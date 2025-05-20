@@ -1,0 +1,69 @@
+.example-card {
+  width: 90vw; /* Scales with viewport width */
+  max-width: 90%; /* Limits width for larger screens */
+  margin: 1.5% auto; /* Reduced responsive margin for compact layout */
+}
+
+.card-content-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: 12vh; /* Reduced height for compact cards */
+}
+
+.image-section {
+  flex: 0 0 30%; /* Takes 30% of card width */
+  padding: 1.5%; /* Reduced responsive padding */
+  display: flex;
+}
+
+.image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Scales image responsively */
+  border-radius: 0.4rem; /* Reduced responsive border radius */
+}
+
+.description {
+  flex: 0 0 40%; /* Takes 40% of card width */
+  padding: 1.5%; /* Reduced padding */
+  font-size: clamp(0.7rem, 1.8vw, 0.9rem); /* Smaller responsive font */
+}
+
+.sidebar {
+  flex: 0 0 30%; /* Takes 30% of card width */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5%; /* Reduced padding */
+}
+
+.price-section {
+  flex: 1; /* Equal height with button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.price-section mat-card-subtitle {
+  margin-right: 0.4rem; /* Reduced responsive margin */
+  font-size: clamp(1.8rem, 4vw, 2.5rem); /* Smaller responsive xxx-large */
+  color: #000000; /* Black font color */
+}
+
+.per-night {
+  font-size: clamp(0.6rem, 1.2vw, 0.8rem); /* Smaller responsive font */
+  color: #666;
+}
+
+mat-card-actions {
+  flex: 1; /* Equal height with price section */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-card-actions button {
+  width: 100%;
+  font-size: clamp(0.8rem, 1.8vw, 1rem); /* Smaller responsive large font */
+}

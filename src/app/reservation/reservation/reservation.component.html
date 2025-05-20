@@ -1,5 +1,32 @@
-<app-navbar></app-navbar>
-<p>reservation works!</p>
+<app-navbar></app-navbar >
+<div class="reservation-container">
+  <h2>Hotel Reservation</h2>
+  <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+    <div class="date-pickers">
+      <mat-form-field appearance="fill" class="date-field">
+        <mat-label>Check-in Date </mat-label>
+        <input matInput [matDatepicker]="checkInPicker" formControlName="checkInDate" (dateChange)="onCheckInDateChange()">
+        <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+        <mat-datepicker #checkInPicker></mat-datepicker>
+        <mat-error *ngIf="reservationForm.get('checkInDate')?.hasError('required')">
+          Check-in date is required
+        </mat-error>
+      </mat-form-field>
 
+      <mat-form-field appearance="fill" class="date-field">
+        <mat-label>Check-out Date</mat-label>
+        <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOutDate" [min]="minCheckOutDate">
+        <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+        <mat-datepicker #checkOutPicker></mat-datepicker>
+        <mat-error *ngIf="reservationForm.get('checkOutDate')?.hasError('required')">
+          Check-out date is required
+        </mat-error>
+        <mat-error *ngIf="reservationForm.get('checkOutDate')?.hasError('matDatepickerMin')">
+          Check-out date must be after check-in date
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-
+    <button mat-raised-button color="primary" type="submit" [disabled]="reservationForm.invalid">Submit</button>
+  </form>
+</div>
