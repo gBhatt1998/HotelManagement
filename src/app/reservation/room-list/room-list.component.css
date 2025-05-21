@@ -1,69 +1,114 @@
 .example-card {
-  width: 90vw; /* Scales with viewport width */
-  max-width: 90%; /* Limits width for larger screens */
-  margin: 1.5% auto; /* Reduced responsive margin for compact layout */
+  width: 90vw; /* More responsive base width */
+  max-width: 800px; /* Absolute maximum size */
+  margin: 1rem auto; /* Consistent vertical spacing */
 }
 
 .card-content-container {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
-  min-height: 12vh; /* Reduced height for compact cards */
+  gap: 1rem; /* Consistent gap between sections */
+  padding: 0.5rem;
 }
 
 .image-section {
-  flex: 0 0 30%; /* Takes 30% of card width */
-  padding: 1.5%; /* Reduced responsive padding */
+  flex: 0 0 150px; /* Match image width exactly */
   display: flex;
+  align-items: center; /* Center image vertically */
 }
 
 .image-section img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Scales image responsively */
-  border-radius: 0.4rem; /* Reduced responsive border radius */
+  width: 100%; /* Use container width */
+  height: 120px; /* Slightly taller aspect ratio */
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .description {
-  flex: 0 0 40%; /* Takes 40% of card width */
-  padding: 1.5%; /* Reduced padding */
-  font-size: clamp(0.7rem, 1.8vw, 0.9rem); /* Smaller responsive font */
+  flex: 1;
+  padding: 0 0.5rem;
+  font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+  line-height: 1.4; /* Better readability */
+  overflow-y: auto; /* Handle long descriptions */
+  max-height: 120px; /* Match image height */
 }
 
 .sidebar {
-  flex: 0 0 30%; /* Takes 30% of card width */
+  flex: 0 0 120px; /* Fixed width for price/button */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1.5%; /* Reduced padding */
 }
 
 .price-section {
-  flex: 1; /* Equal height with button */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  padding: 0.5rem 0;
 }
 
 .price-section mat-card-subtitle {
-  margin-right: 0.4rem; /* Reduced responsive margin */
-  font-size: clamp(1.8rem, 4vw, 2.5rem); /* Smaller responsive xxx-large */
-  color: #000000; /* Black font color */
-}
-
-.per-night {
-  font-size: clamp(0.6rem, 1.2vw, 0.8rem); /* Smaller responsive font */
-  color: #666;
+  font-size: clamp(1.5rem, 3vw, 2rem); /* More balanced scaling */
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
 }
 
 mat-card-actions {
-  flex: 1; /* Equal height with price section */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0;
 }
 
 mat-card-actions button {
   width: 100%;
-  font-size: clamp(0.8rem, 1.8vw, 1rem); /* Smaller responsive large font */
+  padding: 0.5rem;
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
 }
+.sort-control {
+  text-align: lef;
+  padding: 1rem;
+  margin-bottom: -1rem;
+}
+
+.sort-control button {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0 1rem;
+}
+
+.mat-page ,.sort-control{
+  margin: 1rem auto;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  /* background-color:red ; */
+}
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .example-card {
+    width: 95vw;
+  }
+  
+  .card-content-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .image-section {
+    flex-basis: auto;
+    justify-content: center;
+  }
+  
+  .sidebar {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    flex-basis: auto;
+  }
+  
+  .price-section {
+    text-align: left;
+    flex: 1;
+  }
+  
+  mat-card-actions {
+    flex: 0 0 120px;
+  }
+}
+

@@ -13,8 +13,26 @@ reservationForm: FormGroup;
   constructor(private fb: FormBuilder) {
     this.reservationForm = this.fb.group({
       checkInDate: ['', Validators.required],
-      checkOutDate: ['', Validators.required]
+      checkOutDate: ['', Validators.required],
+      roomType: [null]
+    
     });
+  }
+
+  filterCriteria = {
+    checkIn: null as Date | null,
+    checkOut: null as Date | null,
+    type: ''
+  };
+
+  onSubmit() {
+    if (this.reservationForm.valid) {
+      this.filterCriteria = {
+        checkIn: this.reservationForm.value.checkInDate,
+        checkOut: this.reservationForm.value.checkOutDate,
+        type: this.reservationForm.value.roomType
+      };
+    }
   }
 
   onCheckInDateChange(): void {
@@ -28,10 +46,5 @@ reservationForm: FormGroup;
     }
   }
 
-  onSubmit(): void {
-    if (this.reservationForm.valid) {
-      console.log('Reservation Data:', this.reservationForm.value);
-      // Handle form submission (e.g., send to backend)
-    }
-  }
+  
 }
