@@ -6,6 +6,9 @@ import { ReservationComponent } from './reservation/reservation.component';
 import { SharedModule } from '../shared/shared.module';
 import { RoomListComponent } from './room-list/room-list.component';
 
+import { reservationReducer } from './store/reservation/reservation.reducer';
+import { StoreModule } from '@ngrx/store';
+
 
 @NgModule({
   declarations: [
@@ -15,7 +18,8 @@ import { RoomListComponent } from './room-list/room-list.component';
   imports: [
     CommonModule,
     ReservationRoutingModule,
-    SharedModule
+    SharedModule,
+     StoreModule.forFeature('reservation', reservationReducer)
   ]
 })
 export class ReservationModule { }

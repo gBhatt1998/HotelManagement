@@ -11,13 +11,15 @@ export class ReservationComponent {
 reservationForm: FormGroup;
   minCheckOutDate: Date | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private store:Store) {
     this.reservationForm = this.fb.group({
       checkInDate: ['', Validators.required],
       checkOutDate: ['', Validators.required],
       roomType: [null]
     
     });
+      this.store.subscribe(state => console.log('Entire store state:', state));
+
   }
 
   filterCriteria = {
@@ -35,10 +37,10 @@ reservationForm: FormGroup;
       };
     }
 // store checkin and
-    // this.store.dispatch(setReservationDate({
-    //     checkIn: new Date(this.reservationForm.value.checkInDate),
-    // checkOut: new Date(this.reservationForm.value.checkOutDate)
-    // }))
+    this.store.dispatch(setReservationDate({
+        checkIn: new Date(this.reservationForm.value.checkInDate),
+    checkOut: new Date(this.reservationForm.value.checkOutDate)
+    }))
   }
 
   onCheckInDateChange(): void {

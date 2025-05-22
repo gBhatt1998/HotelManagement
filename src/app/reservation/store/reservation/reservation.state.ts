@@ -4,7 +4,7 @@ export interface ReservationState {
   selectedRoom:any
 }
 
-export const initalState: ReservationState={
+export const initialState: ReservationState={
     checkIn:null,
     checkOut:null,
     selectedRoom:null
