@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { Store } from '@ngrx/store';
+import { setReservationDate } from '../store/reservation/reservation.action';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',
@@ -33,6 +34,11 @@ reservationForm: FormGroup;
         type: this.reservationForm.value.roomType
       };
     }
+// store checkin and
+    // this.store.dispatch(setReservationDate({
+    //     checkIn: new Date(this.reservationForm.value.checkInDate),
+    // checkOut: new Date(this.reservationForm.value.checkOutDate)
+    // }))
   }
 
   onCheckInDateChange(): void {

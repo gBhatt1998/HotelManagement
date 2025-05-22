@@ -3,6 +3,9 @@
   max-width: 800px;
   margin: 0 auto;
 }
+.nav-bar,.reservation-container{
+  scale:  2px;
+}
 
 .reservation-container h2 {
   text-align: center;
