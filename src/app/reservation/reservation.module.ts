@@ -8,12 +8,14 @@ import { RoomListComponent } from './room-list/room-list.component';
 
 import { reservationReducer } from './store/reservation/reservation.reducer';
 import { StoreModule } from '@ngrx/store';
+import { HotelCardComponent } from './hotel-card/hotel-card.component';
 
 
 @NgModule({
   declarations: [
     ReservationComponent,
-    RoomListComponent
+    RoomListComponent,
+    HotelCardComponent
   ],
   imports: [
     CommonModule,

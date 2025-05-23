@@ -60,11 +60,6 @@ mat-card-actions button {
   padding: 0.5rem;
   font-size: clamp(0.85rem, 1.6vw, 1rem);
 }
-.sort-control {
-  text-align: lef;
-  padding: 1rem;
-  margin-bottom: -1rem;
-}
 
 .sort-control button {
   border: 1px solid #ddd;
@@ -72,43 +67,37 @@ mat-card-actions button {
   padding: 0 1rem;
 }
 
-.mat-page ,.sort-control{
-  margin: 1rem auto;
+.room-list-layout {
   display: flex;
-  justify-content: center;
-  text-align: center;
-  /* background-color:red ; */
-}
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .example-card {
-    width: 95vw;
-  }
-  
-  .card-content-container {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .image-section {
-    flex-basis: auto;
-    justify-content: center;
-  }
-  
-  .sidebar {
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-    flex-basis: auto;
-  }
-  
-  .price-section {
-    text-align: left;
-    flex: 1;
-  }
-  
-  mat-card-actions {
-    flex: 0 0 120px;
-  }
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px;
 }
 
+/* Left column for controls */
+.controls-column {
+  flex: 0 0 200px; /* fixed width */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Cards area */
+.cards-container {
+  flex: 1;
+}
+
+/* Previously defined - adjusted for left alignment */
+.sort-control {
+  text-align: left;
+  padding: 0;
+}
+
+.mat-page {
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+  margin: 0;
+  margin: 2rem auto; /* Ensure space around it */
+  padding-bottom: 2rem;
+}

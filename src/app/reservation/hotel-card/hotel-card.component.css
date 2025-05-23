@@ -1,0 +1,49 @@
+.card {
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .card__img img {
+    width: 100%;
+    max-height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .card__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .price {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+  }
+  
+  .price__label {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+
+  .form-field {
+    width: 80%;
+    margin-bottom: 12px;
+  }
+  
+ 
+  .name-phone-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .small-field {
+    flex: 1;
+    min-width: 100px;
+  }
+  

@@ -1,3 +1,4 @@
+<div class="layout-container">
    <div class="nav-bar" >
     <app-navbar></app-navbar>
    </div>
@@ -51,4 +52,15 @@
  
 </div>
 
-<app-room-list [filterCriteria]="filterCriteria"></app-room-list>
+<div class="content-container">
+  <div class="roomlist">
+    <app-room-list [filterCriteria]="filterCriteria"></app-room-list>
+  </div>
+
+  <div class="hotelcard-wrapper">
+    <div class="hotelcard">
+      <app-hotel-card></app-hotel-card>
+    </div>
+  </div>
+  </div>
+

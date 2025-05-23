@@ -1,0 +1,47 @@
+<mat-card class="card">
+    <div class="card__img">
+        <picture>
+            <img [src]="hotel.imageUrl" alt="{{ hotel.title }} image">
+        </picture>
+    </div>
+
+    <mat-card-content class="card__details">
+        <h3>{{ hotel.title }}</h3>
+        <p>{{ hotel.description }}</p>
+
+        <div class="price">
+            <div class="price__l">
+                <span class="price__label">${{ hotel.price }} /</span>
+                <span class="measure__label">{{ hotel.period }}</span>
+            </div>
+        </div>
+
+        <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+            <div class="name-phone-row">
+                <mat-form-field appearance="outline" class="form-field small-field">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name">
+                    <mat-error *ngIf="bookingForm.get('name')?.hasError('required')">Name is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field small-field">
+                    <mat-label>Phone</mat-label>
+                    <input matInput type="tel" formControlName="phone">
+                    <mat-error *ngIf="bookingForm.get('phone')?.hasError('required')">Phone is required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email">
+                <mat-error *ngIf="bookingForm.get('email')?.hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="bookingForm.get('email')?.hasError('email')">Invalid email</mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">
+                Submit
+            </button>
+        </form>
+    </mat-card-content>
+</mat-card>
+  
