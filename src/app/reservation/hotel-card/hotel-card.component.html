@@ -6,12 +6,12 @@
     </div>
 
     <mat-card-content class="card__details">
-        <h3>{{ hotel.title }}</h3>
-        <p>{{ hotel.description }}</p>
+        <h3>{{currentRoom.title }}</h3>
+        <p>{{ currentRoom.description }}</p>
 
         <div class="price">
             <div class="price__l">
-                <span class="price__label">${{ hotel.price }} /</span>
+                <span class="price__label">${{ currentRoom.price }} /</span>
                 <span class="measure__label">{{ hotel.period }}</span>
             </div>
         </div>
@@ -49,15 +49,6 @@
                 <mat-error *ngIf="bookingForm.get('email')?.hasError('required')">Email is required</mat-error>
                 <mat-error *ngIf="bookingForm.get('email')?.hasError('email')">Invalid email</mat-error>
             </mat-form-field>
-
-            
-
-            <div class="room-selected" *ngIf="bookingForm.get('room')?.value" >
-                <mat-form-field appearance="outline" class="form-field">
-                    <mat-label>Room</mat-label>
-                    <input matInput [value]="bookingForm.get('room')?.value" formControlName="room" readonly>
-                </mat-form-field>
-            </div>
 
             <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">
                 Submit

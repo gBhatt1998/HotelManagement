@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { setReservationRoom } from '../store/reservation/reservation.action';
 interface Room {
   type: string;
   title: string; description: string; imageUrl: string; price: number; period: string;
@@ -18,7 +20,7 @@ export class RoomListComponent {
   sortOrder: 'asc' | 'desc' = 'asc';
 
   
-
+constructor(private store: Store) {} // Inject NgRx store
 
   // data=[list1={}]
   rooms = [
@@ -108,6 +110,10 @@ export class RoomListComponent {
   toggleSortOrder() {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.applyFilters();
+  }
+
+  selectRoom(room: Room) {
+    this.store.dispatch(setReservationRoom({ room }));
   }
 
 }

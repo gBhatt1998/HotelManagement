@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
+import { Observable } from 'rxjs';
+import { selectCheckInDate, selectCheckOutDate, selectSelectedRoom } from '../store/reservation/reservation.selectors';
+import { ReservationState } from '../store/reservation/reservation.state';
+import { Store } from '@ngrx/store';
 export interface Room {
   type: string;
   title: string;
@@ -17,6 +20,7 @@ export interface Room {
   styleUrls: ['./hotel-card.component.css']
 })
 export class HotelCardComponent implements OnInit {
+  
   hotel: Room = {
     type: 'Deluxe',
     title: 'Ocean View Deluxe Suite',
@@ -25,11 +29,10 @@ export class HotelCardComponent implements OnInit {
     price: 250,
     period: 'per night',
   };
-
+currentRoom:Room=this.hotel;
   bookingForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, ) { }
-
+  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>){}
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
@@ -37,9 +40,25 @@ export class HotelCardComponent implements OnInit {
       phone: ['', Validators.required],
       checkIn: [null, Validators.required],
       checkOut: [null, Validators.required],
-      room: [this.hotel.title, Validators.required]
     });
+
+      this.store.select(selectCheckInDate).subscribe(checkIn => {
+    if (checkIn) this.bookingForm.patchValue({ checkIn });
+  });
+  
+  this.store.select(selectCheckOutDate).subscribe(checkOut => {
+    if (checkOut) this.bookingForm.patchValue({ checkOut });
+  });
+  
+  this.store.select(selectSelectedRoom).subscribe(room => {
+    if (room) { 
+      this.currentRoom = room;
+        console.log(this.currentRoom);
+    }
+  });
   }
+
+
 
   
 

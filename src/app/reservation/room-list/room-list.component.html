@@ -22,7 +22,7 @@
           <span class="per-night">{{ room.period }}</span>
         </div>
         <mat-card-actions>
-          <button mat-raised-button color="primary" class="book-button">Book Now</button>
+          <button mat-raised-button color="primary" class="book-button"(click)="selectRoom(room)">Book Now</button>
         </mat-card-actions>
       </div>
     </div>
