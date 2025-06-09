@@ -1,0 +1,16 @@
+.sidenav-container {
+  height: 100vh; /* full viewport height */
+}
+
+.sidenav {
+  width: 120px; /* adjust as needed, smaller width */
+  min-width: 150px; /* prevent collapsing too much */
+  background-color: #f5f5f5; /* light background for sidebar */
+}
+
+.main-content {
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #fff;
+  overflow-y: auto;
+}

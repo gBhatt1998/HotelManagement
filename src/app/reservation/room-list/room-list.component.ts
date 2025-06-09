@@ -15,7 +15,7 @@ export class RoomListComponent {
   pageSize = 3;
   currentPage = 0;
   paginatedRooms: any[] = [];
-     
+     showPaginator = false;
   @Input() filterCriteria: any;
   sortOrder: 'asc' | 'desc' = 'asc';
 
@@ -95,6 +95,9 @@ constructor(private store: Store) {} // Inject NgRx store
     this.filteredRooms.sort((a, b) =>
       this.sortOrder === 'asc' ? a.price - b.price : b.price - a.price
     );
+
+    this.showPaginator=this.filteredRooms.length>this.pageSize;
+    this.currentPage=0;
 
     this.updatePaginatedRooms();
   }

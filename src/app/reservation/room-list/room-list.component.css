@@ -87,7 +87,7 @@ mat-card-actions button {
   flex: 1;
 }
 
-/* Previously defined - adjusted for left alignment */
+
 .sort-control {
   text-align: left;
   padding: 0;

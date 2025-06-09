@@ -11,7 +11,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { HttpClientModule } from '@angular/common/http'; 
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -27,7 +33,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ReactiveFormsModule,
     MatCardModule,
     MatSelectModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    HttpClientModule,
+    MatSidenavModule,
+    MatListModule,
+    MatTableModule,
+    MatFormFieldModule,
+    FormsModule
   ],
   exports:[
     NavbarComponent,
@@ -38,7 +50,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ReactiveFormsModule,
     MatCardModule,
     MatSelectModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    HttpClientModule,
+    MatSidenavModule,
+    MatListModule,
+    MatTableModule,
+    MatFormFieldModule,
+    FormsModule
   ]
 })
 export class SharedModule { }

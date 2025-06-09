@@ -1,0 +1,18 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <h3 class="sidebar-title">Admin Dashboard</h3>
+    <mat-nav-list>
+      <a mat-list-item routerLink="reservations" routerLinkActive="active">Reservations</a>
+      <a mat-list-item routerLink="guests" routerLinkActive="active">Guests</a>
+      <a mat-list-item routerLink="rooms" routerLinkActive="active">Rooms</a>
+      <!-- Add more links here -->
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="main-content">
+        hellp
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

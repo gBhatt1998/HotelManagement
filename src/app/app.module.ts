@@ -5,6 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
+import { SharedModule } from './shared/shared.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './auth/jwt.interceptor';
+// import { JwtInterceptor } from './auth/Jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -14,9 +18,14 @@ import { StoreModule } from '@ngrx/store';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({})
+    StoreModule.forRoot({}),
+    SharedModule
   ],
-  providers: [],
+  providers: [ {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 <!-- room-list.component.html -->
 <div class="sort-control">
-  <button mat-button (click)="toggleSortOrder()">
+  <button  *ngIf="showPaginator" mat-button (click)="toggleSortOrder()">
     Sort by Price {{sortOrder === 'asc' ? '↑' : '↓'}}
   </button>
 </div>
@@ -28,7 +28,9 @@
     </div>
   </mat-card>
 <div class="mat-page">
-  <mat-paginator [length]="rooms.length" [pageSize]="pageSize" [pageSizeOptions]="[3, 5, 10]"
+  <mat-paginator *ngIf="showPaginator"
+   [length]="filteredRooms.length" [pageSize]="pageSize" [pageSizeOptions]="[3, 5, 10]"
+   [length]="filteredRooms.length"
     (page)="onPageChange($event)" aria-label="Select page">
   </mat-paginator>
 </div>
