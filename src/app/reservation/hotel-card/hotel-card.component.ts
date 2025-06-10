@@ -8,6 +8,9 @@ import { Store } from '@ngrx/store';
 import { Room } from '../models/room.model';
 import { Service } from '../models/service.model';
 import { HotelCardService } from '../hotel-card.service';
+import { DialogService } from 'src/app/shared/dialog.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',
@@ -28,12 +31,14 @@ export class HotelCardComponent implements OnInit {
   };
 
  availableServices: Service[] = [];
-currentRoom:Room=this.hotel;
+ currentRoom:Room=this.hotel;
   bookingForm!: FormGroup;
   totalPrice: number = 0;
-  
-
-  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>, private hotelCardService:HotelCardService){}
+  roomId!: number;
+checkInDate!:string ;
+checkOutDate!: string;
+  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>, private hotelCardService:HotelCardService,  private dialog: MatDialog
+){}
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
@@ -46,17 +51,25 @@ currentRoom:Room=this.hotel;
 
     });
 
-      this.store.select(selectCheckInDate).subscribe(checkIn => {
-    if (checkIn) this.bookingForm.patchValue({ checkIn });
-  });
-  
-  this.store.select(selectCheckOutDate).subscribe(checkOut => {
-    if (checkOut) this.bookingForm.patchValue({ checkOut });
-  });
+this.store.select(selectCheckInDate).subscribe(checkIn => {
+  if (checkIn) {
+    this.checkInDate = new Date(checkIn).toISOString().split('T')[0]; // ensure string
+    this.bookingForm.patchValue({ checkIn: new Date(checkIn) }); // for date display in form
+  }
+});
+
+this.store.select(selectCheckOutDate).subscribe(checkOut => {
+  if (checkOut) {
+    this.checkOutDate = new Date(checkOut).toISOString().split('T')[0]; // ensure string
+    this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
+  }
+});
+
   
   this.store.select(selectSelectedRoom).subscribe(room => {
     if (room) { 
       this.currentRoom = room;
+    this.roomId = room.id;
         console.log(this.currentRoom);
         this.calculateTotalPrice()
     }
@@ -82,30 +95,7 @@ currentRoom:Room=this.hotel;
   this.totalPrice = (this.currentRoom?.pricePerNight || 0) + chooseServicesTotal;
 }
 
-  onSubmit(): void {
-  if (this.bookingForm.invalid) return;
-
-  const formValue = this.bookingForm.value;
-
-  const bookingPayload = {
-    checkInDate: formValue.checkIn,
-    checkOutDate: formValue.checkOut,
-    totalPrice: this.totalPrice,
-    roomId: this.currentRoom.id ,
-    guestDetails: {
-      name: formValue.name,
-      email: formValue.email,
-      password: formValue.password,
-      phone: formValue.phone,
-      role: 'USER'
-    },
-    serviceIds: formValue.serviceIds || []
-  };
-
-  console.log('Booking Payload:', bookingPayload);
-}
-
- private fetchAvailableServices(): void {
+private fetchAvailableServices(): void {
     // this.loadingServices = true;
     this.hotelCardService.getAllServices().subscribe({
       next: (services) => {
@@ -122,5 +112,52 @@ currentRoom:Room=this.hotel;
     });
   }
 
+  onSubmit(): void {
+  if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
+  const formValue = this.bookingForm.value;
+
+  const bookingPayload = {
+    checkInDate: formValue.checkIn,
+    checkOutDate: formValue.checkOut,
+    totalPrice: this.totalPrice,
+    roomId: this.roomId,
+    guestDetails: {
+      name: formValue.name,
+      email: formValue.email,
+      password: formValue.password,
+      phone: formValue.phone,
+      role: 'USER'
+    },
+    serviceIds: formValue.serviceIds || []
+  };
+
+  console.log('Booking Payload:', bookingPayload);
+     const dialogRef = this.dialog.open(DialogComponent, {
+    disableClose: true,
+    data: {
+      title: 'Booking in Progress',
+      message: 'Please wait while we confirm your reservation...',
+      mode: 'loading'
+    }
+  });
+
+  this.hotelCardService.confirmReservation(bookingPayload).subscribe({
+    next: (response) => {
+      dialogRef.componentInstance.data = {
+        title: 'Success',
+        message: response.message || 'Reservation Confirmed!',
+        mode: 'success'
+      };
+    },
+    error: (error) => {
+      const errorMsg = error.error?.message || 'An error occurred during reservation.';
+      dialogRef.componentInstance.data = {
+        title: 'Error',
+        message: errorMsg,
+        mode: 'error'
+      };
+    }
+  });
+}
 }

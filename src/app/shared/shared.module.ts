@@ -18,10 +18,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { DialogComponent } from './dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    DialogComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +43,9 @@ import { FormsModule } from '@angular/forms';
     MatListModule,
     MatTableModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+  MatProgressSpinnerModule
   ],
   exports:[
     NavbarComponent,
@@ -56,7 +62,9 @@ import { FormsModule } from '@angular/forms';
     MatListModule,
     MatTableModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+    DialogComponent
   ]
 })
 export class SharedModule { }

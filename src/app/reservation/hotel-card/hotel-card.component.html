@@ -57,7 +57,7 @@
       </div>
 <mat-form-field appearance="outline" class="form-field">
   <mat-label>Select Services</mat-label>
-  <mat-select formControlName="serviceIds" >
+  <mat-select formControlName="serviceIds" multiple> >
     <mat-option *ngFor="let service of availableServices" [value]="service.id">
       {{ service.name }} — ${{ service.price }}
     </mat-option>

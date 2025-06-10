@@ -1,0 +1,13 @@
+.success-message {
+  color: green;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+mat-spinner {
+  margin: 16px auto;
+}
