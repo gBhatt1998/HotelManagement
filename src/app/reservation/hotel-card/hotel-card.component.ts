@@ -18,27 +18,22 @@ import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 })
 export class HotelCardComponent implements OnInit {
   
-  hotel: Room = {
-    id: 1,
-    roomNumber: 101,
-    type: 'Deluxe',
-    // title: 'Ocean View Deluxe Suite',
-    description: 'Enjoy a luxurious ocean view room with king-sized bed, minibar, and free WiFi.',
-    imageUrl: 'https://vuniversity.in/wp-content/uploads/2023/10/Types-of-room-single.png',
-    pricePerNight: 250,
-    // period: 'per night',
-
-  };
 
  availableServices: Service[] = [];
- currentRoom:Room=this.hotel;
+ currentRoom!:Room;
   bookingForm!: FormGroup;
   totalPrice: number = 0;
   roomId!: number;
 checkInDate!:string ;
 checkOutDate!: string;
-  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>, private hotelCardService:HotelCardService,  private dialog: MatDialog
-){}
+
+  previousSelectedServiceIds: number[] = [];
+  selectedServices: Service[] = [];
+  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>, 
+    private hotelCardService: HotelCardService, 
+    private dialogService: DialogService){}
+
+
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
@@ -53,8 +48,10 @@ checkOutDate!: string;
 
 this.store.select(selectCheckInDate).subscribe(checkIn => {
   if (checkIn) {
-    this.checkInDate = new Date(checkIn).toISOString().split('T')[0]; // ensure string
-    this.bookingForm.patchValue({ checkIn: new Date(checkIn) }); // for date display in form
+    this.checkInDate = new Date(checkIn).toISOString().split('T')[0]; 
+    this.bookingForm.patchValue({ checkIn: new Date(checkIn) }); 
+    this.calculateTotalPrice();
+
   }
 });
 
@@ -62,6 +59,8 @@ this.store.select(selectCheckOutDate).subscribe(checkOut => {
   if (checkOut) {
     this.checkOutDate = new Date(checkOut).toISOString().split('T')[0]; // ensure string
     this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
+    this.calculateTotalPrice();
+
   }
 });
 
@@ -69,31 +68,33 @@ this.store.select(selectCheckOutDate).subscribe(checkOut => {
   this.store.select(selectSelectedRoom).subscribe(room => {
     if (room) { 
       this.currentRoom = room;
-    this.roomId = room.id;
+    this.roomId = room.roomNumber;
+      this.calculateTotalPrice();
+
         console.log(this.currentRoom);
-        this.calculateTotalPrice()
+  
     }
   });
 
-  this.fetchAvailableServices();
+    this.fetchAvailableServices();
 
-  this.bookingForm.get('serviceIds')?.valueChanges.subscribe(() => {
-    this.calculateTotalPrice();
-  });
-
-  this.calculateTotalPrice();
+    this.bookingForm.get('serviceIds')?.valueChanges.subscribe((selectedIds: number[]) => {
+      console.log('Selected Service IDs:', selectedIds);
+      this.calculateTotalPrice();
+    });
   }
 
+ 
+  public calculateNights(): number {
+    const checkIn = this.bookingForm.get('checkIn')?.value;
+    const checkOut = this.bookingForm.get('checkOut')?.value;
+    if (!checkIn || !checkOut) return 1;
 
-
-  calculateTotalPrice(): void {
-  const selectedServiceIds = this.bookingForm.get('serviceIds')?.value ||[] ;
-  const chooseServicesTotal = this.availableServices
-    .filter(service => selectedServiceIds.includes(service.id))
-    .reduce((sum, service) => sum + service.price, 0);
-
-  this.totalPrice = (this.currentRoom?.pricePerNight || 0) + chooseServicesTotal;
-}
+    const inDate = new Date(checkIn);
+    const outDate = new Date(checkOut);
+    const diff = (outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24);
+    return Math.max(1, Math.ceil(diff));
+  }
 
 private fetchAvailableServices(): void {
     // this.loadingServices = true;
@@ -102,7 +103,7 @@ private fetchAvailableServices(): void {
         console.log('Available Services:', services);
         this.availableServices = services;
         // this.loadingServices = false;
-        this.calculateTotalPrice(); // Recalculate after services load
+        // this.calculateTotalPrice(); // Recalculate after services load
       },
       error: (err) => {
         console.error('Failed to load services:', err);
@@ -110,6 +111,20 @@ private fetchAvailableServices(): void {
         // Consider showing an error message to the user
       }
     });
+  }
+
+  public  calculateTotalPrice(): void {
+    const nights = this.calculateNights();
+    const roomCost = (this.currentRoom?.pricePerNight || 0) * nights;
+
+    // Always get fresh reference to avoid shallow checks
+    const selectedIds = [...(this.bookingForm.get('serviceIds')?.value || [])];
+    console.log('Calculating price for service IDs:', selectedIds);
+
+    this.selectedServices = this.availableServices.filter(s => selectedIds.includes(s.serviceId));
+    const serviceCost = this.selectedServices.reduce((sum, s) => sum + s.price, 0);
+
+    this.totalPrice = roomCost + serviceCost;
   }
 
   onSubmit(): void {
@@ -133,31 +148,29 @@ private fetchAvailableServices(): void {
   };
 
   console.log('Booking Payload:', bookingPayload);
-     const dialogRef = this.dialog.open(DialogComponent, {
-    disableClose: true,
-    data: {
-      title: 'Booking in Progress',
-      message: 'Please wait while we confirm your reservation...',
-      mode: 'loading'
-    }
-  });
 
-  this.hotelCardService.confirmReservation(bookingPayload).subscribe({
-    next: (response) => {
-      dialogRef.componentInstance.data = {
-        title: 'Success',
-        message: response.message || 'Reservation Confirmed!',
-        mode: 'success'
-      };
-    },
-    error: (error) => {
-      const errorMsg = error.error?.message || 'An error occurred during reservation.';
-      dialogRef.componentInstance.data = {
-        title: 'Error',
-        message: errorMsg,
-        mode: 'error'
-      };
-    }
-  });
-}
+    const dialogRef = this.dialogService.openLoading('Please wait while we confirm your reservation...', 'Booking in Progress');
+
+    this.hotelCardService.confirmReservation(bookingPayload).subscribe({
+      next: (response) => {
+        dialogRef.componentInstance.data = {
+          title: 'Success',
+          message: response.message || 'Reservation Confirmed!',
+          mode: 'success',
+          statusCode: response.status || 201
+        };
+      },
+      error: (error) => {
+        const errorMsg = error.error?.message || 'An error occurred during reservation.';
+        const status = error.status || 500;
+
+        dialogRef.componentInstance.data = {
+          title: 'Error',
+          message: errorMsg,
+          mode: 'error',
+          statusCode: status
+        };
+      }
+    });
+  }
 }

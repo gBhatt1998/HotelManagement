@@ -46,4 +46,7 @@
     flex: 1;
     min-width: 100px;
   }
-  
+  .nights-info {
+    font-size: 0.8rem;
+    color: #666;
+  }

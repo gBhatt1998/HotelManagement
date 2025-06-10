@@ -6,12 +6,9 @@ import { Subscription } from 'rxjs';
 import { Room } from '../models/room.model';
 import { selectReservationState } from '../store/reservation/reservation.selectors';
 import { AppState } from '../store/root.state'; // where your AppState interface is
+import { DialogService } from 'src/app/shared/dialog.service';
 
-// interface Room {
-//   type: string;
-//   title: string; description: string; imageUrl: string; price: number; period: string;
-  
-// }
+
 @Component({
   selector: 'app-room-list',
   templateUrl: './room-list.component.html',
@@ -30,11 +27,11 @@ export class RoomListComponent {
   checkIn: string | null = null;
   checkOut: string | null = null;
   roomType: string = '';
-  
-  @Output() sendAllAvailableRoomTypes=new EventEmitter<string[]>();
-constructor( private roomlist:RoomlistService,private store: Store<AppState>) {} // Inject NgRx store
+  private roomInitialized = false;
 
-  // data=[list1={}]
+  @Output() sendAllAvailableRoomTypes=new EventEmitter<string[]>();
+  constructor(private roomlist: RoomlistService, private store: Store<AppState>, private dialogService: DialogService
+) {} // Inject 
   
 
   ngOnInit() {
@@ -64,21 +61,43 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
     this.updatePaginatedRooms();
   }
 
-   fetchRooms(): void {
+  private fetchRooms(): void {
+    const dialogRef = this.dialogService.openLoading('Fetching available rooms...', 'Loading Rooms');
+
     const roomObservable = this.checkIn && this.checkOut
       ? this.roomlist.getAvailableRoomsByDate(this.checkIn, this.checkOut)
       : this.roomlist.getAllAvailableRooms();
 
-    roomObservable.subscribe((data: Room[]) => {
-      this.rooms = data;
-      console.log('Available Rooms:', this.rooms);
-      this.availableRoomType = Array.from(new Set(data.map(room => room.type)));
-      console.log('Available Room Types:', this.availableRoomType);
-          this.sendAllAvailableRoomTypes.emit(this.availableRoomType);
+    roomObservable.subscribe({
+      next: (data: Room[]) => {
+        dialogRef.close();
 
-      this.applyFilters();
+        this.rooms = data;
+        this.availableRoomType = Array.from(new Set(data.map(room => room.type)));
+        this.sendAllAvailableRoomTypes.emit(this.availableRoomType);
+
+        if (this.rooms.length > 0 && !this.roomInitialized) {
+          this.store.dispatch(setReservationRoom({ room: this.rooms[0] }));
+          this.roomInitialized = true;
+        }
+
+        this.applyFilters();
+      },
+      error: (error) => {
+        dialogRef.componentInstance.data = {
+          title: 'Failed to Load Rooms',
+          message: error?.error?.message || 'Something went wrong while fetching rooms.',
+          mode: 'error',
+          showRetry: true,
+          onRetry: () => {
+            dialogRef.close();
+            this.fetchRooms(); // Retry logic
+          }
+        };
+      }
     });
   }
+
 
   private applyFilters() {
     // Filter

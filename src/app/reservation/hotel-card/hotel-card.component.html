@@ -1,7 +1,7 @@
 <mat-card class="card">
     <div class="card__img">
         <picture>
-            <img [src]="currentRoom.imageUrl" alt="{{ hotel.type }} image">
+            <img [src]="currentRoom.imageUrl" alt="{{ currentRoom.type }} image">
         </picture>
     </div>
 
@@ -13,6 +13,8 @@
             <div class="price__l">
                 <span class="price__label">${{ currentRoom.pricePerNight }} /</span>
                 <span class="measure__label">per-night</span>
+                <small class="nights-info" style="margin-right: 4px; color: #777;" *ngIf="calculateNights() > 1">
+                    · {{ calculateNights() }} {{ calculateNights() === 1 ? 'night' : 'nights' }}      </small>
             </div>
         </div>
 
@@ -57,12 +59,14 @@
       </div>
 <mat-form-field appearance="outline" class="form-field">
   <mat-label>Select Services</mat-label>
-  <mat-select formControlName="serviceIds" multiple> >
-    <mat-option *ngFor="let service of availableServices" [value]="service.id">
+  <mat-select formControlName="serviceIds" multiple >
+    <mat-option *ngFor="let service of availableServices" [value]="service.serviceId">
       {{ service.name }} — ${{ service.price }}
+
     </mat-option>
   </mat-select>
 </mat-form-field>
+<!-- <p>Debug Services: {{ availableServices | json }}</p> -->
 <div class="price-summary">
   <p><strong>Total Price:</strong> ${{ totalPrice | number:'1.2-2' }}</p>
 </div>
