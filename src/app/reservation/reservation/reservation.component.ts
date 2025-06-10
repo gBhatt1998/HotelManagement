@@ -10,6 +10,8 @@ import { setReservationDate } from '../store/reservation/reservation.action';
 export class ReservationComponent {
 reservationForm: FormGroup;
   minCheckOutDate: Date | null = null;
+    availableRoomType: string[] = [];
+selectedRoomType: string = '';
 
   constructor(private fb: FormBuilder, private store:Store) {
     this.reservationForm = this.fb.group({
@@ -23,16 +25,13 @@ reservationForm: FormGroup;
   }
 
   filterCriteria = {
-    checkIn: null as Date | null,
-    checkOut: null as Date | null,
     type: ''
   };
 
   onSubmit() {
     if (this.reservationForm.valid) {
       this.filterCriteria = {
-        checkIn: this.reservationForm.value.checkInDate,
-        checkOut: this.reservationForm.value.checkOutDate,
+        
         type: this.reservationForm.value.roomType
       };
     }
@@ -54,5 +53,17 @@ reservationForm: FormGroup;
     }
   }
 
+
+   getAllAvailableRoomTypes(types: string[]) {
+    console.log('Available Room Types:', types);
+    this.availableRoomType = types;
+  }
+  
+ onRoomTypeChange(selectedType: string) {
+    // Pass the selected type to child via @Input or update NgRx store if used
+    console.log('Selected Room Type:', selectedType);
+    this.selectedRoomType = selectedType;
+    this.filterCriteria.type = selectedType;
+  }
   
 }

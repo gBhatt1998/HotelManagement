@@ -29,19 +29,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-      <mat-label>Room Type</mat-label>
-      <mat-select formControlName="roomType">
-        <mat-option value="single">Single</mat-option>
-        <mat-option value="deluxe">Deluxe</mat-option>
-        <mat-option value="family">
-          Family</mat-option>
-         <mat-option value="double">Double</mat-option>
-          <mat-option value="double">Double</mat-option>
-      </mat-select>
-      <mat-error *ngIf="reservationForm.get('roomType')?.hasError('required')">
-        Required
-      </mat-error>
-    </mat-form-field>
+  <mat-label>Room Type</mat-label>
+<mat-select formControlName="roomType" (selectionChange)="onRoomTypeChange($event.value)">
+    <mat-option *ngFor="let type of availableRoomType" [value]="type">
+      {{ type | titlecase }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 
     <button mat-raised-button color="primary" type="submit" [disabled]="reservationForm.invalid"
       class="submit-button">Submit</button>
@@ -53,7 +47,8 @@
 
 <div class="content-container">
   <div class="roomlist">
-    <app-room-list [filterCriteria]="filterCriteria"></app-room-list>
+    <app-room-list [filterCriteria]="filterCriteria"
+    (sendAllAvailableRoomTypes)="getAllAvailableRoomTypes($event)"></app-room-list>
   </div>
 
   <div class="hotelcard-wrapper">

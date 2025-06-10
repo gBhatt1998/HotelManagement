@@ -6,6 +6,8 @@ import { selectCheckInDate, selectCheckOutDate, selectSelectedRoom } from '../st
 import { ReservationState } from '../store/reservation/reservation.state';
 import { Store } from '@ngrx/store';
 import { Room } from '../models/room.model';
+import { Service } from '../models/service.model';
+import { HotelCardService } from '../hotel-card.service';
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',
@@ -14,29 +16,24 @@ import { Room } from '../models/room.model';
 export class HotelCardComponent implements OnInit {
   
   hotel: Room = {
-    id: 101,
+    id: 1,
+    roomNumber: 101,
     type: 'Deluxe',
     // title: 'Ocean View Deluxe Suite',
     description: 'Enjoy a luxurious ocean view room with king-sized bed, minibar, and free WiFi.',
     imageUrl: 'https://vuniversity.in/wp-content/uploads/2023/10/Types-of-room-single.png',
-    price: 250,
-    period: 'per night',
+    pricePerNight: 250,
+    // period: 'per night',
 
   };
 
-  availableServices = [
-  { id: 1, name: 'WiFi Access', description: 'High-speed internet connection for all devices', price: 9.99 },
-  { id: 2, name: 'Breakfast Buffet', description: 'Daily continental breakfast with hot options', price: 15.99 },
-  { id: 3, name: 'Airport Shuttle', description: 'Round-trip transportation to/from airport', price: 25 },
-  { id: 4, name: 'Spa Package', description: '60-minute massage and sauna access', price: 75 },
-  { id: 5, name: 'Laundry Service', description: 'Next-day dry cleaning and pressing', price: 12.5 }
-];
+ availableServices: Service[] = [];
 currentRoom:Room=this.hotel;
   bookingForm!: FormGroup;
   totalPrice: number = 0;
   
 
-  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>){}
+  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>, private hotelCardService:HotelCardService){}
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
@@ -65,6 +62,8 @@ currentRoom:Room=this.hotel;
     }
   });
 
+  this.fetchAvailableServices();
+
   this.bookingForm.get('serviceIds')?.valueChanges.subscribe(() => {
     this.calculateTotalPrice();
   });
@@ -80,7 +79,7 @@ currentRoom:Room=this.hotel;
     .filter(service => selectedServiceIds.includes(service.id))
     .reduce((sum, service) => sum + service.price, 0);
 
-  this.totalPrice = (this.currentRoom?.price || 0) + chooseServicesTotal;
+  this.totalPrice = (this.currentRoom?.pricePerNight || 0) + chooseServicesTotal;
 }
 
   onSubmit(): void {
@@ -102,7 +101,26 @@ currentRoom:Room=this.hotel;
     },
     serviceIds: formValue.serviceIds || []
   };
+
+  console.log('Booking Payload:', bookingPayload);
 }
+
+ private fetchAvailableServices(): void {
+    // this.loadingServices = true;
+    this.hotelCardService.getAllServices().subscribe({
+      next: (services) => {
+        console.log('Available Services:', services);
+        this.availableServices = services;
+        // this.loadingServices = false;
+        this.calculateTotalPrice(); // Recalculate after services load
+      },
+      error: (err) => {
+        console.error('Failed to load services:', err);
+        // this.loadingServices = false;
+        // Consider showing an error message to the user
+      }
+    });
+  }
 
 
 }

@@ -1,9 +1,8 @@
 export interface Room {
   id: number;
   type: string;
-  // title: string;
   description: string;
+  pricePerNight: number;
+  roomNumber: number;
   imageUrl: string;
-  price: number;
-  period: string;
 }

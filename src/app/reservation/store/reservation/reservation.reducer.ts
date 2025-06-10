@@ -1,4 +1,4 @@
-import { createReducer,on, State } from "@ngrx/store";
+import { createReducer,on } from "@ngrx/store";
 import { ReservationState,initialState } from "./reservation.state";
 import * as ReservationActions from "./reservation.action"
 

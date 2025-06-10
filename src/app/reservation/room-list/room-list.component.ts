@@ -1,11 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setReservationRoom } from '../store/reservation/reservation.action';
-interface Room {
-  type: string;
-  title: string; description: string; imageUrl: string; price: number; period: string;
+import { RoomlistService } from '../roomlist.service';
+import { Subscription } from 'rxjs';
+import { Room } from '../models/room.model';
+import { selectReservationState } from '../store/reservation/reservation.selectors';
+import { AppState } from '../store/root.state'; // where your AppState interface is
+
+// interface Room {
+//   type: string;
+//   title: string; description: string; imageUrl: string; price: number; period: string;
   
-}
+// }
 @Component({
   selector: 'app-room-list',
   templateUrl: './room-list.component.html',
@@ -18,55 +24,28 @@ export class RoomListComponent {
      showPaginator = false;
   @Input() filterCriteria: any;
   sortOrder: 'asc' | 'desc' = 'asc';
-
+  rooms: Room[] = [];
+  availableRoomType:string[] = [];
+  private storeSub: Subscription | undefined;
+  checkIn: string | null = null;
+  checkOut: string | null = null;
+  roomType: string = '';
   
-constructor(private store: Store) {} // Inject NgRx store
+  @Output() sendAllAvailableRoomTypes=new EventEmitter<string[]>();
+constructor( private roomlist:RoomlistService,private store: Store<AppState>) {} // Inject NgRx store
 
   // data=[list1={}]
-  rooms = [
-    {
-      type: 'single',
-      title: 'Single Room',
-      description: 'A cozy single room with modern amenities, perfect for solo travelers.',
-      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/737205640/display_1500/stock-photo-single-bed-room-in-the-hostel-in-seoul-korea-737205640.jpg',
-      price: 80,
-      period: 'per night'
-    },
-    {
-      type: 'double',
-      title: 'Double Room',
-      description: 'Spacious double room with a king-size bed, ideal for couples.',
-      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/1684314124/display_1500/stock-photo-interior-of-a-hotel-bedroom-1684314124.jpg',
-      price: 120,
-      period: 'per night'
-    },
-    {
-      type: 'deluxe',
-      title: 'Deluxe Suite',
-      description: 'Luxurious suite with a private balcony and premium amenities.',
-      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/153172712/display_1500/stock-photo-luxury-bedroom-in-hotel-153172712.jpg',
-      price: 200,
-      period: 'per night'
-    },
-    {
-      type: 'family',
-      title: 'Family Room',
-      description: 'Large room with multiple beds, perfect for families or groups.',
-      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/2530906857/display_1500/stock-photo--star-hotel-everyday-hotel-tuy-hoa-city-phu-yen-province-vietnam-september-view-the-2530906857.jpg',
-      price: 50,
-      period: 'per night'
-    },
-    {
-      type: 'executive',
-      title: 'Executive Suite',
-      description: 'Elegant suite with a workspace and high-end furnishings.',
-      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/2324216897/display_1500/stock-photo-dubai-united-arab-emirates-june-luxury-hotel-room-in-business-district-of-dubai-downtown-2324216897.jpg',
-      price: 300,
-      period: 'per night'
-    }
-  ];
+  
 
   ngOnInit() {
+
+this.storeSub = this.store.select(selectReservationState).subscribe(state => {
+      const { checkIn, checkOut } = state;
+      this.checkIn = checkIn ? new Date(checkIn).toISOString().split('T')[0] : null;
+      this.checkOut = checkOut ? new Date(checkOut).toISOString().split('T')[0] : null;
+
+      this.fetchRooms();
+    });
     this.updatePaginatedRooms();
     this.applyFilters();
   }
@@ -85,6 +64,22 @@ constructor(private store: Store) {} // Inject NgRx store
     this.updatePaginatedRooms();
   }
 
+   fetchRooms(): void {
+    const roomObservable = this.checkIn && this.checkOut
+      ? this.roomlist.getAvailableRoomsByDate(this.checkIn, this.checkOut)
+      : this.roomlist.getAllAvailableRooms();
+
+    roomObservable.subscribe((data: Room[]) => {
+      this.rooms = data;
+      console.log('Available Rooms:', this.rooms);
+      this.availableRoomType = Array.from(new Set(data.map(room => room.type)));
+      console.log('Available Room Types:', this.availableRoomType);
+          this.sendAllAvailableRoomTypes.emit(this.availableRoomType);
+
+      this.applyFilters();
+    });
+  }
+
   private applyFilters() {
     // Filter
     this.filteredRooms = this.rooms.filter(room =>
@@ -93,7 +88,7 @@ constructor(private store: Store) {} // Inject NgRx store
 
     // Sort
     this.filteredRooms.sort((a, b) =>
-      this.sortOrder === 'asc' ? a.price - b.price : b.price - a.price
+      this.sortOrder === 'asc' ? a.pricePerNight - b.pricePerNight : b.pricePerNight - a.pricePerNight
     );
 
     this.showPaginator=this.filteredRooms.length>this.pageSize;
