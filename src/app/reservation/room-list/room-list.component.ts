@@ -28,7 +28,7 @@ constructor(private store: Store) {} // Inject NgRx store
       type: 'single',
       title: 'Single Room',
       description: 'A cozy single room with modern amenities, perfect for solo travelers.',
-      imageUrl: 'https://images.unsplash.com/photo-1611892440504-42a792e24c9a',
+      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/737205640/display_1500/stock-photo-single-bed-room-in-the-hostel-in-seoul-korea-737205640.jpg',
       price: 80,
       period: 'per night'
     },
@@ -36,7 +36,7 @@ constructor(private store: Store) {} // Inject NgRx store
       type: 'double',
       title: 'Double Room',
       description: 'Spacious double room with a king-size bed, ideal for couples.',
-      imageUrl: 'https://vuniversity.in/wp-content/uploads/2023/10/Types-of-room-single.png',
+      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/1684314124/display_1500/stock-photo-interior-of-a-hotel-bedroom-1684314124.jpg',
       price: 120,
       period: 'per night'
     },
@@ -44,7 +44,7 @@ constructor(private store: Store) {} // Inject NgRx store
       type: 'deluxe',
       title: 'Deluxe Suite',
       description: 'Luxurious suite with a private balcony and premium amenities.',
-      imageUrl: 'https://images.unsplash.com/photo-1578683014728-c7359934f11f',
+      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/153172712/display_1500/stock-photo-luxury-bedroom-in-hotel-153172712.jpg',
       price: 200,
       period: 'per night'
     },
@@ -52,7 +52,7 @@ constructor(private store: Store) {} // Inject NgRx store
       type: 'family',
       title: 'Family Room',
       description: 'Large room with multiple beds, perfect for families or groups.',
-      imageUrl: 'https://images.unsplash.com/photo-1618221710640-bff720b9d56c',
+      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/2530906857/display_1500/stock-photo--star-hotel-everyday-hotel-tuy-hoa-city-phu-yen-province-vietnam-september-view-the-2530906857.jpg',
       price: 50,
       period: 'per night'
     },
@@ -60,7 +60,7 @@ constructor(private store: Store) {} // Inject NgRx store
       type: 'executive',
       title: 'Executive Suite',
       description: 'Elegant suite with a workspace and high-end furnishings.',
-      imageUrl: 'https://images.unsplash.com/photo-1571508601891-7a0f73631bf4',
+      imageUrl: 'https://www.shutterstock.com/shutterstock/photos/2324216897/display_1500/stock-photo-dubai-united-arab-emirates-june-luxury-hotel-room-in-business-district-of-dubai-downtown-2324216897.jpg',
       price: 300,
       period: 'per night'
     }
