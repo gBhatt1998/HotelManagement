@@ -21,11 +21,15 @@ import { FormsModule } from '@angular/forms';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
+import {MatChipsModule} from '@angular/material/chips';
+import { DynamicFormDialogComponent } from './dynamic-form-dialog/dynamic-form-dialog.component';
 @NgModule({
   declarations: [
     NavbarComponent,
-    DialogComponent
+    DialogComponent,
+    DynamicTableComponent,
+    DynamicFormDialogComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +49,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatFormFieldModule,
     FormsModule,
     MatDialogModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatChipsModule
   ],
   exports:[
     NavbarComponent,
@@ -64,7 +69,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatFormFieldModule,
     FormsModule,
     MatDialogModule,
-    DialogComponent
+    DialogComponent,
+    DynamicTableComponent
   ]
 })
 export class SharedModule { }

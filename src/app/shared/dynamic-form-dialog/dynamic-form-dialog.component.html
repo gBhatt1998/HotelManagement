@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{ data.isEdit ? 'Edit' : 'Create' }} {{ data.moduleName }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div *ngFor="let field of data.formFields" class="form-group">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+
+        <input
+          *ngIf="field.type === 'text' || field.type === 'number'"
+          matInput
+          [type]="field.type"
+          [formControlName]="field.key"
+        />
+
+        <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+          {{ field.label }} is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+      {{ data.isEdit ? 'Update' : 'Create' }}
+    </button>
+  </mat-dialog-actions>
+</form>

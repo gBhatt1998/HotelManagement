@@ -1,5 +1,6 @@
 .sidenav-container {
   height: 100vh; /* full viewport height */
+  margin-top: 80px ;  /* remove top margin */
 }
 
 .sidenav {

@@ -8,6 +8,7 @@ import { StoreModule } from '@ngrx/store';
 import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './auth/jwt.interceptor';
+import { EffectsModule } from '@ngrx/effects';
 // import { JwtInterceptor } from './auth/Jwt.interceptor';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { JwtInterceptor } from './auth/jwt.interceptor';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot({}, {}),  // empty root reducer
+EffectsModule.forRoot([]),
     SharedModule
   ],
   providers: [ {

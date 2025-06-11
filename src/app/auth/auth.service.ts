@@ -18,16 +18,16 @@ isAuthenticated = false; // This should be set based on the login response or to
   }
 
     logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwt');
     localStorage.removeItem('role');
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('jwt');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('jwt');
   }
 
   getRole(): string | null {

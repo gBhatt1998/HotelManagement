@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AllReservationsComponent } from './all-reservations/all-reservations.component';
+import { DepartmentComponent } from './department/department.component';
 
 const routes: Routes = [
   {
@@ -9,10 +10,12 @@ const routes: Routes = [
     component: DashboardComponent, // This has the sidebar and <router-outlet>
     children: [
       { path: 'reservations', component: AllReservationsComponent },
+       {path: 'department',component:DepartmentComponent},
       // Add more routes like:
       // { path: 'guests', component: GuestsComponent },
       // { path: 'rooms', component: RoomsComponent },
-      { path: '', redirectTo: 'reservations', pathMatch: 'full' }
+      { path: '', redirectTo: 'reservations', pathMatch: 'full' },
+     
     ]
   }
 ];
