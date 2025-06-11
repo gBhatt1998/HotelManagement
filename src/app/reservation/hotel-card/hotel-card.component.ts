@@ -157,8 +157,19 @@ private fetchAvailableServices(): void {
           title: 'Success',
           message: response.message || 'Reservation Confirmed!',
           mode: 'success',
-          statusCode: response.status || 201
+          statusCode: response.status || 201,
+          close: true,
         };
+        this.bookingForm.reset();
+        if (this.checkInDate) {
+          this.bookingForm.patchValue({ checkIn: new Date(this.checkInDate) });
+        }
+        if (this.checkOutDate) {
+          this.bookingForm.patchValue({ checkOut: new Date(this.checkOutDate) });
+        }
+
+        this.bookingForm.patchValue({ serviceIds: [] });
+        this.selectedServices = [];
       },
       error: (error) => {
         const errorMsg = error.error?.message || 'An error occurred during reservation.';
@@ -168,7 +179,8 @@ private fetchAvailableServices(): void {
           title: 'Error',
           message: errorMsg,
           mode: 'error',
-          statusCode: status
+          statusCode: status,
+          close: true,
         };
       }
     });

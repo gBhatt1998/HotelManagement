@@ -28,7 +28,7 @@ export class RoomListComponent {
   checkOut: string | null = null;
   roomType: string = '';
   private roomInitialized = false;
-
+  hasRoomLoadFailed = false;
   @Output() sendAllAvailableRoomTypes=new EventEmitter<string[]>();
   constructor(private roomlist: RoomlistService, private store: Store<AppState>, private dialogService: DialogService
 ) {} // Inject 
@@ -71,7 +71,21 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
     roomObservable.subscribe({
       next: (data: Room[]) => {
         dialogRef.close();
+        this.hasRoomLoadFailed = false;
 
+        if (data.length === 0) {
+          this.hasRoomLoadFailed = true; 
+        }
+        if (!Array.isArray(data)) {
+          this.dialogService.openError({
+            title: 'Invalid Response',
+            message: 'Server returned unexpected data format.',
+            showRetry: true,
+            onRetry: () => this.fetchRooms()
+          });
+          return;
+        }
+        
         this.rooms = data;
         this.availableRoomType = Array.from(new Set(data.map(room => room.type)));
         this.sendAllAvailableRoomTypes.emit(this.availableRoomType);
@@ -84,16 +98,14 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
         this.applyFilters();
       },
       error: (error) => {
-        dialogRef.componentInstance.data = {
+        dialogRef.close(); // close the loading dialog
+
+        this.dialogService.openError({
           title: 'Failed to Load Rooms',
           message: error?.error?.message || 'Something went wrong while fetching rooms.',
-          mode: 'error',
           showRetry: true,
-          onRetry: () => {
-            dialogRef.close();
-            this.fetchRooms(); // Retry logic
-          }
-        };
+          onRetry: () => this.fetchRooms()
+        });
       }
     });
   }

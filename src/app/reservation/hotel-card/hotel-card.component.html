@@ -14,7 +14,7 @@
                 <span class="price__label">${{ currentRoom.pricePerNight }} /</span>
                 <span class="measure__label">per-night</span>
                 <small class="nights-info" style="margin-right: 4px; color: #777;" *ngIf="calculateNights() > 1">
-                    · {{ calculateNights() }} {{ calculateNights() === 1 ? 'night' : 'nights' }}      </small>
+                    · {{ calculateNights() }} {{ 'nights' }}      </small>
             </div>
         </div>
 

@@ -4,21 +4,27 @@
     Sort by Price {{sortOrder === 'asc' ? '↑' : '↓'}}
   </button>
 </div>
+
+<div *ngIf="hasRoomLoadFailed && rooms.length === 0" class="no-rooms-message">
+  <!-- <mat-icon color="warn">hotel</mat-icon> -->
+  <p>No rooms available for the selected dates. Please try a different range.</p>
+</div>
 <div class="cards-container">
   <mat-card class="example-card" appearance="outlined" *ngFor="let room of paginatedRooms">
     <div class="card-content-container">
       <div class="image-section">
-        <img mat-card-image [src]="room.imageUrl" alt="{{ room.type }} Image">
+        <img mat-card-image [src]="room?.imageUrl" alt="{{ room?.type }} Image">
       </div>
 
       <mat-card-content class="description">
-        <h3 class="room-title">{{ room.type }} Room</h3>
-        <p>{{ room.description }}</p>
+        <h3 class="room-title">{{ room?.type }} Room</h3>
+        <p>{{ room?.description }}</p>
+       
       </mat-card-content>
 
       <div class="sidebar">
         <div class="price-section">
-          <mat-card-subtitle>${{ room.pricePerNight }}</mat-card-subtitle>
+          <mat-card-subtitle>${{ room?.pricePerNight }}</mat-card-subtitle>
           <span class="per-night">per-night</span>
         </div>
         <mat-card-actions>

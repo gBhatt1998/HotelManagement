@@ -5,6 +5,10 @@ export interface DialogData {
   message: string;
   title?: string;
   mode: 'loading' | 'success' | 'error';
+  statusCode?: number;
+  close?: boolean;
+  showRetry?: boolean;            
+  onRetry?: () => void;
 }
 
 @Component({
@@ -20,5 +24,11 @@ export class DialogComponent {
 
   close() {
     this.dialogRef.close();
+  }
+  retry(): void {
+    this.dialogRef.close(); 
+    if (this.data.onRetry) {
+      this.data.onRetry(); 
+    }
   }
 }

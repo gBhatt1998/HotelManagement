@@ -1,20 +1,28 @@
 <h2 mat-dialog-title *ngIf="data.title">{{ data.title }}</h2>
 
 <div mat-dialog-content>
-  <div *ngIf="data.mode === 'loading'" style="text-align:center;">
+ 
+  <div *ngIf="data.mode === 'loading'" style="text-align: center;">
     <mat-spinner diameter="40"></mat-spinner>
+    <p style="margin-top: 10px;">{{ data.message }}</p>
+  </div>
+
+
+  <div *ngIf="data.mode === 'success'" class="success-message">
     <p>{{ data.message }}</p>
   </div>
 
-  <div *ngIf="data.mode === 'success'" class="success-message">
-    ✅ {{ data.message }}
-  </div>
 
   <div *ngIf="data.mode === 'error'" class="error-message">
-    ❌ {{ data.message }}
+    <p>{{ data.message }}</p>
+    <div *ngIf="data.statusCode" class="status-code">
+      <strong>Status:</strong> {{ data.statusCode }}
+    </div>
   </div>
 </div>
 
+
 <div mat-dialog-actions *ngIf="data.mode !== 'loading'" align="end">
-  <button mat-button color="primary" (click)="close()">OK</button>
+  <button *ngIf="data.showRetry" mat-button color="warn" (click)="retry()">Retry</button>
+  <button *ngIf="data.close !== false && !data.showRetry" mat-button color="primary" (click)="close()">OK</button>
 </div>
