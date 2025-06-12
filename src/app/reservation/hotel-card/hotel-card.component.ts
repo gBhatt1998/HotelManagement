@@ -161,6 +161,7 @@ export class HotelCardComponent implements OnInit {
           statusCode: response.status || 201,
           close: true,
         };
+
         this.bookingForm.reset();
         if (this.checkInDate) {
           this.bookingForm.patchValue({ checkIn: new Date(this.checkInDate) });
@@ -168,13 +169,25 @@ export class HotelCardComponent implements OnInit {
         if (this.checkOutDate) {
           this.bookingForm.patchValue({ checkOut: new Date(this.checkOutDate) });
         }
-
         this.bookingForm.patchValue({ serviceIds: [] });
         this.selectedServices = [];
       },
       error: (error) => {
-        const errorMsg = error.error?.message || 'An error occurred during reservation.';
+        let errorMsg = 'An error occurred during reservation.';
         const status = error.status || 500;
+
+        const backendResponse = error.error;
+
+        // Handle 400 (Bad Request) and 401 (Unauthorized) and allow custom messages
+        if (status === 400 || status === 401) {
+          if (typeof backendResponse === 'string') {
+            errorMsg = backendResponse;
+          } else if (backendResponse.message) {
+            errorMsg = backendResponse.message;
+          } else if (typeof backendResponse === 'object') {
+            errorMsg = Object.values(backendResponse).join('\n');
+          }
+        }
 
         dialogRef.componentInstance.data = {
           title: 'Error',
@@ -184,6 +197,9 @@ export class HotelCardComponent implements OnInit {
           close: true,
         };
       }
+      
+      
     });
   }
+  
 }
