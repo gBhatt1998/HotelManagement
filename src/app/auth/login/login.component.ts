@@ -33,6 +33,9 @@ loginForm: FormGroup;
       localStorage.setItem('role', res.role);
       console.log('token:', res.jwt);
       console.log('Role:', res.role );
+
+      this.authService.notifyLogin(); // Add this line
+
       if (res.role === 'ROLE_ADMIN') {
         this.router.navigate(['/admin']);
       } else {
@@ -44,4 +47,5 @@ loginForm: FormGroup;
     }
   });
 }
+
 }

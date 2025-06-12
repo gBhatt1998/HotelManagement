@@ -8,12 +8,18 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-   constructor( private authService:AuthService,private router:Router){}
+  // isLoggedIn = false;
+  //  constructor( private authService:AuthService,private router:Router){}
 
 
-   logout() {
-    this.authService.logout();
-    // Redirect to login page after logout
-    this.router.navigate(['/login']);
-}
+  // ngOnInit() {
+  //   this.authService.getLoggedInStatus().subscribe((status) => {
+  //     this.isLoggedIn = status;
+  //   });
+  // }
+
+  // logout() {
+  //   this.authService.logout();
+  //   this.router.navigate(['/login']);
+  // }
 }

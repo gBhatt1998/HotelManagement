@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AllReservationsComponent } from './all-reservations/all-reservations.component';
 import { DepartmentComponent } from './department/department.component';
+import { EmployeeComponent } from './employee/employee.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,8 @@ const routes: Routes = [
     children: [
       { path: 'reservations', component: AllReservationsComponent },
        {path: 'department',component:DepartmentComponent},
+      { path: 'employee', component: EmployeeComponent },
+      
       // Add more routes like:
       // { path: 'guests', component: GuestsComponent },
       // { path: 'rooms', component: RoomsComponent },

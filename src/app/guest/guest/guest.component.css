@@ -1,0 +1,25 @@
+.guest-reservation{
+    margin-top: 70px;
+}
+.guest-info-card {
+    margin: 20px 0;
+    padding: 16px;
+    margin-top: 70px;
+  }
+  
+  .guest-reservation {
+    margin: 1rem;
+  }
+  
+  .guest-info-card {
+    margin-bottom: 1rem;
+  }
+  
+  .guest-service-cards {
+    margin-top: 2rem;
+  }
+  
+  .service-card {
+    margin-bottom: 1rem;
+  }
+  

@@ -1,6 +1,6 @@
 
 export interface Service {
-  serviceId: number; // previously might have been "id"
+  serviceId: number; 
   name: string;
   description: string;
   price: number;

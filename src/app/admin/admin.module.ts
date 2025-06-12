@@ -10,22 +10,32 @@ import { ReservationEffects } from './store/all-reservation/all-reservation.effe
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { DepartmentComponent } from './department/department.component';
+import { departmentReducer } from './store/department/department.reducer';
+import { DepartmentEffects } from './store/department/department.effects';
+import { EmployeeComponent } from './employee/employee.component';
+import { employeeReducer } from './store/employee/employee.reducer';
+import { EmployeeEffects } from './store/employee/employee.effects';
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
     AllReservationsComponent,
-    DepartmentComponent
+    DepartmentComponent,
+    EmployeeComponent
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     SharedModule,
       StoreModule.forFeature('allReservations', reservationReducer),
-
+    StoreModule.forFeature('departments', departmentReducer),
+    StoreModule.forFeature('employees', employeeReducer),  // <-- Register reducer
+    EffectsModule.forFeature([EmployeeEffects]) ,
     // Register the feature effect
     EffectsModule.forFeature([ReservationEffects]),
+    EffectsModule.forFeature([DepartmentEffects]),
+
   ]
 })
 export class AdminModule { }

@@ -8,16 +8,15 @@ import { Service } from './models/service.model';
 })
 export class HotelCardService {
 
- private apiUrl = 'http://localhost:8080/reservation/allServices'; 
- private bookingApiUrl = 'http://localhost:8080/reservation/confirmed'; // URL for booking a room
-
+  private apiUrl = 'http://localhost:8080/reservation/services'; 
+ private bookingApiUrl = 'http://localhost:8080/reservation/confirmed'; 
   constructor(private http: HttpClient) { }
 
   getAllServices(): Observable<Service[]> {
     return this.http.get<Service[]>(this.apiUrl);
   }
 confirmReservation(payload: any): Observable<any> {
-  return this.http.post(this.bookingApiUrl, payload); // adjust API URL if needed
+  return this.http.post(this.bookingApiUrl, payload); 
 }
 
 

@@ -12,12 +12,12 @@ export class RoomlistService {
   constructor(private http: HttpClient) {}
 
   getAllAvailableRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.baseUrl}/allAvailableRooms`);
+    return this.http.get<Room[]>(`${this.baseUrl}/rooms/available/types`);
   }
 
   getAvailableRoomsByDate(checkIn: string, checkOut: string): Observable<Room[]> {
     return this.http.get<Room[]>(
-      `${this.baseUrl}/availableRoomsByDate?checkIn=${checkIn}&checkOut=${checkOut}`
+      `${this.baseUrl}/rooms/available/by-date?checkIn=${checkIn}&checkOut=${checkOut}`
     );
   }
 }

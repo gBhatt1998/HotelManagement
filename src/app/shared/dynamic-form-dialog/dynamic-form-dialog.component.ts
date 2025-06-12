@@ -4,9 +4,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface DynamicDialogData {
   formTitle: string;
-  formFields: { key: string; label: string; type: string; value?: string | number }[];
   isEdit: boolean;
   moduleName: string;
+  formFields: {
+    key: string;
+    label: string;
+    type: 'text' | 'number' | 'date' | 'multiselect';
+    value?: string | number | string[] | number[];
+    options?: { label: string; value: any }[]; // For multiselect
+  }[];
 }
 
 @Component({

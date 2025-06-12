@@ -24,13 +24,17 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { DynamicFormDialogComponent } from './dynamic-form-dialog/dynamic-form-dialog.component';
+
+import { AddLabelDirective } from './directive/add-label.directive';
+
 @NgModule({
   declarations: [
     NavbarComponent,
     DialogComponent,
     DynamicTableComponent,
-    DynamicFormDialogComponent
-  ],
+    DynamicFormDialogComponent,
+    AddLabelDirective
+  ],  
   imports: [
     CommonModule,
     SharedRoutingModule,
@@ -70,7 +74,8 @@ import { DynamicFormDialogComponent } from './dynamic-form-dialog/dynamic-form-d
     FormsModule,
     MatDialogModule,
     DialogComponent,
-    DynamicTableComponent
+    DynamicTableComponent,
+    AddLabelDirective
   ]
 })
 export class SharedModule { }

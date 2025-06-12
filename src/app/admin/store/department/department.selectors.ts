@@ -5,5 +5,5 @@ export const selectDepartmentState = createFeatureSelector<DepartmentState>('dep
 
 export const selectAllDepartments = createSelector(
   selectDepartmentState,
-  state => state.departments
+  (state: DepartmentState) => state.departments
 );

@@ -1,13 +1,11 @@
-<section>
+<!-- <section>
     <nav class="navbar navbar-expand-lg fixed-top pb-4 px-3" style="background-color: #102C57;">
         <div class="container-fluid">
             <a class="navbar-brand text-light mt-3" href="#">
                 <i class="fa-brands fa-xl fa-monero me-3" style="color: #f8f0e5;"></i>
                 METROPOLITAN
               </a>
-          <!-- <button class="navbar-toggler mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button> -->
+        
           <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav nav-underline mt-3 mb-2 mb-lg-0 justify-content-end">
                 <li class="nav-item">
@@ -28,13 +26,13 @@
                
               </ul>
 
-               <div class="d-flex ms-3 mt-3">
-          <a class="btn btn-outline-light me-2" routerLink="/login">Login</a>
-          <a class="btn btn-light" (click)="logout()">Logout</a>
-        </div>
-          </div>
+              <div class="d-flex ms-3 mt-3">
+                <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login">Login</a>
+                <button *ngIf="isLoggedIn" class="btn btn-light" (click)="logout()">Logout</button>
+              </div>
+<
         </div>
       </nav>
 </section>  
 
-
+ -->

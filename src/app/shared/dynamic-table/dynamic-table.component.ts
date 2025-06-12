@@ -1,4 +1,7 @@
-import { Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import {
+  Component, Input, Output, EventEmitter,
+  ViewChild, OnChanges, SimpleChanges, AfterViewInit
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
@@ -7,19 +10,19 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './dynamic-table.component.html',
   styleUrls: ['./dynamic-table.component.css']
 })
-export class DynamicTableComponent implements OnChanges, AfterViewInit {
+export class DynamicTableComponent<T extends object> implements OnChanges, AfterViewInit {
   @Input() displayedColumns: string[] = [];
-  @Input() data: any[] = [];
+  @Input() data: T[] = [];
   @Input() showDateFilter: boolean = false;
   @Input() enableActions: boolean = true;
   @Input() serviceDropdown?: string[];
   @Input() enableEdit: boolean = true;
 
-  @Output() edit = new EventEmitter<any>();
-  @Output() delete = new EventEmitter<any>();
+  @Output() edit = new EventEmitter<T>();
+  @Output() delete = new EventEmitter<T>();
 
-  originalData: any[] = [];
-  dataSource = new MatTableDataSource<any>();
+  originalData: T[] = [];
+  dataSource = new MatTableDataSource<T>();
 
   selectedStart: Date | null = null;
   selectedEnd: Date | null = null;
@@ -37,7 +40,7 @@ export class DynamicTableComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
@@ -52,7 +55,7 @@ export class DynamicTableComponent implements OnChanges, AfterViewInit {
       end.setHours(23, 59, 59, 999);
 
       filteredData = filteredData.filter(row => {
-        const checkIn = new Date(row.checkInDate);
+        const checkIn = new Date((row as any)['checkInDate']); // you can make this stricter per use case
         return checkIn >= start && checkIn <= end;
       });
     }
@@ -74,15 +77,23 @@ export class DynamicTableComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  getNestedValue(obj: T, path: string): unknown {
+    if (!path.includes('.')) {
+      return (obj as any)[path]; // handles 'id', 'roomType', etc.
+    }
+    return path.split('.').reduce((acc, part) => acc && (acc as any)[part], obj);
   }
+  
 
-  onEdit(row: any): void {
+  onEdit(row: T): void {
     this.edit.emit(row);
   }
 
-  onDelete(row: any): void {
+  onDelete(row: T): void {
     this.delete.emit(row);
+  }
+
+  shouldShowPaginator(): boolean {
+    return this.dataSource.data.length > this.pageSize;
   }
 }

@@ -1,0 +1,33 @@
+<div class="guest-reservation">
+
+    <mat-card *ngIf="guest$ | async as guest" class="guest-info-card" appearance="outlined">
+        <mat-card-header>
+            <mat-card-title>Welcome, {{ guest.name }}</mat-card-title>
+            <mat-card-subtitle>Guest Details</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p><strong>Email:</strong> {{ guest.email }}</p>
+            <p><strong>Phone:</strong> {{ guest.phone }}</p>
+        </mat-card-content>
+    </mat-card>
+
+    <hr />
+
+    <app-dynamic-table [displayedColumns]="columns" [data]="(reservations$ | async) ?? []" [enableActions]="true"
+        [enableEdit]="false" [showDateFilter]="false" (delete)="onDelete($event.reservationId)">
+    </app-dynamic-table>
+
+    <div class="guest-service-cards" *ngIf="selectedServiceDetails.length">
+        <h3>Selected Services</h3>
+
+        <div class="service-card" *ngFor="let service of selectedServiceDetails">
+            <mat-card class="mat-elevation-z3">
+                <mat-card-title>{{ service.name }}</mat-card-title>
+                <mat-card-content>
+                    <p>{{ service.description }}</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
+  
