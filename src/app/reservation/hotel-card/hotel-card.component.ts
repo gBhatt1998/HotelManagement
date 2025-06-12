@@ -38,7 +38,7 @@ checkOutDate!: string;
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      phone: ['', Validators.required,Validators.minLength(10)],
       checkIn: [null, Validators.required],
       checkOut: [null, Validators.required],
       password: ['', [Validators.required, Validators.minLength(6),]],
@@ -117,7 +117,6 @@ private fetchAvailableServices(): void {
     const nights = this.calculateNights();
     const roomCost = (this.currentRoom?.pricePerNight || 0) * nights;
 
-    // Always get fresh reference to avoid shallow checks
     const selectedIds = [...(this.bookingForm.get('serviceIds')?.value || [])];
     console.log('Calculating price for service IDs:', selectedIds);
 
@@ -131,10 +130,12 @@ private fetchAvailableServices(): void {
   if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
   const formValue = this.bookingForm.value;
+ const formattedCheckInDate = new Date(formValue.checkIn).toISOString().split('T')[0];
+  const formattedCheckOutDate = new Date(formValue.checkOut).toISOString().split('T')[0];
 
   const bookingPayload = {
-    checkInDate: formValue.checkIn,
-    checkOutDate: formValue.checkOut,
+    checkInDate: formattedCheckInDate,
+    checkOutDate: formattedCheckOutDate,
     totalPrice: this.totalPrice,
     roomId: this.roomId,
     guestDetails: {
