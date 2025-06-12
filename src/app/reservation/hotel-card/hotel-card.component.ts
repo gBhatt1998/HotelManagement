@@ -17,64 +17,64 @@ import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
   styleUrls: ['./hotel-card.component.css']
 })
 export class HotelCardComponent implements OnInit {
-  
 
- availableServices: Service[] = [];
- currentRoom!:Room;
+
+  availableServices: Service[] = [];
+  currentRoom!: Room;
   bookingForm!: FormGroup;
   totalPrice: number = 0;
   roomId!: number;
-checkInDate!:string ;
-checkOutDate!: string;
+  checkInDate!: string;
+  checkOutDate!: string;
 
   previousSelectedServiceIds: number[] = [];
   selectedServices: Service[] = [];
-  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>, 
-    private hotelCardService: HotelCardService, 
-    private dialogService: DialogService){}
+  constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>,
+    private hotelCardService: HotelCardService,
+    private dialogService: DialogService) { }
 
 
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      phone: ['', Validators.required, Validators.minLength(10)],
       checkIn: [null, Validators.required],
       checkOut: [null, Validators.required],
       password: ['', [Validators.required, Validators.minLength(6),]],
-        serviceIds: [[]],
+      serviceIds: [[]],
 
     });
 
-this.store.select(selectCheckInDate).subscribe(checkIn => {
-  if (checkIn) {
-    this.checkInDate = new Date(checkIn).toISOString().split('T')[0]; 
-    this.bookingForm.patchValue({ checkIn: new Date(checkIn) }); 
-    this.calculateTotalPrice();
+    this.store.select(selectCheckInDate).subscribe(checkIn => {
+      if (checkIn) {
+        this.checkInDate = new Date(checkIn).toISOString().split('T')[0];
+        this.bookingForm.patchValue({ checkIn: new Date(checkIn) });
+        this.calculateTotalPrice();
 
-  }
-});
+      }
+    });
 
-this.store.select(selectCheckOutDate).subscribe(checkOut => {
-  if (checkOut) {
-    this.checkOutDate = new Date(checkOut).toISOString().split('T')[0]; // ensure string
-    this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
-    this.calculateTotalPrice();
+    this.store.select(selectCheckOutDate).subscribe(checkOut => {
+      if (checkOut) {
+        this.checkOutDate = new Date(checkOut).toISOString().split('T')[0]; // ensure string
+        this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
+        this.calculateTotalPrice();
 
-  }
-});
+      }
+    });
 
-  
-  this.store.select(selectSelectedRoom).subscribe(room => {
-    if (room) { 
-      this.currentRoom = room;
-    this.roomId = room.roomNumber;
-      this.calculateTotalPrice();
+
+    this.store.select(selectSelectedRoom).subscribe(room => {
+      if (room) {
+        this.currentRoom = room;
+        this.roomId = room.roomNumber;
+        this.calculateTotalPrice();
 
         console.log(this.currentRoom);
-  
-    }
-  });
+
+      }
+    });
 
     this.fetchAvailableServices();
 
@@ -84,7 +84,7 @@ this.store.select(selectCheckOutDate).subscribe(checkOut => {
     });
   }
 
- 
+
   public calculateNights(): number {
     const checkIn = this.bookingForm.get('checkIn')?.value;
     const checkOut = this.bookingForm.get('checkOut')?.value;
@@ -96,7 +96,7 @@ this.store.select(selectCheckOutDate).subscribe(checkOut => {
     return Math.max(1, Math.ceil(diff));
   }
 
-private fetchAvailableServices(): void {
+  private fetchAvailableServices(): void {
     // this.loadingServices = true;
     this.hotelCardService.getAllServices().subscribe({
       next: (services) => {
@@ -113,11 +113,10 @@ private fetchAvailableServices(): void {
     });
   }
 
-  public  calculateTotalPrice(): void {
+  public calculateTotalPrice(): void {
     const nights = this.calculateNights();
     const roomCost = (this.currentRoom?.pricePerNight || 0) * nights;
 
-    // Always get fresh reference to avoid shallow checks
     const selectedIds = [...(this.bookingForm.get('serviceIds')?.value || [])];
     console.log('Calculating price for service IDs:', selectedIds);
 
@@ -128,26 +127,28 @@ private fetchAvailableServices(): void {
   }
 
   onSubmit(): void {
-  if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
+    if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
-  const formValue = this.bookingForm.value;
+    const formValue = this.bookingForm.value;
+    const formattedCheckInDate = new Date(formValue.checkIn).toISOString().split('T')[0];
+    const formattedCheckOutDate = new Date(formValue.checkOut).toISOString().split('T')[0];
 
-  const bookingPayload = {
-    checkInDate: formValue.checkIn,
-    checkOutDate: formValue.checkOut,
-    totalPrice: this.totalPrice,
-    roomId: this.roomId,
-    guestDetails: {
-      name: formValue.name,
-      email: formValue.email,
-      password: formValue.password,
-      phone: formValue.phone,
-      role: 'USER'
-    },
-    serviceIds: formValue.serviceIds || []
-  };
+    const bookingPayload = {
+      checkInDate: formattedCheckInDate,
+      checkOutDate: formattedCheckOutDate,
+      totalPrice: this.totalPrice,
+      roomId: this.roomId,
+      guestDetails: {
+        name: formValue.name,
+        email: formValue.email,
+        password: formValue.password,
+        phone: formValue.phone,
+        role: 'USER'
+      },
+      serviceIds: formValue.serviceIds || []
+    };
 
-  console.log('Booking Payload:', bookingPayload);
+    console.log('Booking Payload:', bookingPayload);
 
     const dialogRef = this.dialogService.openLoading('Please wait while we confirm your reservation...', 'Booking in Progress');
 
