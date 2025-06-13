@@ -38,7 +38,7 @@ export class HotelCardComponent implements OnInit {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required, Validators.minLength(10)],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       checkIn: [null, Validators.required],
       checkOut: [null, Validators.required],
       password: ['', [Validators.required, Validators.minLength(6),]],

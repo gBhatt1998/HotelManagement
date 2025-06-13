@@ -15,6 +15,7 @@ import { DepartmentEffects } from './store/department/department.effects';
 import { EmployeeComponent } from './employee/employee.component';
 import { employeeReducer } from './store/employee/employee.reducer';
 import { EmployeeEffects } from './store/employee/employee.effects';
+import { RoomTypeComponent } from './room-type/room-type.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { EmployeeEffects } from './store/employee/employee.effects';
     DashboardComponent,
     AllReservationsComponent,
     DepartmentComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    RoomTypeComponent
   ],
   imports: [
     CommonModule,

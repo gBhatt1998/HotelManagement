@@ -40,7 +40,7 @@ export class EmployeeEffects {
                     map(employees => {
                         this.dialogService.openSuccess({
                             title: 'Employee Created',
-                            message: `Employee '${employee.name}' created successfully.`
+                            message: `Employee '${employee.name}' created successfully.`,
                         });
                         return EmployeeActions.loadEmployeesSuccess({ employees });
                     }),
@@ -65,7 +65,7 @@ export class EmployeeEffects {
                     map(employees => {
                         this.dialogService.openSuccess({
                             title: 'Employee Updated',
-                            message: `Employee '${employee.name}' updated successfully.`
+                            message: `Employee '${employee.name}' updated successfully.`,
                         });
                         return EmployeeActions.loadEmployeesSuccess({ employees });
                     }),
@@ -90,7 +90,7 @@ export class EmployeeEffects {
                     map(employees => {
                         this.dialogService.openSuccess({
                             title: 'Employee Deleted',
-                            message: `Employee deleted successfully.`
+                            message: `Employee deleted successfully.`,
                         });
                         return EmployeeActions.loadEmployeesSuccess({ employees });
                     }),

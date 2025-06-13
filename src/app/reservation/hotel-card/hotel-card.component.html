@@ -22,20 +22,24 @@
         <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
             <!-- Check-in and Check-out -->
             <div class="checkin-checkout" style="display: flex; gap: 10px;">
+                <!-- Check-in -->
                 <mat-form-field appearance="outline" class="form-field small-field">
                     <mat-label>Check-in</mat-label>
-                    <input matInput [value]="bookingForm.get('checkIn')?.value | date:'dd-MM-yyyy'"
-                        formControlName="checkIn" readonly>
+                    <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #checkInPicker></mat-datepicker>
                     <mat-error *ngIf="bookingForm.get('checkIn')?.hasError('required')">Check-in is required</mat-error>
                 </mat-form-field>
-
+                
+                <!-- Check-out -->
                 <mat-form-field appearance="outline" class="form-field small-field">
                     <mat-label>Check-out</mat-label>
-                    <input matInput [value]="bookingForm.get('checkOut')?.value | date:'dd-MM-yyyy'"
-                        formControlName="checkOut" readonly>
-                    <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required')">Check-out is
-                        required</mat-error>
+                    <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #checkOutPicker></mat-datepicker>
+                    <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required')">Check-out is required</mat-error>
                 </mat-form-field>
+  
             </div>
 
             <!-- Name and Phone -->
@@ -49,10 +53,14 @@
                 <mat-form-field appearance="outline" class="form-field small-field">
                     <mat-label>Phone</mat-label>
                     <input matInput type="tel" formControlName="phone">
-                    <mat-error *ngIf="bookingForm.get('phone')?.hasError('required')">Phone is required</mat-error>
-                    <mat-error *ngIf="bookingForm.get('phone')?.hasError('minlength')">Phone must be at least 10
-                        digits</mat-error>
+                    <mat-error *ngIf="bookingForm.get('phone')?.hasError('required')">
+                        Phone is required
+                    </mat-error>
+                    <mat-error *ngIf="bookingForm.get('phone')?.hasError('pattern')">
+                        Phone must be exactly 10 digits
+                    </mat-error>
                 </mat-form-field>
+                  
             </div>
 
             <!-- Email and Password -->

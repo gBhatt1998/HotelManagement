@@ -18,30 +18,34 @@ export class DepartmentEffects {
   loadDepartments$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DepartmentActions.loadDepartments),
-      mergeMap(() =>
-        this.departmentService.getAll().pipe(
-          map((departments: DepartmentResponseDTO[]) =>
-            DepartmentActions.loadDepartmentsSuccess({ departments })
-          ),
+      mergeMap(() => {
+        const dialogRef = this.dialogService.openLoading('Loading departments...');
+        return this.departmentService.getAll().pipe(
+          map((departments: DepartmentResponseDTO[]) => {
+            dialogRef.close();
+            return DepartmentActions.loadDepartmentsSuccess({ departments });
+          }),
           catchError(error => {
+            dialogRef.close();
             this.dialogService.openError({
               title: 'Load Failed',
               message: error?.error?.message || 'Failed to load departments.',
             });
             return of(DepartmentActions.loadDepartmentsFailure({ error: error.message }));
           })
-        )
-      )
+        );
+      })
     )
   );
-
 
   createDepartment$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DepartmentActions.createDepartment),
-      mergeMap(({ department }) =>
-        this.departmentService.create(department).pipe(
+      mergeMap(({ department }) => {
+        const dialogRef = this.dialogService.openLoading('Creating department...');
+        return this.departmentService.create(department).pipe(
           map((created: DepartmentResponseDTO) => {
+            dialogRef.close();
             this.dialogService.openSuccess({
               title: 'Department Created',
               message: `Department '${created.name}' created successfully.`,
@@ -49,24 +53,26 @@ export class DepartmentEffects {
             return DepartmentActions.createDepartmentSuccess({ department: created });
           }),
           catchError(error => {
+            dialogRef.close();
             this.dialogService.openError({
               title: 'Creation Failed',
               message: error?.error?.message || 'Could not create department.',
             });
             return of(DepartmentActions.createDepartmentFailure({ error: error.message }));
           })
-        )
-      )
+        );
+      })
     )
   );
-
 
   updateDepartment$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DepartmentActions.updateDepartment),
-      mergeMap(({ department }) =>
-        this.departmentService.update(department).pipe(
+      mergeMap(({ department }) => {
+        const dialogRef = this.dialogService.openLoading('Updating department...');
+        return this.departmentService.update(department).pipe(
           map((updated: DepartmentResponseDTO) => {
+            dialogRef.close();
             this.dialogService.openSuccess({
               title: 'Department Updated',
               message: `Department '${updated.name}' updated successfully.`,
@@ -74,23 +80,26 @@ export class DepartmentEffects {
             return DepartmentActions.updateDepartmentSuccess({ department: updated });
           }),
           catchError(error => {
+            dialogRef.close();
             this.dialogService.openError({
               title: 'Update Failed',
               message: error?.error?.message || 'Could not update department.',
             });
             return of(DepartmentActions.updateDepartmentFailure({ error: error.message }));
           })
-        )
-      )
+        );
+      })
     )
   );
 
   deleteDepartment$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DepartmentActions.deleteDepartment),
-      mergeMap(({ id }) =>
-        this.departmentService.delete(id).pipe(
+      mergeMap(({ id }) => {
+        const dialogRef = this.dialogService.openLoading('Deleting department...');
+        return this.departmentService.delete(id).pipe(
           map(() => {
+            dialogRef.close();
             this.dialogService.openSuccess({
               title: 'Department Deleted',
               message: `Department with ID ${id} deleted successfully.`,
@@ -98,26 +107,15 @@ export class DepartmentEffects {
             return DepartmentActions.deleteDepartmentSuccess({ id });
           }),
           catchError(error => {
+            dialogRef.close();
             this.dialogService.openError({
               title: 'Deletion Failed',
               message: error?.error?.message || 'Could not delete department.',
             });
             return of(DepartmentActions.deleteDepartmentFailure({ error: error.message }));
           })
-        )
-      )
+        );
+      })
     )
   );
-
-  // 🔄 Reload department list after success actions
-  reloadDepartments$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(
-        DepartmentActions.createDepartmentSuccess,
-        DepartmentActions.updateDepartmentSuccess,
-        DepartmentActions.deleteDepartmentSuccess
-      ),
-      map(() => DepartmentActions.loadDepartments())
-    )
-  );
-}
+}  

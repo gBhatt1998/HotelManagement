@@ -9,26 +9,28 @@ export interface EmployeeState {
 
 const initialState: EmployeeState = {
     employees: [],
-    error: null
+    error: null,
 };
 
 export const employeeReducer = createReducer(
     initialState,
-    on(EmployeeActions.loadEmployeesSuccess, (state, { employees }) => ({ ...state, employees })),
-    on(EmployeeActions.loadEmployeesFailure, (state, { error }) => ({ ...state, error })),
 
-    on(EmployeeActions.createEmployeeSuccess, (state, { employee }) => ({ ...state, employees: [...state.employees, employee] })),
-    on(EmployeeActions.createEmployeeFailure, (state, { error }) => ({ ...state, error })),
-
-    on(EmployeeActions.updateEmployeeSuccess, (state, { employee }) => ({
+    // Main state update from all success scenarios
+    on(EmployeeActions.loadEmployeesSuccess, (state, { employees }) => ({
         ...state,
-        employees: state.employees.map(e => e.id === employee.id ? employee : e)
+        employees,
+        error: null
     })),
-    on(EmployeeActions.updateEmployeeFailure, (state, { error }) => ({ ...state, error })),
 
-    on(EmployeeActions.deleteEmployeeSuccess, (state, { id }) => ({
-        ...state,
-        employees: state.employees.filter(e => e.id !== id)
-    })),
-    on(EmployeeActions.deleteEmployeeFailure, (state, { error }) => ({ ...state, error }))
+    // Handle any failure (used after create/update/delete/load)
+    on(
+        EmployeeActions.loadEmployeesFailure,
+        EmployeeActions.createEmployeeFailure,
+        EmployeeActions.updateEmployeeFailure,
+        EmployeeActions.deleteEmployeeFailure,
+        (state, { error }) => ({
+            ...state,
+            error,
+        })
+    )
 );
