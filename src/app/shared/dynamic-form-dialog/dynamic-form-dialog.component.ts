@@ -1,23 +1,26 @@
-import { Component, Inject, OnInit } from '@angular/core';
+
+import { Component, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface DynamicDialogData {
+  formTitle: string;
   isEdit: boolean;
   moduleName: string;
   formFields: {
     key: string;
     label: string;
-    type: 'text' | 'number' | 'date' | 'multiselect' | 'textarea';
+    type: 'text' | 'number' | 'date' | 'multiselect' | 'select';
     value?: string | number | string[] | number[];
-    options?: { label: string; value: any }[]; // For multiselect
-    required?: boolean;
+    options?: { label: string; value: any }[];
     validators?: {
       name: 'minlength' | 'maxlength' | 'min' | 'max' | 'pattern';
       value: number | string;
       message: string;
     }[];
+    showDetailsCard?: boolean;
   }[];
+  onFieldChange?: (fieldKey: string, value: any, patchForm: (key: string, value: any) => void) => void;
 }
 
 @Component({
@@ -27,11 +30,13 @@ export interface DynamicDialogData {
 })
 export class DynamicFormDialogComponent implements OnInit {
   form!: FormGroup;
+  selectedCardData: any = null;
 
   constructor(
     public dialogRef: MatDialogRef<DynamicFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DynamicDialogData,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +44,6 @@ export class DynamicFormDialogComponent implements OnInit {
 
     this.data.formFields.forEach(field => {
       const validators = [];
-
-      if (field.required) {
-        validators.push(Validators.required);
-      }
 
       if (field.validators) {
         for (const validator of field.validators) {
@@ -66,10 +67,32 @@ export class DynamicFormDialogComponent implements OnInit {
         }
       }
 
+      validators.push(Validators.required);
       group[field.key] = [field.value ?? '', validators];
     });
 
     this.form = this.fb.group(group);
+
+    if (this.data.onFieldChange) {
+      this.data.formFields.forEach(field => {
+        this.form.get(field.key)?.valueChanges.subscribe(value => {
+          this.data.onFieldChange!(field.key, value, this.patchFormValue.bind(this));
+
+          if (field.showDetailsCard && field.options) {
+            const selected = field.options.find(opt => opt.value === value);
+            this.selectedCardData = selected ?? null;
+            this.cdRef.detectChanges();
+          }
+        });
+      });
+    }
+
+    this.cdRef.detectChanges();
+  }
+
+  patchFormValue(key: string, value: any): void {
+    this.form.patchValue({ [key]: value });
+    this.cdRef.detectChanges();
   }
 
   getErrorMessage(fieldKey: string): string {

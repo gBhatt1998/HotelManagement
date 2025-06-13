@@ -18,6 +18,9 @@ import { EmployeeEffects } from './store/employee/employee.effects';
 import { RoomTypeComponent } from './room-type/room-type.component';
 import { roomTypeReducer } from './store/room-type/room-type.reducer';
 import { RoomTypeEffects } from './store/room-type/room-type.effects';
+import { RoomComponent } from './room/room.component';
+import { roomReducer } from './store/room/room.reducer';
+import { RoomEffects } from './store/room/room.effects';
 
 
 @NgModule({
@@ -26,7 +29,8 @@ import { RoomTypeEffects } from './store/room-type/room-type.effects';
     AllReservationsComponent,
     DepartmentComponent,
     EmployeeComponent,
-    RoomTypeComponent
+    RoomTypeComponent,
+    RoomComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +40,11 @@ import { RoomTypeEffects } from './store/room-type/room-type.effects';
     StoreModule.forFeature('departments', departmentReducer),
     StoreModule.forFeature('employees', employeeReducer),
       StoreModule.forFeature('roomTypes', roomTypeReducer),  
+       StoreModule.forFeature('rooms', roomReducer),
     EffectsModule.forFeature([EmployeeEffects]) ,
+    EffectsModule.forFeature([RoomEffects]),
+    
+    
    
     EffectsModule.forFeature([RoomTypeEffects]),
     

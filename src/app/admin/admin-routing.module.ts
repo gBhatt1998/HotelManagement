@@ -5,6 +5,7 @@ import { AllReservationsComponent } from './all-reservations/all-reservations.co
 import { DepartmentComponent } from './department/department.component';
 import { EmployeeComponent } from './employee/employee.component';
 import { RoomTypeComponent } from './room-type/room-type.component';
+import { RoomComponent } from './room/room.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
        {path: 'department',component:DepartmentComponent},
       { path: 'employee', component: EmployeeComponent },
       {path:'room-type',component:RoomTypeComponent},
+      {path:'room',component:RoomComponent},
       
       // Add more routes like:
       // { path: 'guests', component: GuestsComponent },

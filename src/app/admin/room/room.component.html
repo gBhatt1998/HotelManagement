@@ -1,0 +1,16 @@
+<div class="room-container">
+  <h2>Room Management</h2>
+
+  <div class="actions-bar">
+    <button mat-flat-button color="primary" (click)="openCreateDialog()">
+      + Create Room
+    </button>
+  </div>
+
+  <app-dynamic-table
+    [data]="(rooms$ | async) || []"
+    [displayedColumns]="displayedColumns"
+    [enableActions]="true"
+    [enableEdit]="false"
+  ></app-dynamic-table>
+</div>

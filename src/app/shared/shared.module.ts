@@ -26,6 +26,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { DynamicFormDialogComponent } from './dynamic-form-dialog/dynamic-form-dialog.component';
 
 import { AddLabelDirective } from './directive/add-label.directive';
+import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AddLabelDirective } from './directive/add-label.directive';
     DialogComponent,
     DynamicTableComponent,
     DynamicFormDialogComponent,
-    AddLabelDirective
+    AddLabelDirective,
+    DynamicCardComponent
   ],  
   imports: [
     CommonModule,
@@ -75,7 +77,8 @@ import { AddLabelDirective } from './directive/add-label.directive';
     MatDialogModule,
     DialogComponent,
     DynamicTableComponent,
-    AddLabelDirective
+    AddLabelDirective,
+    DynamicCardComponent
   ]
 })
 export class SharedModule { }

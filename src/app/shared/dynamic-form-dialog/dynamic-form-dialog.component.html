@@ -1,40 +1,58 @@
-<h2 mat-dialog-title>
-  {{ data.isEdit ? 'Edit' : 'Create' }} {{ data.moduleName }}
-</h2>
+<h2 mat-dialog-title>{{ data.isEdit ? 'Edit' : 'Create' }} {{ data.moduleName }}</h2>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <mat-dialog-content>
-    <div *ngFor="let field of data.formFields" class="form-group">
-      <mat-form-field appearance="fill" class="full-width">
-        <mat-label>{{ field.label }}</mat-label>
+    <div class="dialog-container">
+      <div class="form-section">
+        <div *ngFor="let field of data.formFields" class="form-group">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ field.label }}</mat-label>
 
-        <!-- TEXT or NUMBER -->
-        <input *ngIf="field.type === 'text' || field.type === 'number'" matInput
-               [type]="field.type"
-               [formControlName]="field.key" />
+            <!-- TEXT or NUMBER -->
+            <input *ngIf="field.type === 'text' || field.type === 'number'" matInput [type]="field.type"
+                   [formControlName]="field.key" />
 
-        <!-- TEXTAREA -->
-        <textarea *ngIf="field.type === 'textarea'" matInput
-                  [formControlName]="field.key" rows="4"></textarea>
+            <!-- DATE -->
+            <ng-container *ngIf="field.type === 'date'">
+              <input matInput [matDatepicker]="picker" [formControlName]="field.key" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </ng-container>
 
-        <!-- DATE -->
-        <input *ngIf="field.type === 'date'" matInput
-               [matDatepicker]="picker"
-               [formControlName]="field.key" />
-        <mat-datepicker-toggle *ngIf="field.type === 'date'" matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+            <!-- MULTISELECT -->
+            <mat-select *ngIf="field.type === 'multiselect'" [formControlName]="field.key" multiple>
+              <mat-option *ngFor="let option of field.options" [value]="option.value">
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
 
-        <!-- MULTISELECT -->
-        <mat-select *ngIf="field.type === 'multiselect'" [formControlName]="field.key" multiple>
-          <mat-option *ngFor="let option of field.options" [value]="option.value">
-            {{ option.label }}
-          </mat-option>
-        </mat-select>
+            <!-- SELECT (for room type selection) -->
+            <mat-select *ngIf="field.type === 'select' && field.options" [formControlName]="field.key">
+              <mat-option *ngFor="let option of field.options" [value]="option.value">
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
 
-        <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-          {{ getErrorMessage(field.key) }}
-        </mat-error>
-      </mat-form-field>
+            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Card Section -->
+      <app-dynamic-card
+        *ngIf="selectedCardData"
+        class="card-section"
+        [title]="'Room Type Details'"
+        [data]="selectedCardData"
+        [fields]="[
+          { label: 'Type', key: 'type' },
+          { label: 'Description', key: 'description' },
+          { label: 'Price Per Night', key: 'pricePerNight', currency: true },
+          { label: 'Image', key: 'imageUrl', image: true }
+        ]"
+      ></app-dynamic-card>
     </div>
   </mat-dialog-content>
 

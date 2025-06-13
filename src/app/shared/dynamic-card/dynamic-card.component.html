@@ -1,0 +1,12 @@
+<mat-card *ngIf="data">
+  <mat-card-title>{{ title }}</mat-card-title>
+  <mat-card-content>
+    <div *ngFor="let field of fields">
+      <p>
+        <strong>{{ field.label }}:</strong>
+        <span *ngIf="field.currency">₹{{ data[field.key] }}</span>
+        <span *ngIf="!field.currency">{{ data[field.key] }}</span>
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
