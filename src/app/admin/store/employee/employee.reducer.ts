@@ -1,36 +1,39 @@
 import { createReducer, on } from '@ngrx/store';
 import * as EmployeeActions from './employee.actions';
 import { EmployeeResponseDTO } from 'src/app/shared/models/employeeresponseDTO.model';
-
 export interface EmployeeState {
-    employees: EmployeeResponseDTO[];
-    error: string | null;
+  employees: EmployeeResponseDTO[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: EmployeeState = {
-    employees: [],
-    error: null,
+  employees: [],
+  loading: false,
+  error: null,
 };
 
 export const employeeReducer = createReducer(
-    initialState,
+  initialState,
 
-    // Main state update from all success scenarios
-    on(EmployeeActions.loadEmployeesSuccess, (state, { employees }) => ({
-        ...state,
-        employees,
-        error: null
-    })),
+  on(EmployeeActions.loadEmployees, (state) => ({ ...state, loading: true })),
 
-    // Handle any failure (used after create/update/delete/load)
-    on(
-        EmployeeActions.loadEmployeesFailure,
-        EmployeeActions.createEmployeeFailure,
-        EmployeeActions.updateEmployeeFailure,
-        EmployeeActions.deleteEmployeeFailure,
-        (state, { error }) => ({
-            ...state,
-            error,
-        })
-    )
+  on(EmployeeActions.loadEmployeesSuccess, (state, { employees }) => ({
+    ...state,
+    employees,
+    loading: false,
+    error: null,
+  })),
+
+  on(
+    EmployeeActions.loadEmployeesFailure,
+    EmployeeActions.createEmployeeFailure,
+    EmployeeActions.updateEmployeeFailure,
+    EmployeeActions.deleteEmployeeFailure,
+    (state, { error }) => ({
+      ...state,
+      loading: false,
+      error,
+    })
+  )
 );

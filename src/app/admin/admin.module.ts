@@ -16,6 +16,8 @@ import { EmployeeComponent } from './employee/employee.component';
 import { employeeReducer } from './store/employee/employee.reducer';
 import { EmployeeEffects } from './store/employee/employee.effects';
 import { RoomTypeComponent } from './room-type/room-type.component';
+import { roomTypeReducer } from './store/room-type/room-type.reducer';
+import { RoomTypeEffects } from './store/room-type/room-type.effects';
 
 
 @NgModule({
@@ -32,9 +34,12 @@ import { RoomTypeComponent } from './room-type/room-type.component';
     SharedModule,
       StoreModule.forFeature('allReservations', reservationReducer),
     StoreModule.forFeature('departments', departmentReducer),
-    StoreModule.forFeature('employees', employeeReducer),  // <-- Register reducer
+    StoreModule.forFeature('employees', employeeReducer),
+      StoreModule.forFeature('roomTypes', roomTypeReducer),  
     EffectsModule.forFeature([EmployeeEffects]) ,
-    // Register the feature effect
+   
+    EffectsModule.forFeature([RoomTypeEffects]),
+    
     EffectsModule.forFeature([ReservationEffects]),
     EffectsModule.forFeature([DepartmentEffects]),
 

@@ -1,1 +1,20 @@
-<p>room-type works!</p>
+<div class="room-type-header">
+  <h2>Room Types</h2>
+  <button mat-raised-button color="primary" (click)="openCreateDialog()" appAddLabel>Create Room Type</button>
+</div>
+
+<app-dynamic-table
+  [data]="(roomTypes$ | async) || []"
+  [displayedColumns]="displayedColumns"
+  [enableActions]="true"
+  [enableEdit]="true"
+  (edit)="onEdit($event)"
+  (delete)="onDelete($event)">
+</app-dynamic-table>
+
+
+
+ <!-- <app-dynamic-table [displayedColumns]="['id', 'name', 'position', 'hireDate', 'departments']"
+        [data]="(employees$ | async) ?? []" [enableActions]="true" [enableEdit]="true" (edit)="openEditDialog($event)"
+        (delete)="deleteEmployee($event.id)">
+    </app-dynamic-table> -->

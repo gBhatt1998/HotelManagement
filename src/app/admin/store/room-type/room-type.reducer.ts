@@ -16,17 +16,28 @@ const initialState: RoomTypeState = {
 
 export const roomTypeReducer = createReducer(
     initialState,
-    on(RoomTypeActions.loadRoomTypes, state => ({ ...state, loading: true })),
-    on(RoomTypeActions.loadRoomTypesSuccess, (state, { roomTypes }) => ({ ...state, roomTypes, loading: false })),
-    on(RoomTypeActions.loadRoomTypesFailure, (state, { error }) => ({ ...state, error, loading: false })),
 
-    on(RoomTypeActions.addRoomTypeSuccess, (state, { roomType }) => ({ ...state, roomTypes: [...state.roomTypes, roomType] })),
-    on(RoomTypeActions.updateRoomTypeSuccess, (state, { roomType }) => ({
+    // Trigger loading spinner
+    on(RoomTypeActions.loadRoomTypes, state => ({ ...state, loading: true })),
+
+    // On success, update full list and stop spinner
+    on(RoomTypeActions.loadRoomTypesSuccess, (state, { roomTypes }) => ({
         ...state,
-        roomTypes: state.roomTypes.map(r => r.id === roomType.id ? roomType : r)
+        roomTypes,
+        loading: false,
+        error: null
     })),
-    on(RoomTypeActions.deleteRoomTypeSuccess, (state, { id }) => ({
-        ...state,
-        roomTypes: state.roomTypes.filter(r => r.id !== id)
-    }))
+
+    // On any failure
+    on(
+        RoomTypeActions.loadRoomTypesFailure,
+        RoomTypeActions.addRoomTypeFailure,
+        RoomTypeActions.updateRoomTypeFailure,
+        RoomTypeActions.deleteRoomTypeFailure,
+        (state, { error }) => ({
+            ...state,
+            loading: false,
+            error
+        })
+    )
 );

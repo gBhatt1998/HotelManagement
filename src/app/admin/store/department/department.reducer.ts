@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { DepartmentResponseDTO } from 'src/app/shared/models/departmentresponseDTO.model';
 import * as DepartmentActions from './department.actions';
+import { DepartmentResponseDTO } from 'src/app/shared/models/departmentresponseDTO.model';
 
 export interface DepartmentState {
   departments: DepartmentResponseDTO[];
@@ -16,72 +16,14 @@ export const initialState: DepartmentState = {
 
 export const departmentReducer = createReducer(
   initialState,
-
-  // Load Departments
-  on(DepartmentActions.loadDepartments, state => ({
-    ...state,
-    loading: true,
-    error: null
-  })),
+  on(DepartmentActions.loadDepartments, state => ({ ...state, loading: true })),
   on(DepartmentActions.loadDepartmentsSuccess, (state, { departments }) => ({
     ...state,
+    departments,
     loading: false,
-    departments
+    error: null
   })),
   on(DepartmentActions.loadDepartmentsFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error
-  })),
-
-  // Create Department
-  on(DepartmentActions.createDepartment, state => ({
-    ...state,
-    loading: true,
-    error: null
-  })),
-  on(DepartmentActions.createDepartmentSuccess, (state, { department }) => ({
-    ...state,
-    loading: false,
-    departments: [...state.departments, department]
-  })),
-  on(DepartmentActions.createDepartmentFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error
-  })),
-
-  // Update Department
-  on(DepartmentActions.updateDepartment, state => ({
-    ...state,
-    loading: true,
-    error: null
-  })),
-  on(DepartmentActions.updateDepartmentSuccess, (state, { department }) => ({
-    ...state,
-    loading: false,
-    departments: state.departments.map(d =>
-      d.id === department.id ? department : d
-    )
-  })),
-  on(DepartmentActions.updateDepartmentFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error
-  })),
-
-  // Delete Department
-  on(DepartmentActions.deleteDepartment, state => ({
-    ...state,
-    loading: true,
-    error: null
-  })),
-  on(DepartmentActions.deleteDepartmentSuccess, (state, { id }) => ({
-    ...state,
-    loading: false,
-    departments: state.departments.filter(d => d.id !== id)
-  })),
-  on(DepartmentActions.deleteDepartmentFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error

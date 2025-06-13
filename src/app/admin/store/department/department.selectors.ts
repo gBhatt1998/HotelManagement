@@ -7,3 +7,11 @@ export const selectAllDepartments = createSelector(
   selectDepartmentState,
   (state: DepartmentState) => state.departments
 );
+export const selectDepartmentLoading = createSelector(
+  selectDepartmentState,
+  (state: DepartmentState) => state.loading
+);
+export const selectDepartmentError = createSelector(
+  selectDepartmentState,
+  (state: DepartmentState) => state.error
+);
