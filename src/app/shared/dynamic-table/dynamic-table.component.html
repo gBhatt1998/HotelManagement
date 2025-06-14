@@ -1,20 +1,12 @@
 <div class="table-controls">
+  <!-- Search Input -->
   <mat-form-field appearance="outline">
     <mat-label>Search</mat-label>
     <input matInput [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search all columns..." />
   </mat-form-field>
 
-  <ng-container *ngIf="serviceDropdown?.length">
-    <mat-form-field appearance="outline" disabled>
-      <mat-label>Available Services</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let service of serviceDropdown" [value]="service">
-          {{ service }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </ng-container>
 
+  <!-- Date Filter -->
   <ng-container *ngIf="showDateFilter">
     <mat-form-field appearance="outline">
       <mat-label>Start Date</mat-label>
@@ -32,35 +24,58 @@
   </ng-container>
 </div>
 
+<!-- Table -->
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width-table">
+
+  <!-- Dynamic Columns -->
   <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
     <th mat-header-cell *matHeaderCellDef> {{ column | titlecase }} </th>
     <td mat-cell *matCellDef="let row">
       <ng-container [ngSwitch]="column">
+
+        <!-- Date formatting -->
         <ng-container *ngSwitchCase="'checkInDate'">
           {{ row['checkInDate'] | date: 'dd-MM-yyyy' }}
         </ng-container>
+
         <ng-container *ngSwitchCase="'checkOutDate'">
           {{ row['checkOutDate'] | date: 'dd-MM-yyyy' }}
         </ng-container>
+
+        <!-- Service Toggle -->
         <ng-container *ngSwitchCase="'serviceNames'">
           <div *ngIf="row['serviceNames']?.length">
-            <mat-chip *ngFor="let service of row['serviceNames']" color="primary" selected>
-              {{ service }}
-            </mat-chip>
+            <button mat-button (click)="toggleService(row)" color="primary">
+              {{ expandedServiceRowId === row['reservationId'] ? 'Hide Services' : 'View Services' }}
+            </button>
+        
+            <mat-chip-set *ngIf="expandedServiceRowId === row['reservationId']" aria-label="Service list" class="chip-list">
+              <mat-chip *ngFor="let service of row['serviceNames']; let i = index" selected [ngClass]="'chip-color-' + (i % 5)">
+                {{ service }}
+              </mat-chip>
+            </mat-chip-set>
+            
           </div>
         </ng-container>
+        
+        
+        
 
+        <!-- Price Formatting -->
         <ng-container *ngSwitchCase="'totalPrice'">
           ${{ row['totalPrice'] }}
-          </ng-container>
+        </ng-container>
+
+        <!-- Nested Properties (e.g. guest.name) -->
         <ng-container *ngSwitchDefault>
           {{ getNestedValue(row, column) }}
         </ng-container>
+
       </ng-container>
     </td>
   </ng-container>
 
+  <!-- Action Column -->
   <ng-container *ngIf="enableActions" matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let row">
@@ -71,10 +86,12 @@
     </td>
   </ng-container>
 
+  <!-- Header & Row Definitions -->
   <tr mat-header-row *matHeaderRowDef="enableActions ? displayedColumns.concat('actions') : displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: enableActions ? displayedColumns.concat('actions') : displayedColumns"></tr>
 </table>
 
+<!-- Paginator -->
 <mat-paginator *ngIf="shouldShowPaginator()" [length]="dataSource.data.length" [pageSize]="pageSize"
-  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+  [pageSizeOptions]="getPageSizeOptions()" showFirstLastButtons>
 </mat-paginator>

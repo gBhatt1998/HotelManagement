@@ -28,9 +28,9 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
   selectedEnd: Date | null = null;
   searchText: string = '';
   selectedService: string = '';
+  expandedServiceRowId: number | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   pageSize = 5;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -41,13 +41,14 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   applyFilters(): void {
     let filteredData = [...this.originalData];
 
-    // Filter by date
     if (this.showDateFilter && this.selectedStart && this.selectedEnd) {
       const start = new Date(this.selectedStart);
       const end = new Date(this.selectedEnd);
@@ -55,12 +56,11 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
       end.setHours(23, 59, 59, 999);
 
       filteredData = filteredData.filter(row => {
-        const checkIn = new Date((row as any)['checkInDate']); // you can make this stricter per use case
+        const checkIn = new Date((row as any)['checkInDate']);
         return checkIn >= start && checkIn <= end;
       });
     }
 
-    // Global search
     if (this.searchText.trim()) {
       const text = this.searchText.trim().toLowerCase();
       filteredData = filteredData.filter(row =>
@@ -72,18 +72,25 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
 
     this.dataSource.data = filteredData;
 
-    if (this.paginator) {
-      this.paginator.firstPage();
-    }
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+        this.paginator.firstPage();
+      }
+    });
   }
 
+  toggleService(row: T): void {
+    const rowId = (row as any)['reservationId'];
+    this.expandedServiceRowId = this.expandedServiceRowId === rowId ? null : rowId;
+  }
+  
   getNestedValue(obj: T, path: string): unknown {
     if (!path.includes('.')) {
-      return (obj as any)[path]; // handles 'id', 'roomType', etc.
+      return (obj as any)[path];
     }
     return path.split('.').reduce((acc, part) => acc && (acc as any)[part], obj);
   }
-  
 
   onEdit(row: T): void {
     this.edit.emit(row);
@@ -95,5 +102,12 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
 
   shouldShowPaginator(): boolean {
     return this.dataSource.data.length > this.pageSize;
+  }
+
+  getPageSizeOptions(): number[] {
+    const total = this.dataSource.data.length;
+    if (total <= 5) return [5];
+    if (total <= 10) return [5, 10];
+    return [5, 10, 20];
   }
 }

@@ -1,6 +1,6 @@
 <div style="position: relative;">
   <button mat-raised-button color="primary" (click)="openCreateDialog()" appAddLabel>
-    + Add Department
+    + Department
   </button>
 
   <app-dynamic-table [data]="(departments$ | async) ?? []" [displayedColumns]="displayedColumns" [enableActions]="true"

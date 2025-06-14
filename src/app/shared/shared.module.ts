@@ -22,8 +22,9 @@ import { DialogComponent } from './dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
-import {MatChipsModule} from '@angular/material/chips';
+// import {MatChipsModule} from '@angular/material/chips';
 import { DynamicFormDialogComponent } from './dynamic-form-dialog/dynamic-form-dialog.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AddLabelDirective } from './directive/add-label.directive';
 import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
@@ -39,6 +40,7 @@ import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
   ],  
   imports: [
     CommonModule,
+    MatChipsModule,
     SharedRoutingModule,
     MatNativeDateModule,
     MatButtonModule,
@@ -56,7 +58,7 @@ import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
     FormsModule,
     MatDialogModule,
   MatProgressSpinnerModule,
-  MatChipsModule
+  
   ],
   exports:[
     NavbarComponent,
@@ -78,7 +80,8 @@ import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
     DialogComponent,
     DynamicTableComponent,
     AddLabelDirective,
-    DynamicCardComponent
+    DynamicCardComponent,
+    MatChipsModule 
   ]
 })
 export class SharedModule { }

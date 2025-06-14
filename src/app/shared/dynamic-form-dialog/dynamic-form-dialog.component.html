@@ -1,90 +1,98 @@
-<h2 mat-dialog-title>{{ data.isEdit ? 'Edit' : 'Create' }} {{ data.moduleName }}</h2>
+<h2 mat-dialog-title class="dialog-title">
+  {{ data.isEdit ? 'Edit' : 'Create' }} {{ data.moduleName }}
+</h2>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <mat-dialog-content class="dialog-container">
-    <div *ngFor="let field of data.formFields" class="form-group">
-      <ng-container [ngSwitch]="field.type">
-        <!-- TEXT -->
-        <mat-form-field *ngSwitchCase="'text'" appearance="fill" [ngClass]="getFieldClass(field.key)">
-          <mat-label>{{ field.label }}</mat-label>
-          <input matInput type="text" [formControlName]="field.key" />
-          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-            {{ getErrorMessage(field.key) }}
-          </mat-error>
-        </mat-form-field>
+    <div class="form-grid">
+      <div *ngFor="let field of data.formFields" class="form-field">
+        <ng-container [ngSwitch]="field.type">
 
-        <!-- NUMBER -->
-        <mat-form-field *ngSwitchCase="'number'" appearance="fill" [ngClass]="getFieldClass(field.key)">
-          <mat-label>{{ field.label }}</mat-label>
-          <input matInput type="number" [formControlName]="field.key" />
-          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-            {{ getErrorMessage(field.key) }}
-          </mat-error>
-        </mat-form-field>
+          <!-- TEXT -->
+          <mat-form-field *ngSwitchCase="'text'" appearance="outline" class="full-width">
+            <mat-label>{{ field.label }}</mat-label>
+            <input matInput type="text" [formControlName]="field.key" />
+            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
+          </mat-form-field>
 
-        <!-- TEXTAREA -->
-        <mat-form-field *ngSwitchCase="'textarea'" appearance="fill" [ngClass]="getFieldClass(field.key)">
-          <mat-label>{{ field.label }}</mat-label>
-          <textarea matInput cdkTextareaAutosize [cdkAutosizeMinRows]="4" [cdkAutosizeMaxRows]="10"
-            [formControlName]="field.key"></textarea>
-          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-            {{ getErrorMessage(field.key) }}
-          </mat-error>
-        </mat-form-field>
+          <!-- NUMBER -->
+          <mat-form-field *ngSwitchCase="'number'" appearance="outline" class="full-width">
+            <mat-label>{{ field.label }}</mat-label>
+            <input matInput type="number" [formControlName]="field.key" />
+            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
+          </mat-form-field>
 
-        <!-- DATE -->
-        <!-- DATE (Simplified) -->
-        <mat-form-field *ngSwitchCase="'date'" appearance="fill" [ngClass]="getFieldClass(field.key)">
-          <mat-label>{{ field.label }}</mat-label>
-          <input matInput [matDatepicker]="picker" [formControlName]="field.key" readonly />
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-            {{ getErrorMessage(field.key) }}
-          </mat-error>
-        </mat-form-field>
+          <!-- BOOLEAN -->
+          <mat-checkbox *ngSwitchCase="'boolean'" [formControlName]="field.key">
+            {{ field.label }}
+          </mat-checkbox>
 
+          <!-- TEXTAREA -->
+          <mat-form-field *ngSwitchCase="'textarea'" appearance="outline" class="full-width textarea-field">
+            <mat-label>{{ field.label }}</mat-label>
+            <textarea matInput cdkTextareaAutosize [cdkAutosizeMinRows]="3" [cdkAutosizeMaxRows]="6"
+              [formControlName]="field.key"></textarea>
+            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
+          </mat-form-field>
 
-        <!-- MULTISELECT -->
-        <mat-form-field *ngSwitchCase="'multiselect'" appearance="fill" [ngClass]="getFieldClass(field.key)">
-          <mat-label>{{ field.label }}</mat-label>
-          <mat-select [formControlName]="field.key" multiple>
-            <mat-option *ngFor="let option of field.options" [value]="option.value">
-              {{ option.label }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-            {{ getErrorMessage(field.key) }}
-          </mat-error>
-        </mat-form-field>
+          <!-- DATE -->
+          <mat-form-field *ngSwitchCase="'date'" appearance="outline" class="full-width">
+            <mat-label>{{ field.label }}</mat-label>
+            <input matInput [matDatepicker]="picker" [formControlName]="field.key" readonly />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
+          </mat-form-field>
 
-        <!-- SELECT -->
-        <mat-form-field *ngSwitchCase="'select'" appearance="fill" [ngClass]="getFieldClass(field.key)">
-          <mat-label>{{ field.label }}</mat-label>
-          <mat-select [formControlName]="field.key">
-            <mat-option *ngFor="let option of field.options" [value]="option.value">
-              {{ option.label }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-            {{ getErrorMessage(field.key) }}
-          </mat-error>
-        </mat-form-field>
-      </ng-container>
+          <div *ngIf="field.type === 'date'" class="date-value">
+            Selected Date: {{ form.get(field.key)?.value | date: 'mediumDate' }}
+          </div>
 
-      <!-- Selected Date Text -->
-      <div *ngIf="field.type === 'date'" class="date-value">
-        Selected Date: {{ form.get(field.key)?.value | date: 'mediumDate' }}
-      </div>
+          <!-- SELECT -->
+          <mat-form-field *ngSwitchCase="'select'" appearance="outline" class="full-width">
+            <mat-label>{{ field.label }}</mat-label>
+            <mat-select [formControlName]="field.key">
+              <mat-option *ngFor="let option of field.options" [value]="option.value">
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
+          </mat-form-field>
 
-      <!-- Image Preview -->
-      <div *ngIf="field.key === 'imageUrl' && form.get(field.key)?.valid" class="image-preview">
-        <img [src]="form.get(field.key)?.value" alt="Image Preview" />
+          <!-- MULTISELECT -->
+          <mat-form-field *ngSwitchCase="'multiselect'" appearance="outline" class="full-width">
+            <mat-label>{{ field.label }}</mat-label>
+            <mat-select [formControlName]="field.key" multiple>
+              <mat-option *ngFor="let option of field.options" [value]="option.value">
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
+          </mat-form-field>
+
+        </ng-container>
+
+        <!-- Image Preview -->
+        <div *ngIf="field.key === 'imageUrl' && form.get(field.key)?.valid" class="image-preview">
+          <img [src]="form.get(field.key)?.value" alt="Image Preview" />
+        </div>
       </div>
     </div>
   </mat-dialog-content>
 
-  <mat-dialog-actions align="end">
+  <mat-dialog-actions align="end" class="action-buttons">
     <button mat-button type="button" (click)="onCancel()">Cancel</button>
     <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
       {{ data.isEdit ? 'Update' : 'Create' }}

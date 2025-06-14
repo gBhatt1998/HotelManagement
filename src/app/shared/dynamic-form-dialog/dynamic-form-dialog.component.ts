@@ -2,23 +2,40 @@ import { Component, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+export type FieldType = 'text' | 'number' | 'date' | 'multiselect' | 'textarea' | 'select' | 'boolean';
+
+export interface FormFieldValidator {
+  name: 'minlength' | 'maxlength' | 'min' | 'max' | 'pattern';
+  value: number | string;
+  message: string;
+}
+
+export interface FormFieldOption {
+  label: string;
+  value: string | number;
+}
+
+export interface FormField {
+  key: string;
+  label: string;
+  type: FieldType;
+  value?: string | number | string[] | number[] | boolean;
+  options?: FormFieldOption[];
+  validators?: FormFieldValidator[];
+  required?: boolean;
+  disabled?: boolean;
+}
+
 export interface DynamicDialogData {
   formTitle: string;
   isEdit: boolean;
   moduleName: string;
-  formFields: {
-    key: string;
-    label: string;
-    type: 'text' | 'number' | 'date' | 'multiselect' | 'textarea' | 'select';
-    value?: string | number | string[] | number[];
-    options?: { label: string; value: any }[];
-    validators?: {
-      name: 'minlength' | 'maxlength' | 'min' | 'max' | 'pattern';
-      value: number | string;
-      message: string;
-    }[];
-  }[];
-  onFieldChange?: (fieldKey: string, value: any, patchForm: (key: string, value: any) => void) => void;
+  formFields: FormField[];
+  onFieldChange?: (
+    fieldKey: string,
+    value: string | number | string[] | number[] | boolean,
+    patchForm: (key: string, value: any) => void
+  ) => void;
 }
 
 @Component({
@@ -28,7 +45,6 @@ export interface DynamicDialogData {
 })
 export class DynamicFormDialogComponent implements OnInit {
   form!: FormGroup;
-  pickerMap: { [key: string]: any } = {};
 
   constructor(
     public dialogRef: MatDialogRef<DynamicFormDialogComponent>,
@@ -38,9 +54,9 @@ export class DynamicFormDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const group: Record<string, any> = {};
+    const group: { [key: string]: any } = {};
 
-    this.data.formFields.forEach((field) => {
+    this.data.formFields.forEach((field: FormField) => {
       const validators = [];
 
       if (field.validators) {
@@ -65,13 +81,19 @@ export class DynamicFormDialogComponent implements OnInit {
         }
       }
 
-      validators.push(Validators.required);
-      group[field.key] = [field.value ?? '', validators];
+      if (field.required !== false) {
+        validators.push(Validators.required);
+      }
+
+      group[field.key] = this.fb.control(
+        { value: field.value ?? '', disabled: field.disabled ?? false },
+        validators
+      );
     });
 
     this.form = this.fb.group(group);
 
-    // Listen for dynamic field changes
+    // Handle dynamic value changes
     if (this.data.onFieldChange) {
       this.data.formFields.forEach((field) => {
         this.form.get(field.key)?.valueChanges.subscribe((value) => {
@@ -114,7 +136,7 @@ export class DynamicFormDialogComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value);
+      this.dialogRef.close(this.form.getRawValue());
     }
   }
 

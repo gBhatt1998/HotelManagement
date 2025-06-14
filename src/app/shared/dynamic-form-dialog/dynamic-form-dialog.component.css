@@ -1,25 +1,28 @@
-.dialog-container {
-    display: flex;
-    flex-direction: column;
-    min-width: 400px;
-    max-height: 80vh;
-    overflow: auto;
+.dialog-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #3f51b5;
+    margin-bottom: 12px;
+  }
+  
+  .dialog-container {
+    max-height: 75vh;
+    overflow-y: auto;
     padding-right: 12px;
   }
   
-  .form-group {
-    margin-bottom: 20px;
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .form-field {
     display: flex;
     flex-direction: column;
   }
   
   .full-width {
-    width: 100%;
-  }
-  
-  .compact-field {
-    min-width: 250px;
-    max-width: 350px;
     width: 100%;
   }
   
@@ -29,26 +32,31 @@
   }
   
   .date-value {
-    font-size: 14px;
+    font-size: 13px;
+    color: #777;
     margin-top: 4px;
-    color: #555;
+    font-style: italic;
   }
   
   .image-preview {
-    margin-top: 12px;
+    margin-top: 10px;
     text-align: center;
   }
   
   .image-preview img {
     max-width: 100%;
-    max-height: 200px;
+    max-height: 180px;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .action-buttons {
+    padding-top: 12px;
   }
   
   @media screen and (max-width: 600px) {
-    .compact-field {
-      min-width: 100%;
+    .form-grid {
+      grid-template-columns: 1fr;
     }
   }
   

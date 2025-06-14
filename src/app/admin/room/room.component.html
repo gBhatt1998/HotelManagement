@@ -1,16 +1,18 @@
 <div class="room-container">
-  <h2>Room Management</h2>
+  
 
   <div class="actions-bar">
-    <button mat-flat-button color="primary" (click)="openCreateDialog()">
-      + Create Room
+    <button mat-flat-button color="primary" (click)="openCreateDialog()" appAddLabel>
+      +  Room
     </button>
   </div>
 
+  <!-- 👈 This is missing based on what you shared -->
   <app-dynamic-table
     [data]="(rooms$ | async) || []"
     [displayedColumns]="displayedColumns"
     [enableActions]="true"
     [enableEdit]="false"
+    (delete)="onDelete($event)"
   ></app-dynamic-table>
 </div>

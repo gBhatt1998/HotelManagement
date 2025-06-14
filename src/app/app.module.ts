@@ -9,6 +9,8 @@ import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { EffectsModule } from '@ngrx/effects';
+import { MatChipsModule } from '@angular/material/chips';
+
 // import { JwtInterceptor } from './auth/Jwt.interceptor';
 
 @NgModule({
@@ -21,7 +23,8 @@ import { EffectsModule } from '@ngrx/effects';
     BrowserAnimationsModule,
     StoreModule.forRoot({}, {}),  // empty root reducer
 EffectsModule.forRoot([]),
-    SharedModule
+    SharedModule,
+    // MatChipsModule
   ],
   providers: [ {
       provide: HTTP_INTERCEPTORS,
