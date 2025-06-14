@@ -1,58 +1,86 @@
 <h2 mat-dialog-title>{{ data.isEdit ? 'Edit' : 'Create' }} {{ data.moduleName }}</h2>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <mat-dialog-content>
-    <div class="dialog-container">
-      <div class="form-section">
-        <div *ngFor="let field of data.formFields" class="form-group">
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{ field.label }}</mat-label>
+  <mat-dialog-content class="dialog-container">
+    <div *ngFor="let field of data.formFields" class="form-group">
+      <ng-container [ngSwitch]="field.type">
+        <!-- TEXT -->
+        <mat-form-field *ngSwitchCase="'text'" appearance="fill" [ngClass]="getFieldClass(field.key)">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput type="text" [formControlName]="field.key" />
+          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            {{ getErrorMessage(field.key) }}
+          </mat-error>
+        </mat-form-field>
 
-            <!-- TEXT or NUMBER -->
-            <input *ngIf="field.type === 'text' || field.type === 'number'" matInput [type]="field.type"
-                   [formControlName]="field.key" />
+        <!-- NUMBER -->
+        <mat-form-field *ngSwitchCase="'number'" appearance="fill" [ngClass]="getFieldClass(field.key)">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput type="number" [formControlName]="field.key" />
+          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            {{ getErrorMessage(field.key) }}
+          </mat-error>
+        </mat-form-field>
 
-            <!-- DATE -->
-            <ng-container *ngIf="field.type === 'date'">
-              <input matInput [matDatepicker]="picker" [formControlName]="field.key" />
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </ng-container>
+        <!-- TEXTAREA -->
+        <mat-form-field *ngSwitchCase="'textarea'" appearance="fill" [ngClass]="getFieldClass(field.key)">
+          <mat-label>{{ field.label }}</mat-label>
+          <textarea matInput cdkTextareaAutosize [cdkAutosizeMinRows]="4" [cdkAutosizeMaxRows]="10"
+            [formControlName]="field.key"></textarea>
+          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            {{ getErrorMessage(field.key) }}
+          </mat-error>
+        </mat-form-field>
 
-            <!-- MULTISELECT -->
-            <mat-select *ngIf="field.type === 'multiselect'" [formControlName]="field.key" multiple>
-              <mat-option *ngFor="let option of field.options" [value]="option.value">
-                {{ option.label }}
-              </mat-option>
-            </mat-select>
+        <!-- DATE -->
+        <!-- DATE (Simplified) -->
+        <mat-form-field *ngSwitchCase="'date'" appearance="fill" [ngClass]="getFieldClass(field.key)">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput [matDatepicker]="picker" [formControlName]="field.key" readonly />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            {{ getErrorMessage(field.key) }}
+          </mat-error>
+        </mat-form-field>
 
-            <!-- SELECT (for room type selection) -->
-            <mat-select *ngIf="field.type === 'select' && field.options" [formControlName]="field.key">
-              <mat-option *ngFor="let option of field.options" [value]="option.value">
-                {{ option.label }}
-              </mat-option>
-            </mat-select>
 
-            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-              {{ getErrorMessage(field.key) }}
-            </mat-error>
-          </mat-form-field>
-        </div>
+        <!-- MULTISELECT -->
+        <mat-form-field *ngSwitchCase="'multiselect'" appearance="fill" [ngClass]="getFieldClass(field.key)">
+          <mat-label>{{ field.label }}</mat-label>
+          <mat-select [formControlName]="field.key" multiple>
+            <mat-option *ngFor="let option of field.options" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            {{ getErrorMessage(field.key) }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- SELECT -->
+        <mat-form-field *ngSwitchCase="'select'" appearance="fill" [ngClass]="getFieldClass(field.key)">
+          <mat-label>{{ field.label }}</mat-label>
+          <mat-select [formControlName]="field.key">
+            <mat-option *ngFor="let option of field.options" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            {{ getErrorMessage(field.key) }}
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+
+      <!-- Selected Date Text -->
+      <div *ngIf="field.type === 'date'" class="date-value">
+        Selected Date: {{ form.get(field.key)?.value | date: 'mediumDate' }}
       </div>
 
-      <!-- Card Section -->
-      <app-dynamic-card
-        *ngIf="selectedCardData"
-        class="card-section"
-        [title]="'Room Type Details'"
-        [data]="selectedCardData"
-        [fields]="[
-          { label: 'Type', key: 'type' },
-          { label: 'Description', key: 'description' },
-          { label: 'Price Per Night', key: 'pricePerNight', currency: true },
-          { label: 'Image', key: 'imageUrl', image: true }
-        ]"
-      ></app-dynamic-card>
+      <!-- Image Preview -->
+      <div *ngIf="field.key === 'imageUrl' && form.get(field.key)?.valid" class="image-preview">
+        <img [src]="form.get(field.key)?.value" alt="Image Preview" />
+      </div>
     </div>
   </mat-dialog-content>
 
