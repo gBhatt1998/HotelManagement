@@ -1,18 +1,9 @@
 <div class="room-type-header">
-  
-  <button mat-raised-button color="primary" (click)="openCreateDialog()" appAddLabel> + Room Type</button>
+  <button mat-raised-button color="primary" (click)="openCreateDialog()" appAddLabel>
+    + Room Type
+  </button>
 </div>
 
-<!-- <app-dynamic-table
-  [data]="(roomTypes$ | async) || []"
-  [displayedColumns]="displayedColumns"
-  [enableActions]="true"
-  [enableEdit]="true"
-  (edit)="onEdit($event)"
-  (delete)="onDelete($event)">
-</app-dynamic-table> -->
-
 <app-dynamic-card [data]="(roomTypes$ | async) || []" [fields]="['type', 'description', 'pricePerNight', 'imageUrl']"
-  imageField="imageUrl" titleField="type" (edit)="onEdit($event)" (delete)="onDelete($event)">
+  imageField="imageUrl" (edit)="onEdit($event)" (delete)="onDelete($event)">
 </app-dynamic-card>
-

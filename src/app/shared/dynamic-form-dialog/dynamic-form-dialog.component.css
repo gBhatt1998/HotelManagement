@@ -49,6 +49,13 @@
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
+  textarea.mat-input-element {
+    overflow-y: hidden !important;
+    height: auto !important;
+    resize: none !important;
+    min-height: 56px;
+    max-height: none;
+  }
   
   .action-buttons {
     padding-top: 12px;

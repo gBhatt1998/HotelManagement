@@ -4,19 +4,19 @@ import {
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-
+// ... existing imports
 @Component({
   selector: 'app-dynamic-table',
   templateUrl: './dynamic-table.component.html',
-  styleUrls: ['./dynamic-table.component.css']
+  styleUrls: ['./dynamic-table.component.css'],
 })
 export class DynamicTableComponent<T extends object> implements OnChanges, AfterViewInit {
   @Input() displayedColumns: string[] = [];
   @Input() data: T[] = [];
   @Input() showDateFilter: boolean = false;
   @Input() enableActions: boolean = true;
-  @Input() serviceDropdown?: string[];
   @Input() enableEdit: boolean = true;
+  @Input() enableRoomTypeFilter: boolean = false;
 
   @Output() edit = new EventEmitter<T>();
   @Output() delete = new EventEmitter<T>();
@@ -27,8 +27,10 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
   selectedStart: Date | null = null;
   selectedEnd: Date | null = null;
   searchText: string = '';
-  selectedService: string = '';
+  selectedRoomType: string = '';
   expandedServiceRowId: number | null = null;
+
+  roomTypes: string[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   pageSize = 5;
@@ -36,6 +38,7 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data']) {
       this.originalData = [...this.data];
+      this.extractRoomTypes();
       this.applyFilters();
     }
   }
@@ -46,9 +49,19 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
     }
   }
 
+  extractRoomTypes(): void {
+    const set = new Set<string>();
+    this.originalData.forEach(row => {
+      const type = (row as any)['roomTypeName'];
+      if (type) set.add(type);
+    });
+    this.roomTypes = Array.from(set);
+  }
+
   applyFilters(): void {
     let filteredData = [...this.originalData];
 
+    // Date filter
     if (this.showDateFilter && this.selectedStart && this.selectedEnd) {
       const start = new Date(this.selectedStart);
       const end = new Date(this.selectedEnd);
@@ -61,12 +74,20 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
       });
     }
 
+    // Search text
     if (this.searchText.trim()) {
       const text = this.searchText.trim().toLowerCase();
       filteredData = filteredData.filter(row =>
         Object.values(row).some(value =>
           String(value).toLowerCase().includes(text)
         )
+      );
+    }
+
+    // Room Type filter
+    if (this.selectedRoomType) {
+      filteredData = filteredData.filter(row =>
+        (row as any)['roomTypeName'] === this.selectedRoomType
       );
     }
 
@@ -80,15 +101,21 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
     });
   }
 
+  clearFilters(): void {
+    this.selectedStart = null;
+    this.selectedEnd = null;
+    this.searchText = '';
+    this.selectedRoomType = '';
+    this.applyFilters();
+  }
+
   toggleService(row: T): void {
     const rowId = (row as any)['reservationId'];
     this.expandedServiceRowId = this.expandedServiceRowId === rowId ? null : rowId;
   }
-  
+
   getNestedValue(obj: T, path: string): unknown {
-    if (!path.includes('.')) {
-      return (obj as any)[path];
-    }
+    if (!path.includes('.')) return (obj as any)[path];
     return path.split('.').reduce((acc, part) => acc && (acc as any)[part], obj);
   }
 

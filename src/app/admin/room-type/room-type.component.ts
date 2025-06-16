@@ -13,7 +13,6 @@ import { selectRoomTypes } from '../store/room-type/room-type.selectors';
 })
 export class RoomTypeComponent implements OnInit {
   roomTypes$: Observable<RoomType[]>;
-  displayedColumns = ['id', 'type', 'description', 'pricePerNight', 'imageUrl'];
 
   constructor(private store: Store, private dialog: MatDialog) {
     this.roomTypes$ = this.store.select(selectRoomTypes);
@@ -89,73 +88,72 @@ export class RoomTypeComponent implements OnInit {
   }
 
   onEdit(roomType: RoomType): void {
-  const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
-    data: {
-      formTitle: 'Edit Room Type',
-      formFields: [
-        {
-          key: 'type',
-          label: 'Type',
-          type: 'text',
-          required: true,
-          value: roomType.type,
-          validators: [
-            { name: 'minlength', value: 3, message: 'Type must be at least 3 characters' },
-            { name: 'maxlength', value: 30, message: 'Type cannot exceed 30 characters' }
-          ]
-        },
-        {
-          key: 'description',
-          label: 'Description',
-          type: 'textarea',
-          required: true,
-          value: roomType.description,
-          validators: [
-            { name: 'minlength', value: 10, message: 'Description must be at least 10 characters' },
-            { name: 'maxlength', value: 500, message: 'Description is too long' }
-          ]
-        },
-        {
-          key: 'pricePerNight',
-          label: 'Price Per Night',
-          type: 'number',
-          required: true,
-          value: roomType.pricePerNight,
-          validators: [
-            { name: 'min', value: 1, message: 'Price must be at least ₹1' }
-          ]
-        },
-        {
-          key: 'imageUrl',
-          label: 'Image URL',
-          type: 'text',
-          required: true,
-          value: roomType.imageUrl,
-          validators: [
-            {
-              name: 'pattern',
-              value: '^(https?:\\/\\/.*\\.(?:png|jpg|jpeg|gif|webp))$',
-              message: 'Must be a valid image URL (jpg, png, etc.)'
-            }
-          ]
-        }
-      ],
-      isEdit: true,
-      moduleName: 'RoomType'
-    },
-    width: '500px'
-  });
+    const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
+      data: {
+        formTitle: 'Edit Room Type',
+        formFields: [
+          {
+            key: 'type',
+            label: 'Type',
+            type: 'text',
+            required: true,
+            value: roomType.type,
+            validators: [
+              { name: 'minlength', value: 3, message: 'Type must be at least 3 characters' },
+              { name: 'maxlength', value: 30, message: 'Type cannot exceed 30 characters' }
+            ]
+          },
+          {
+            key: 'description',
+            label: 'Description',
+            type: 'textarea',
+            required: true,
+            value: roomType.description,
+            validators: [
+              { name: 'minlength', value: 10, message: 'Description must be at least 10 characters' },
+              { name: 'maxlength', value: 500, message: 'Description is too long' }
+            ]
+          },
+          {
+            key: 'pricePerNight',
+            label: 'Price Per Night',
+            type: 'number',
+            required: true,
+            value: roomType.pricePerNight,
+            validators: [
+              { name: 'min', value: 1, message: 'Price must be at least ₹1' }
+            ]
+          },
+          {
+            key: 'imageUrl',
+            label: 'Image URL',
+            type: 'text',
+            required: true,
+            value: roomType.imageUrl,
+            validators: [
+              {
+                name: 'pattern',
+                value: '^(https?:\\/\\/.*\\.(?:png|jpg|jpeg|gif|webp))$',
+                message: 'Must be a valid image URL (jpg, png, etc.)'
+              }
+            ]
+          }
+        ],
+        isEdit: true,
+        moduleName: 'RoomType'
+      },
+      width: '500px'
+    });
 
-  dialogRef.afterClosed().subscribe((result: Partial<RoomType> | null) => {
-    if (result) {
-      this.store.dispatch(
-        RoomTypeActions.updateRoomType({
-          id: roomType.id,
-          roomType: { ...roomType, ...result }
-        })
-      );
-    }
-  });
-}
-
+    dialogRef.afterClosed().subscribe((result: Partial<RoomType> | null) => {
+      if (result) {
+        this.store.dispatch(
+          RoomTypeActions.updateRoomType({
+            id: roomType.id,
+            roomType: { ...roomType, ...result }
+          })
+        );
+      }
+    });
+  }
 }

@@ -63,7 +63,7 @@ selectedRoomType: string = '';
     // Pass the selected type to child via @Input or update NgRx store if used
     console.log('Selected Room Type:', selectedType);
     this.selectedRoomType = selectedType;
-    this.filterCriteria.type = selectedType;
+   this.filterCriteria.type = selectedType ?? '';
   }
   
 }

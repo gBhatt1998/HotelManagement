@@ -1,97 +1,105 @@
-<div class="table-controls">
-  <!-- Search Input -->
-  <mat-form-field appearance="outline">
-    <mat-label>Search</mat-label>
-    <input matInput [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search all columns..." />
-  </mat-form-field>
-
-
-  <!-- Date Filter -->
-  <ng-container *ngIf="showDateFilter">
+<div class="dynamic-table-wrapper">
+  <div class="table-controls">
+    <!-- Search Input -->
     <mat-form-field appearance="outline">
-      <mat-label>Start Date</mat-label>
-      <input matInput [matDatepicker]="startPicker" [(ngModel)]="selectedStart" (dateChange)="applyFilters()" />
-      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-      <mat-datepicker #startPicker></mat-datepicker>
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search all columns..." />
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>End Date</mat-label>
-      <input matInput [matDatepicker]="endPicker" [(ngModel)]="selectedEnd" (dateChange)="applyFilters()" />
-      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-      <mat-datepicker #endPicker></mat-datepicker>
-    </mat-form-field>
-  </ng-container>
+    <!-- Room Type Filter -->
+    <ng-container *ngIf="enableRoomTypeFilter">
+      <mat-form-field appearance="outline">
+        <mat-label>Room Type</mat-label>
+        <mat-select [(ngModel)]="selectedRoomType" (selectionChange)="applyFilters()">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let type of roomTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <!-- Date Filter -->
+    <ng-container *ngIf="showDateFilter">
+      <mat-form-field appearance="outline">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" [(ngModel)]="selectedStart" (dateChange)="applyFilters()" />
+        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endPicker" [(ngModel)]="selectedEnd" (dateChange)="applyFilters()" />
+        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </ng-container>
+
+    <button mat-stroked-button color="primary" (click)="clearFilters()">Clear Filters</button>
+  </div>
+
+  <!-- Table -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width-table">
+    <!-- Dynamic Columns -->
+    <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+      <th mat-header-cell *matHeaderCellDef> {{ column | titlecase }} </th>
+      <td mat-cell *matCellDef="let row">
+        <ng-container [ngSwitch]="column">
+
+          <!-- Date formatting -->
+          <ng-container *ngSwitchCase="'checkInDate'">
+            {{ row['checkInDate'] | date: 'dd-MM-yyyy' }}
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'checkOutDate'">
+            {{ row['checkOutDate'] | date: 'dd-MM-yyyy' }}
+          </ng-container>
+
+          <!-- Service Chips -->
+          <ng-container *ngSwitchCase="'serviceNames'">
+            <div *ngIf="row['serviceNames']?.length">
+              <button mat-button (click)="toggleService(row)" color="primary">
+                {{ expandedServiceRowId === row['reservationId'] ? 'Hide Services' : 'View Services' }}
+              </button>
+              <mat-chip-set *ngIf="expandedServiceRowId === row['reservationId']" class="chip-list">
+                <mat-chip *ngFor="let service of row['serviceNames']; let i = index" selected
+                  [ngClass]="'chip-color-' + (i % 5)">
+                  {{ service }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </ng-container>
+
+          <!-- Price -->
+          <ng-container *ngSwitchCase="'totalPrice'">
+            ${{ row['totalPrice'] }}
+          </ng-container>
+
+          <!-- Default -->
+          <ng-container *ngSwitchDefault>
+            {{ getNestedValue(row, column) }}
+          </ng-container>
+
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container *ngIf="enableActions" matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let row">
+        <ng-container *ngIf="enableEdit">
+          <button mat-button color="primary" (click)="onEdit(row)">Edit</button>
+        </ng-container>
+        <button mat-button color="warn" (click)="onDelete(row)">Delete</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="enableActions ? displayedColumns.concat('actions') : displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: enableActions ? displayedColumns.concat('actions') : displayedColumns">
+    </tr>
+  </table>
+
+  <mat-paginator *ngIf="shouldShowPaginator()" [length]="dataSource.data.length" [pageSize]="pageSize"
+    [pageSizeOptions]="getPageSizeOptions()" showFirstLastButtons>
+  </mat-paginator>
 </div>
-
-<!-- Table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width-table">
-
-  <!-- Dynamic Columns -->
-  <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-    <th mat-header-cell *matHeaderCellDef> {{ column | titlecase }} </th>
-    <td mat-cell *matCellDef="let row">
-      <ng-container [ngSwitch]="column">
-
-        <!-- Date formatting -->
-        <ng-container *ngSwitchCase="'checkInDate'">
-          {{ row['checkInDate'] | date: 'dd-MM-yyyy' }}
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'checkOutDate'">
-          {{ row['checkOutDate'] | date: 'dd-MM-yyyy' }}
-        </ng-container>
-
-        <!-- Service Toggle -->
-        <ng-container *ngSwitchCase="'serviceNames'">
-          <div *ngIf="row['serviceNames']?.length">
-            <button mat-button (click)="toggleService(row)" color="primary">
-              {{ expandedServiceRowId === row['reservationId'] ? 'Hide Services' : 'View Services' }}
-            </button>
-        
-            <mat-chip-set *ngIf="expandedServiceRowId === row['reservationId']" aria-label="Service list" class="chip-list">
-              <mat-chip *ngFor="let service of row['serviceNames']; let i = index" selected [ngClass]="'chip-color-' + (i % 5)">
-                {{ service }}
-              </mat-chip>
-            </mat-chip-set>
-            
-          </div>
-        </ng-container>
-        
-        
-        
-
-        <!-- Price Formatting -->
-        <ng-container *ngSwitchCase="'totalPrice'">
-          ${{ row['totalPrice'] }}
-        </ng-container>
-
-        <!-- Nested Properties (e.g. guest.name) -->
-        <ng-container *ngSwitchDefault>
-          {{ getNestedValue(row, column) }}
-        </ng-container>
-
-      </ng-container>
-    </td>
-  </ng-container>
-
-  <!-- Action Column -->
-  <ng-container *ngIf="enableActions" matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef> Actions </th>
-    <td mat-cell *matCellDef="let row">
-      <ng-container *ngIf="enableEdit">
-        <button mat-button color="primary" (click)="onEdit(row)">Edit</button>
-      </ng-container>
-      <button mat-button color="warn" (click)="onDelete(row)">Delete</button>
-    </td>
-  </ng-container>
-
-  <!-- Header & Row Definitions -->
-  <tr mat-header-row *matHeaderRowDef="enableActions ? displayedColumns.concat('actions') : displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: enableActions ? displayedColumns.concat('actions') : displayedColumns"></tr>
-</table>
-
-<!-- Paginator -->
-<mat-paginator *ngIf="shouldShowPaginator()" [length]="dataSource.data.length" [pageSize]="pageSize"
-  [pageSizeOptions]="getPageSizeOptions()" showFirstLastButtons>
-</mat-paginator>

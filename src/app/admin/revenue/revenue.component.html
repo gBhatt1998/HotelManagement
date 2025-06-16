@@ -1,0 +1,18 @@
+<div class="chart-wrapper">
+    <div class="buttons">
+        <button mat-stroked-button color="primary" (click)="loadMonthly()">Monthly</button>
+        <button mat-stroked-button color="accent" (click)="loadWeekly()">Weekly</button>
+        <button mat-raised-button color="warn" (click)="toggleChartType()" appAddLabel>
+            Toggle {{ barChartType === 'bar' ? 'Line' : 'Bar' }} Chart
+            </button>
+    </div>
+
+    <div *ngIf="data.length">
+        <canvas baseChart [data]="barChartData" [options]="barChartOptions" [legend]="barChartLegend"
+            [type]="barChartType">
+        </canvas>
+    </div>
+
+    <mat-progress-spinner *ngIf="loading$ | async" mode="indeterminate"></mat-progress-spinner>
+</div>
+  

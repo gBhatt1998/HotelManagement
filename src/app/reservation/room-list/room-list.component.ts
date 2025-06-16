@@ -114,7 +114,9 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
   private applyFilters() {
     // Filter
     this.filteredRooms = this.rooms.filter(room =>
-      this.filterCriteria?.type ? room.type === this.filterCriteria.type : true
+      this.filterCriteria?.type
+        ? room.type === this.filterCriteria.type
+        : true // if no type selected, include all
     );
 
     // Sort

@@ -1,44 +1,37 @@
 <!-- app.component.html -->
 <div class="nav-bar">
-  <section>
-    <nav class="navbar navbar-expand-lg fixed-top pb-4 px-3" style="background-color: #102C57;">
-      <div class="container-fluid">
-        <a class="navbar-brand text-light mt-3" [class.disabled]="isLoggedIn" [attr.tabindex]="isLoggedIn ? -1 : null"
-          [routerLink]="!isLoggedIn ? '/' : null" [style.pointer-events]="isLoggedIn ? 'none' : 'auto'">
-          <i class="fa-brands fa-xl fa-monero me-3" style="color: #f8f0e5;"></i>
-          METROPOLITAN
-        </a>
+  <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #102C57;">
+    <div class="container-fluid">
+      <a class="navbar-brand text-light mt-1" [routerLink]="!isLoggedIn ? '/' : null"
+        [style.pointer-events]="isLoggedIn ? 'none' : 'auto'">
+        <i class="fa-brands fa-monero me-2" style="color: #f8f0e5;"></i>
+        METROPOLITAN
+      </a>
 
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <!-- Only show links if not logged in -->
-          <ul *ngIf="!isLoggedIn" class="navbar-nav nav-underline mt-3 mb-2 mb-lg-0 justify-content-end">
-            <li class="nav-item">
-              <a class="nav-link text-light mx-3" href="#events">Events</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light mx-3" href="#amenities">Amenities</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light mx-3" href="#dining">Dining</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light mx-3" href="#offers">Offers</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-light mx-3" href="#rooms">Rooms</a>
-            </li>
-          </ul>
+      <!-- Toggler for mobile view -->
+      <button class="navbar-toggler text-bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-          <div class="d-flex ms-3 mt-3">
-            <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login">Login</a>
-            <button *ngIf="isLoggedIn" class="btn btn-light" (click)="logout()">Logout</button>
-          </div>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul *ngIf="!isLoggedIn" class="navbar-nav nav-underline mt-2 mb-2">
+          <li class="nav-item"><a class="nav-link text-light mx-2" href="#events">Events</a></li>
+          <li class="nav-item"><a class="nav-link text-light mx-2" href="#amenities">Amenities</a></li>
+          <li class="nav-item"><a class="nav-link text-light mx-2" href="#dining">Dining</a></li>
+          <li class="nav-item"><a class="nav-link text-light mx-2" href="#offers">Offers</a></li>
+          <li class="nav-item"><a class="nav-link text-light mx-2" href="#rooms">Rooms</a></li>
+        </ul>
+
+        <div class="d-flex align-items-center ms-3">
+          <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login">Login Page</a>
+          <button *ngIf="isLoggedIn" class="btn btn-light" (click)="logout()">Logout</button>
         </div>
       </div>
-    </nav>
-  </section>
+    </div>
+  </nav>
 </div>
 
-<main>
+<main class="content-wrapper">
   <router-outlet></router-outlet>
 </main>

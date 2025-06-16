@@ -29,13 +29,15 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-field">
-  <mat-label>Room Type</mat-label>
-<mat-select formControlName="roomType" (selectionChange)="onRoomTypeChange($event.value)">
-    <mat-option *ngFor="let type of availableRoomType" [value]="type">
-      {{ type | titlecase }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+      <mat-label>Room Type</mat-label>
+      <mat-select formControlName="roomType" (selectionChange)="onRoomTypeChange($event.value)">
+        <mat-option [value]="null">All</mat-option> <!-- This allows clearing -->
+        <mat-option *ngFor="let type of availableRoomType" [value]="type">
+          {{ type | titlecase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
 
     <button mat-raised-button color="primary" type="submit" [disabled]="reservationForm.invalid"
       class="submit-button">Submit</button>
@@ -57,3 +59,6 @@
   </div>
   </div>
 </div>
+
+
+<!-- npm install ng2-charts@4.1.1 chart.js -->

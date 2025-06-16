@@ -28,6 +28,8 @@ import { MatChipsModule } from '@angular/material/chips';
 
 import { AddLabelDirective } from './directive/add-label.directive';
 import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
+import { NgChartsModule } from 'ng2-charts';
+import { TextFieldModule } from '@angular/cdk/text-field';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,8 @@ import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
     FormsModule,
     MatDialogModule,
   MatProgressSpinnerModule,
+    NgChartsModule, 
+    TextFieldModule
   
   ],
   exports:[
@@ -81,7 +85,9 @@ import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
     DynamicTableComponent,
     AddLabelDirective,
     DynamicCardComponent,
-    MatChipsModule 
+    MatChipsModule ,
+    NgChartsModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModule { }

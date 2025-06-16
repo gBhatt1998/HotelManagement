@@ -1,31 +1,35 @@
 <div class="card-container">
   <mat-card *ngFor="let item of data" class="dynamic-card mat-elevation-z4">
-    
-    <!-- Room Image -->
-    <img
-      *ngIf="imageField"
-      class="room-image"
-      [src]="getNestedValue(item, imageField)"
-      alt="Room Image"
-    />
+
+    <!-- Image (if available) -->
+    <img *ngIf="imageField" class="room-image" [src]="getNestedValue(item, imageField)" alt="Image" />
 
     <!-- Title -->
     <mat-card-title class="card-title">
       {{ getNestedValue(item, fields[0]) }}
     </mat-card-title>
 
-    <!-- Dynamic Content -->
+    <!-- Other Fields -->
     <mat-card-content>
-      <div *ngFor="let field of fields.slice(imageField ? 1 : 0)">
-        <strong>{{ field | titlecase }}:</strong>
-        <span>{{ getNestedValue(item, field) }}</span>
+      <div *ngFor="let field of fields.slice(imageField ? 1 : 0)" class="field-line">
+        <span class="field-label">
+          {{ field === 'pricePerNight' ? 'Price per Night' : (field | titlecase) }}:
+        </span>
+        <span class="field-value">
+          {{
+          field === 'pricePerNight'
+          ? ('$' + getNestedValue(item, field))
+          : getNestedValue(item, field)
+          }}
+        </span>
       </div>
     </mat-card-content>
 
-    <!-- Edit/Delete Buttons -->
+    <!-- Action Buttons -->
     <mat-card-actions *ngIf="enableEdit || enableDelete">
       <button *ngIf="enableEdit" mat-stroked-button color="primary" (click)="onEdit(item)">Edit</button>
       <button *ngIf="enableDelete" mat-stroked-button color="warn" (click)="onDelete(item)">Delete</button>
     </mat-card-actions>
+
   </mat-card>
 </div>

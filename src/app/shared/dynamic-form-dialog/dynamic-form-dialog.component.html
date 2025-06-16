@@ -1,5 +1,5 @@
 <h2 mat-dialog-title class="dialog-title">
-  {{ data.isEdit ? 'Edit' : 'Create' }} {{ data.moduleName }}
+  {{ data.isEdit ? 'Update' : 'Create' }} {{ data.moduleName }}
 </h2>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -8,7 +8,7 @@
       <div *ngFor="let field of data.formFields" class="form-field">
         <ng-container [ngSwitch]="field.type">
 
-          <!-- TEXT -->
+          <!-- TEXT INPUT -->
           <mat-form-field *ngSwitchCase="'text'" appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
             <input matInput type="text" [formControlName]="field.key" />

@@ -130,10 +130,7 @@ export class DynamicFormDialogComponent implements OnInit {
     return `${field.label} is invalid`;
   }
 
-  getFieldClass(key: string): string {
-    return key === 'description' ? 'full-width' : 'compact-field';
-  }
-
+ 
   onSubmit(): void {
     if (this.form.valid) {
       this.dialogRef.close(this.form.getRawValue());
