@@ -41,6 +41,7 @@
                 </mat-form-field>
   
             </div>
+<ng-container  *ngIf="isUserAuthenticated()">
 
             <!-- Name and Phone -->
             <div class="name-phone-row">
@@ -81,7 +82,7 @@
                         characters</mat-error>
                 </mat-form-field>
             </div>
-
+</ng-container>
             <!-- Services -->
             <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Select Services</mat-label>
@@ -98,9 +99,18 @@
             </div>
 
             <!-- Submit -->
-            <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">
-                Submit
-            </button>
+          <ng-container *ngIf="isUserAuthenticated(); else loginButton">
+  <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">
+    Submit
+  </button>
+</ng-container>
+
+<ng-template #loginButton>
+  <a mat-raised-button color="accent" [routerLink]="['/login']">
+    Login to Book
+  </a>
+</ng-template>
+
         </form>
     </mat-card-content>
 </mat-card>

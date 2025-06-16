@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { Router } from '@angular/router';
 
@@ -7,24 +7,26 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'hotelManagement';
+export class AppComponent implements OnInit {
   isLoggedIn = false;
-  constructor(private authService: AuthService, private router: Router) { }
+  userRole: string | null = null;
 
+  constructor(private authService: AuthService,private route:Router) {}
 
-  ngOnInit() {
-    this.authService.getLoggedInStatus().subscribe((status) => {
-      this.isLoggedIn = status;
-    });
+  ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
+    this.userRole = this.authService.getRole();
+
+    this.authService.getLoggedInStatus().subscribe(status => {
+      this.isLoggedIn = status;
+      this.userRole = this.authService.getRole();
+    });
   }
 
-  
-
-  logout() {
+  logout(): void {
     this.authService.logout();
-     this.isLoggedIn = false;
-    this.router.navigate(['/login']);
+    this.isLoggedIn = false;
+    this.userRole = null;
+  this.route.navigate(['/login']);
   }
 }

@@ -20,11 +20,11 @@ export class ReservationEffects {
       ofType(ReservationActions.loadAllReservations),
       mergeMap(() =>
         this.reservationService.getAllReservations().pipe(
-            tap(res => console.log('[Effect] Fetched Reservations:', res)), // ✅ LOG HERE,
+            // tap(res => console.log('[Effect] Fetched Reservations:', res)), // 
           map((reservations) => ReservationActions.loadAllReservationsSuccess({ reservations })),
           
           catchError((error) => 
-                    //   console.error('[Effect] Load Reservations Error:', error); // ✅ LOG ERROR
+                    //   console.error('[Effect] Load Reservations Error:', error); //
 
              of(ReservationActions.loadAllReservationsFailure({ error })))
         )

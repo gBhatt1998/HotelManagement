@@ -1,36 +1,55 @@
-<!-- app.component.html -->
 <div class="nav-bar">
   <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #102C57;">
     <div class="container-fluid">
       <a class="navbar-brand text-light mt-1" [routerLink]="!isLoggedIn ? '/' : null"
-        [style.pointer-events]="isLoggedIn ? 'none' : 'auto'">
+         [style.pointer-events]="isLoggedIn ? 'none' : 'auto'">
         <i class="fa-brands fa-monero me-2" style="color: #f8f0e5;"></i>
         METROPOLITAN
       </a>
 
-      <!-- Toggler for mobile view -->
-      <button class="navbar-toggler text-bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler text-bg-light" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+              aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul *ngIf="!isLoggedIn" class="navbar-nav nav-underline mt-2 mb-2">
+        <!-- Non-logged in Nav -->
+        <!-- <ul *ngIf="!isLoggedIn" class="navbar-nav nav-underline mt-2 mb-2">
           <li class="nav-item"><a class="nav-link text-light mx-2" href="#events">Events</a></li>
           <li class="nav-item"><a class="nav-link text-light mx-2" href="#amenities">Amenities</a></li>
           <li class="nav-item"><a class="nav-link text-light mx-2" href="#dining">Dining</a></li>
           <li class="nav-item"><a class="nav-link text-light mx-2" href="#offers">Offers</a></li>
           <li class="nav-item"><a class="nav-link text-light mx-2" href="#rooms">Rooms</a></li>
-        </ul>
+        </ul> -->
+
+        <!-- Common to all -->
+        <a class="nav-link text-light" routerLink="/">Make a Reservation</a>
+
+        <!-- Logged in Guest -->
+       <!-- Logged in Guest -->
+<a *ngIf="isLoggedIn && userRole === 'ROLE_USER'" class="nav-link text-light" routerLink="/guest">
+  My Reservations
+</a>
+
+<!-- Admin Panel -->
+<a *ngIf="isLoggedIn && userRole === 'ROLE_ADMIN'" class="nav-link text-light" routerLink="/admin">
+  Admin Dashboard
+</a>
+
 
         <div class="d-flex align-items-center ms-3">
+          <!-- Login Button -->
           <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login">Login Page</a>
+
+          <!-- Logout Button -->
           <button *ngIf="isLoggedIn" class="btn btn-light" (click)="logout()">Logout</button>
         </div>
       </div>
     </div>
   </nav>
 </div>
+
 
 <main class="content-wrapper">
   <router-outlet></router-outlet>

@@ -20,7 +20,7 @@ selectedRoomType: string = '';
       roomType: [null]
     
     });
-      this.store.subscribe(state => console.log('Entire store state:', state));
+      // this.store.subscribe(state => console.log('Entire store state:', state));
 
   }
 
@@ -55,13 +55,13 @@ selectedRoomType: string = '';
 
 
    getAllAvailableRoomTypes(types: string[]) {
-    console.log('Available Room Types:', types);
+    // console.log('Available Room Types:', types);
     this.availableRoomType = types;
   }
   
  onRoomTypeChange(selectedType: string) {
-    // Pass the selected type to child via @Input or update NgRx store if used
-    console.log('Selected Room Type:', selectedType);
+    
+    // console.log('Selected Room Type:', selectedType);
     this.selectedRoomType = selectedType;
    this.filterCriteria.type = selectedType ?? '';
   }

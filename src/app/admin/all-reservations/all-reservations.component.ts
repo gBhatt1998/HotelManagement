@@ -33,9 +33,7 @@ displayedColumns: string[] = [
     this.reservations$ = this.store.select(selectAllReservations);
   }
 
-  onEdit(row: any): void {
-    console.log('Edit clicked:', row);
-  }
+ 
 
  onDelete(row: reservationdetailsresponse): void {
   this.store.dispatch(deleteReservation({ id: row.reservationId }));

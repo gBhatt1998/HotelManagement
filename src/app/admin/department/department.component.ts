@@ -47,7 +47,7 @@ export class DepartmentComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: CreateDepartmentDTO | null) => {
       if (result) {
         // Ensure 'result' contains only { name: string }
-        console.log('Create payload:', result); // Check for extra fields like `id`
+        // console.log('Create payload:', result); // Check for extra fields like `id`
 
         this.store.dispatch(DepartmentActions.createDepartment({ department: result }));
       }

@@ -3,15 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Service } from './models/service.model';
 import { ApiResponse } from '../shared/models/api-response.model';
+import { reservationdetailsresponse } from '../shared/models/reservationdetailsresponse.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HotelCardService {
 
- private apiUrl = 'http://localhost:8080/reservation/services'; // URL for fetching all services
- private bookingApiUrl = 'http://localhost:8080/reservation/confirmed'; // URL for booking a room
-
+ private apiUrl = 'http://localhost:8080/reservation/services'; 
+ private bookingApiUrl = 'http://localhost:8080/reservation/confirmed'; 
   constructor(private http: HttpClient) { }
 
   getAllServices(): Observable<Service[]> {

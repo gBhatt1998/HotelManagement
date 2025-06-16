@@ -11,6 +11,7 @@ import { HotelCardService } from '../hotel-card.service';
 import { DialogService } from 'src/app/shared/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
+import { AuthService } from 'src/app/auth/auth.service';
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',
@@ -31,7 +32,9 @@ export class HotelCardComponent implements OnInit {
   selectedServices: Service[] = [];
   constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>,
     private hotelCardService: HotelCardService,
-    private dialogService: DialogService) { }
+    private dialogService: DialogService,
+    public authService: AuthService  // <-- add this
+) { }
 
 
   ngOnInit(): void {
@@ -71,7 +74,7 @@ export class HotelCardComponent implements OnInit {
         this.roomId = room.roomNumber;
         this.calculateTotalPrice();
 
-        console.log(this.currentRoom);
+        // console.log(this.currentRoom);
 
       }
     });
@@ -79,7 +82,7 @@ export class HotelCardComponent implements OnInit {
     this.fetchAvailableServices();
 
     this.bookingForm.get('serviceIds')?.valueChanges.subscribe((selectedIds: number[]) => {
-      console.log('Selected Service IDs:', selectedIds);
+      // console.log('Selected Service IDs:', selectedIds);
       this.calculateTotalPrice();
     });
   }
@@ -100,7 +103,7 @@ export class HotelCardComponent implements OnInit {
     // this.loadingServices = true;
     this.hotelCardService.getAllServices().subscribe({
       next: (services) => {
-        console.log('Available Services:', services);
+        // console.log('Available Services:', services);
         this.availableServices = services;
         // this.loadingServices = false;
         // this.calculateTotalPrice(); // Recalculate after services load
@@ -118,13 +121,18 @@ export class HotelCardComponent implements OnInit {
     const roomCost = (this.currentRoom?.pricePerNight || 0) * nights;
 
     const selectedIds = [...(this.bookingForm.get('serviceIds')?.value || [])];
-    console.log('Calculating price for service IDs:', selectedIds);
+    // console.log('Calculating price for service IDs:', selectedIds);
 
     this.selectedServices = this.availableServices.filter(s => selectedIds.includes(s.serviceId));
     const serviceCost = this.selectedServices.reduce((sum, s) => sum + s.price, 0);
 
     this.totalPrice = roomCost + serviceCost;
   }
+
+  public isUserAuthenticated(): boolean {
+  return this.authService.isLoggedIn();
+}
+
 
   onSubmit(): void {
     if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
@@ -148,7 +156,17 @@ export class HotelCardComponent implements OnInit {
       serviceIds: formValue.serviceIds || []
     };
 
-    console.log('Booking Payload:', bookingPayload);
+    if (this.isUserAuthenticated()) {
+    bookingPayload.guestDetails = {
+      name: formValue.name,
+      email: formValue.email,
+      password: formValue.password,
+      phone: formValue.phone,
+      role: 'USER'
+    };
+  }
+
+    // console.log('Booking Payload:', bookingPayload);
 
     const dialogRef = this.dialogService.openLoading('Please wait while we confirm your reservation...', 'Booking in Progress');
 

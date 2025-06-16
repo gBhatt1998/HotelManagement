@@ -114,10 +114,25 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
     this.expandedServiceRowId = this.expandedServiceRowId === rowId ? null : rowId;
   }
 
-  getNestedValue(obj: T, path: string): unknown {
-    if (!path.includes('.')) return (obj as any)[path];
-    return path.split('.').reduce((acc, part) => acc && (acc as any)[part], obj);
+  getNestedValue(obj: any, path: string): any {
+  // Split the path into parts, e.g. "user.profile.name" → ["user", "profile", "name"]
+  const keys = path.split('.');
+
+  //  original object
+  let current = obj;
+
+  //  each key one by one
+  for (const key of keys) {
+    // if current object is not null or undefined and has the key
+    if (current && current.hasOwnProperty(key)) {
+      current = current[key]; // go one level deeper
+    } else {
+      return ''; // If   missing return empty 
+    }
   }
+
+  return current;
+}
 
   onEdit(row: T): void {
     this.edit.emit(row);
