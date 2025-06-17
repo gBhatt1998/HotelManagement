@@ -12,6 +12,9 @@ import { DialogService } from 'src/app/shared/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
 import { AuthService } from 'src/app/auth/auth.service';
+// import { GuestDetails } from '../models/reservationpayload.model';
+import { GuestDetails } from 'src/app/guest/guest/guest.model'; // 👈 This is what the selector uses
+import { selectGuestDetails } from 'src/app/guest/guest/store/guest.selectors';
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',
@@ -33,7 +36,8 @@ export class HotelCardComponent implements OnInit {
   constructor(private fb: FormBuilder, private store: Store<{ reservation: ReservationState }>,
     private hotelCardService: HotelCardService,
     private dialogService: DialogService,
-    public authService: AuthService  // <-- add this
+    public authService: AuthService ,
+    private storeGuest:Store,
 ) { }
 
 
@@ -44,9 +48,18 @@ export class HotelCardComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       checkIn: [null, Validators.required],
       checkOut: [null, Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6),]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       serviceIds: [[]],
+    });
 
+    this.storeGuest.select(selectGuestDetails).subscribe((guest: GuestDetails | null) => {
+      if (guest && this.isUserAuthenticated()) {
+        this.bookingForm.patchValue({
+          name: guest.name,
+          email: guest.email,
+          phone: guest.phone,
+        });
+      }
     });
 
     this.store.select(selectCheckInDate).subscribe(checkIn => {
@@ -54,38 +67,32 @@ export class HotelCardComponent implements OnInit {
         this.checkInDate = new Date(checkIn).toISOString().split('T')[0];
         this.bookingForm.patchValue({ checkIn: new Date(checkIn) });
         this.calculateTotalPrice();
-
       }
     });
 
     this.store.select(selectCheckOutDate).subscribe(checkOut => {
       if (checkOut) {
-        this.checkOutDate = new Date(checkOut).toISOString().split('T')[0]; // ensure string
+        this.checkOutDate = new Date(checkOut).toISOString().split('T')[0];
         this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
         this.calculateTotalPrice();
-
       }
     });
-
 
     this.store.select(selectSelectedRoom).subscribe(room => {
       if (room) {
         this.currentRoom = room;
         this.roomId = room.roomNumber;
         this.calculateTotalPrice();
-
-        // console.log(this.currentRoom);
-
       }
     });
 
     this.fetchAvailableServices();
 
-    this.bookingForm.get('serviceIds')?.valueChanges.subscribe((selectedIds: number[]) => {
-      // console.log('Selected Service IDs:', selectedIds);
+    this.bookingForm.get('serviceIds')?.valueChanges.subscribe(() => {
       this.calculateTotalPrice();
     });
   }
+
 
 
   public calculateNights(): number {

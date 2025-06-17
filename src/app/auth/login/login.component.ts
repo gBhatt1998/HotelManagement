@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignupRequest } from 'src/app/shared/models/signup-request.model';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -26,7 +28,7 @@ export class LoginComponent implements OnInit {
       phone: [''],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['GUEST']
+      role: ['USER']
     });
   }
 
@@ -53,28 +55,66 @@ export class LoginComponent implements OnInit {
   }
 
   
-onSubmit(): void {
-  if (this.authForm.invalid) return;
+  onSubmit(): void {
+    if (this.authForm.invalid) return;
 
-  const { name, phone, email, password, role } = this.authForm.value;
+    const { name, phone, email, password, role } = this.authForm.value;
 
-  if (this.isLoginMode) {
-    this.authService.login(email, password).subscribe({
-      next: (res) => {
-        localStorage.setItem('jwt', res.jwt);
-        this.authService.notifyLogin();
-        const userRole = this.authService.getRole();
-        this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/guest']);
-      },
-      error: () => this.loginError = 'Invalid email or password.'
-    });
-  } else {
-    const signupData: SignupRequest = { name, phone, email, password, role };
+    if (this.isLoginMode) {
+      this.authService.login(email, password).subscribe({
+        next: (res) => {
+          localStorage.setItem('jwt', res.jwt);
+          this.authService.notifyLogin();
+          const userRole = this.authService.getRole();
+          this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/']);
+        },
+        error: (err) => {
+          const message = this.extractErrorMessage(err);
+          this.dialogService.openError({
+            title: 'Login Failed',
+            message
+          });
+        }
+      });
+    } else {
+      const signupData: SignupRequest = { name, phone, email, password, role };
 
-    this.authService.signup(signupData).subscribe({
-      next: () => this.toggleMode(),
-      error: () => this.loginError = 'Signup failed. Please try again.'
-    });
+      this.authService.signup(signupData).subscribe({
+        next: () => {
+          this.dialogService.openSuccess({
+            title: 'Signup Successful',
+            message: 'You can now login with your credentials.'
+          });
+          this.toggleMode(); // switch to login
+        },
+        error: (err) => {
+          const message = this.extractErrorMessage(err);
+          this.dialogService.openError({
+            title: 'Signup Failed',
+            message
+          });
+        }
+      });
+    }
   }
-}
+  private extractErrorMessage(error: any): string {
+    if (!error || !error.error) return 'An unknown error occurred.';
+
+    // Direct message
+    if (typeof error.error === 'string') {
+      return error.error;
+    }
+
+    if (error.error.message) {
+      return error.error.message;
+    }
+
+    // Handle validation error structure (if used)
+    if (typeof error.error === 'object') {
+      return Object.values(error.error).join(', ');
+    }
+
+    return 'Unexpected error occurred.';
+  }
+    
 }

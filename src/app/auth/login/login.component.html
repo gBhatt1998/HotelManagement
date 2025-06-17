@@ -20,7 +20,7 @@
       <mat-form-field appearance="outline" class="form-field">
   <mat-label>Role</mat-label>
   <mat-select formControlName="role">
-    <mat-option value="GUEST">Guest</mat-option>
+    <mat-option value="USER">User</mat-option>
     <mat-option value="ADMIN">Admin</mat-option>
   </mat-select>
   <mat-error *ngIf="authForm.get('role')?.hasError('required')">Role is required</mat-error>

@@ -18,7 +18,7 @@ export interface DecodedToken {
 export class AuthService {
 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'http://localhost:8080/api/auth'; // Adjust the API URL as needed
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
  signup(data: SignupRequest): Observable<any> {
-  return this.http.post(`${this.apiUrl}/auth/signup`, data);
+  return this.http.post(`${this.apiUrl}/signup`, data);
 }
 
   logout(): void {
