@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Service } from './models/service.model';
 import { ApiResponse } from '../shared/models/api-response.model';
 import { reservationdetailsresponse } from '../shared/models/reservationdetailsresponse.model';
+import { ReservationConfirmationPayload } from './models/ReservationConfirmationPayload.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class HotelCardService {
   getAllServices(): Observable<Service[]> {
     return this.http.get<Service[]>(this.apiUrl);
   }
-  confirmReservation(payload: any): Observable<ApiResponse> {
+  confirmReservation(payload: ReservationConfirmationPayload ): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.bookingApiUrl, payload);
   }
 

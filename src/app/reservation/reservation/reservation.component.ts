@@ -12,6 +12,8 @@ reservationForm: FormGroup;
   minCheckOutDate: Date | null = null;
     availableRoomType: string[] = [];
 selectedRoomType: string = '';
+filterCriteria: { type: string } = { type: '' };
+
 
   constructor(private fb: FormBuilder, private store:Store) {
     this.reservationForm = this.fb.group({
@@ -24,9 +26,31 @@ selectedRoomType: string = '';
 
   }
 
-  filterCriteria = {
-    type: ''
-  };
+  ngOnInit() {
+  const checkIn = localStorage.getItem('checkInDate');
+  const checkOut = localStorage.getItem('checkOutDate');
+  const roomType = localStorage.getItem('roomType');
+
+  if (checkIn && checkOut) {
+    this.reservationForm.patchValue({
+      checkInDate: new Date(checkIn),
+      checkOutDate: new Date(checkOut),
+      roomType: roomType || null
+    });
+
+    // Also dispatch to NgRx again
+    this.store.dispatch(setReservationDate({
+      checkIn: new Date(checkIn),
+      checkOut: new Date(checkOut)
+    }));
+
+    this.filterCriteria.type = roomType || '';
+    this.selectedRoomType = roomType || '';
+  }
+}
+
+
+
 
   onSubmit() {
     if (this.reservationForm.valid) {
@@ -38,8 +62,10 @@ selectedRoomType: string = '';
 // store checkin and
     this.store.dispatch(setReservationDate({
         checkIn: new Date(this.reservationForm.value.checkInDate),
-    checkOut: new Date(this.reservationForm.value.checkOutDate)
-    }))
+        checkOut: new Date(this.reservationForm.value.checkOutDate)
+    }));
+    localStorage.setItem('checkInDate', this.reservationForm.value.checkInDate);
+    localStorage.setItem('checkOutDate', this.reservationForm.value.checkOutDate);
   }
 
   onCheckInDateChange(): void {
@@ -64,6 +90,7 @@ selectedRoomType: string = '';
     // console.log('Selected Room Type:', selectedType);
     this.selectedRoomType = selectedType;
    this.filterCriteria.type = selectedType ?? '';
+   localStorage.setItem('roomType', selectedType || '');
   }
   
 }

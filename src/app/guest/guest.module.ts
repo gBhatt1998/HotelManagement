@@ -19,8 +19,8 @@ import { EffectsModule } from '@ngrx/effects';
     CommonModule,
     GuestRoutingModule,
     SharedModule,
-    StoreModule.forFeature('guest', guestReducer), // ✅ reducer
-    EffectsModule.forFeature([GuestEffects])    
+    // StoreModule.forFeature('guest', guestReducer), // ✅ reducer
+    // EffectsModule.forFeature([GuestEffects])    
   ]
 })
 export class GuestModule { }

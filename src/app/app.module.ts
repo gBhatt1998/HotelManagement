@@ -10,6 +10,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { EffectsModule } from '@ngrx/effects';
 import { MatChipsModule } from '@angular/material/chips';
+import { GuestModule } from './guest/guest.module';
+import { guestReducer } from './guest/guest/store/guest.reducer';
+import { GuestEffects } from './guest/guest/store/guest.effects';
 
 // import { JwtInterceptor } from './auth/Jwt.interceptor';
 
@@ -25,6 +28,9 @@ import { MatChipsModule } from '@angular/material/chips';
 EffectsModule.forRoot([]),
     SharedModule,
     // MatChipsModule
+    // GuestModule,
+     StoreModule.forFeature('guest', guestReducer), // ✅ reducer
+    EffectsModule.forFeature([GuestEffects])  
   ],
   providers: [ {
       provide: HTTP_INTERCEPTORS,

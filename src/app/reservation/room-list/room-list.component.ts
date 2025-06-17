@@ -43,6 +43,15 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
 
       this.fetchRooms();
     });
+
+
+    const storedRoom = localStorage.getItem('selectedRoom');
+  if (storedRoom && !this.roomInitialized) {
+    const room: Room = JSON.parse(storedRoom);
+    this.store.dispatch(setReservationRoom({ room }));
+    this.roomInitialized = true;
+  }
+
     this.updatePaginatedRooms();
     this.applyFilters();
   }
@@ -85,7 +94,7 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
           });
           return;
         }
-        
+        console.log("rooms query"+data)
         this.rooms = data;
         this.availableRoomType = Array.from(new Set(data.map(room => room.type)));
         this.sendAllAvailableRoomTypes.emit(this.availableRoomType);
@@ -145,6 +154,9 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
 
   selectRoom(room: Room) {
     this.store.dispatch(setReservationRoom({ room }));
+
+      localStorage.setItem('selectedRoom', JSON.stringify(room));
+
   }
 
 }

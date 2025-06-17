@@ -30,5 +30,19 @@ export const guestReducer = createReducer(
             reservations: state.data!.reservations.filter(r => r.reservationId !== id)
         }
     })),
-    on(GuestActions.deleteGuestReservationFailure, (state, { error }) => ({ ...state, loading: false, error }))
+    on(GuestActions.deleteGuestReservationFailure, (state, { error }) => ({ ...state, loading: false, error })),
+
+  // Set GuestDetails from localStorage
+  on(GuestActions.setGuestDetails, (state, { guest }) => ({
+    ...state,
+    data: state.data
+      ? { ...state.data, guest }
+      : { guest, reservations: [], serviceNames: [] }
+  })),
+
+  // Clear GuestDetails on logout
+  on(GuestActions.clearGuestDetails, state => ({
+    ...state,
+    data: null
+  }))
 );

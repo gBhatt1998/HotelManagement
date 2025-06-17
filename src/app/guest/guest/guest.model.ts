@@ -5,7 +5,7 @@ export interface GuestReservationsResponse {
 }
 
 export interface GuestDetails {
-    id: number;
+    // id: number;
     name: string;
     email: string;
     phone: string;

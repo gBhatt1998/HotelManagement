@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (
 
   const token = authService.getToken();
   const role = authService.getRole();
-  const requiredRole = route.data['role'];
+  const requiredRoles = route.data['role'];
 
   
   if (!token) {
@@ -24,7 +24,7 @@ export const authGuard: CanActivateFn = (
   if (state.url === '/auth/login' || state.url === '/login') {
     if (role === 'ROLE_ADMIN') {
       return router.createUrlTree(['/admin']);
-    } else if (role === 'ROLE_USER' || role === 'ROLE_GUEST') {
+    } else if (role === 'ROLE_USER' || role === 'ROLE_ADMIN') {
       return router.createUrlTree(['/guest']);
     } else {
       return router.createUrlTree(['/unauthorized']);
@@ -33,10 +33,18 @@ export const authGuard: CanActivateFn = (
 
   console.log('Token:', token);
 console.log('Decoded Role:', role);
-console.log('Expected Role:', requiredRole);
+console.log('Expected Role:', requiredRoles);
 
-  if (requiredRole && role !== requiredRole) {
-    return router.createUrlTree(['/unauthorized']);
+  if (requiredRoles) {
+    if (Array.isArray(requiredRoles)) {
+      if (!requiredRoles.includes(role)) {
+        return router.createUrlTree(['/unauthorized']);
+      }
+    } else {
+      if (role !== requiredRoles) {
+        return router.createUrlTree(['/unauthorized']);
+      }
+    }
   }
 
   return true;

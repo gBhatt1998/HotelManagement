@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { jwtDecode as jwt_decode } from 'jwt-decode';
 import { SignupRequest } from '../shared/models/signup-request.model';
+import { GuestDetails } from '../guest/guest/guest.model';
 
 export interface DecodedToken {
   sub: string;       // email
@@ -72,6 +73,19 @@ export class AuthService {
   getRole(): string | null {
     return this.getDecodedToken()?.role ?? null;
   }
+
+  storeGuestDetails(details: GuestDetails): void {
+  localStorage.setItem('guestDetails', JSON.stringify(details));
+}
+
+getStoredGuestDetails(): GuestDetails | null {
+  const raw = localStorage.getItem('guestDetails');
+  return raw ? JSON.parse(raw) : null;
+}
+
+clearGuestDetails(): void {
+  localStorage.removeItem('guestDetails');
+}
 
   
 }

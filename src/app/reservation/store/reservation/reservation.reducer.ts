@@ -13,6 +13,11 @@ export const reservationReducer= createReducer(
     on(ReservationActions.setReservationRoom,(state,{room})=> ({
         ...state,
        selectedRoom: room
-    }))
-
-)
+    })),
+   on(ReservationActions.resetReservationDates, (state) => ({
+    ...state,
+    checkIn: null,
+    checkOut: null,
+    selectedRoom: null
+  }))
+);

@@ -1,4 +1,5 @@
 import { createAction,props } from "@ngrx/store";
+import { Room } from "../../models/room.model";
 
 export const setReservationDate=createAction(
     '[Reservation] Set Dates',
@@ -7,5 +8,7 @@ export const setReservationDate=createAction(
 
 export const setReservationRoom=createAction(
     '[Reservation] Select Room',
-    props<{room:any}>()
+    props<{room:Room}>()
 );
+
+export const resetReservationDates = createAction('[Reservation] Reset Dates');

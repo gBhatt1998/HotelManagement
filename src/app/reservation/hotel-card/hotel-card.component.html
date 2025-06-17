@@ -73,14 +73,14 @@
                     <mat-error *ngIf="bookingForm.get('email')?.hasError('email')">Invalid email</mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="form-field">
+                <!-- <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Password</mat-label>
                     <input matInput type="password" formControlName="password" />
                     <mat-error *ngIf="bookingForm.get('password')?.hasError('required')">Password is
                         required</mat-error>
                     <mat-error *ngIf="bookingForm.get('password')?.hasError('minlength')">Password must be at least 6
                         characters</mat-error>
-                </mat-form-field>
+                </mat-form-field> -->
             </div>
 </ng-container>
             <!-- Services -->

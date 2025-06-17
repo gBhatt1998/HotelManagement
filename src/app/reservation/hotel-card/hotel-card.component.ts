@@ -15,6 +15,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 // import { GuestDetails } from '../models/reservationpayload.model';
 import { GuestDetails } from 'src/app/guest/guest/guest.model'; // 👈 This is what the selector uses
 import { selectGuestDetails } from 'src/app/guest/guest/store/guest.selectors';
+import { resetReservationDates } from '../store/reservation/reservation.action';
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',
@@ -41,57 +42,90 @@ export class HotelCardComponent implements OnInit {
 ) { }
 
 
-  ngOnInit(): void {
-    this.bookingForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      checkIn: [null, Validators.required],
-      checkOut: [null, Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      serviceIds: [[]],
-    });
+ ngOnInit(): void {
+  // Initialize the form
+  this.bookingForm = this.fb.group({
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+    checkIn: [null, Validators.required],
+    checkOut: [null, Validators.required],
+    serviceIds: [[]],
+  });
 
-    this.storeGuest.select(selectGuestDetails).subscribe((guest: GuestDetails | null) => {
-      if (guest && this.isUserAuthenticated()) {
-        this.bookingForm.patchValue({
-          name: guest.name,
-          email: guest.email,
-          phone: guest.phone,
-        });
-      }
+  // Auto-fill guest details if available
+  this.storeGuest.select(selectGuestDetails).subscribe((guestDetails) => {
+  if (guestDetails && this.authService.isLoggedIn()) {
+    this.bookingForm.patchValue({
+      name: guestDetails.name,
+      email: guestDetails.email,
+      phone: guestDetails.phone,
     });
-
-    this.store.select(selectCheckInDate).subscribe(checkIn => {
-      if (checkIn) {
-        this.checkInDate = new Date(checkIn).toISOString().split('T')[0];
-        this.bookingForm.patchValue({ checkIn: new Date(checkIn) });
-        this.calculateTotalPrice();
-      }
-    });
-
-    this.store.select(selectCheckOutDate).subscribe(checkOut => {
-      if (checkOut) {
-        this.checkOutDate = new Date(checkOut).toISOString().split('T')[0];
-        this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
-        this.calculateTotalPrice();
-      }
-    });
-
-    this.store.select(selectSelectedRoom).subscribe(room => {
-      if (room) {
-        this.currentRoom = room;
-        this.roomId = room.roomNumber;
-        this.calculateTotalPrice();
-      }
-    });
-
-    this.fetchAvailableServices();
-
-    this.bookingForm.get('serviceIds')?.valueChanges.subscribe(() => {
-      this.calculateTotalPrice();
-    });
+  } else {
+    const stored = localStorage.getItem('guestDetails');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this.bookingForm.patchValue({
+        name: parsed.name,
+        email: parsed.email,
+        phone: parsed.phone,
+      });
+    }
   }
+});
+
+
+  // Sync form with NgRx store state
+  this.store.select(selectCheckInDate).subscribe(checkIn => {
+    if (checkIn) {
+      this.checkInDate = new Date(checkIn).toISOString().split('T')[0];
+      this.bookingForm.patchValue({ checkIn: new Date(checkIn) });
+    } else {
+      this.checkInDate = '';
+      this.bookingForm.patchValue({ checkIn: null });
+    }
+    this.calculateTotalPrice();
+  });
+
+  this.store.select(selectCheckOutDate).subscribe(checkOut => {
+    if (checkOut) {
+      this.checkOutDate = new Date(checkOut).toISOString().split('T')[0];
+      this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
+    } else {
+      this.checkOutDate = '';
+      this.bookingForm.patchValue({ checkOut: null });
+    }
+    this.calculateTotalPrice();
+  });
+
+  this.store.select(selectSelectedRoom).subscribe(room => {
+    if (room) {
+      this.currentRoom = room;
+      this.roomId = room.roomNumber;
+    } else {
+      this.currentRoom = {} as Room;
+      this.roomId = 0;
+    }
+    this.calculateTotalPrice();
+  });
+
+  // Fetch service list and restore any previous selections
+  this.fetchAvailableServices();
+
+  // Listen for serviceIds change and save to localStorage
+  this.bookingForm.get('serviceIds')?.valueChanges.subscribe((selectedIds) => {
+    localStorage.setItem('selectedServiceIds', JSON.stringify(selectedIds));
+    this.calculateTotalPrice();
+  });
+
+  // Restore selected services (if available and valid)
+  const savedServiceIds = localStorage.getItem('selectedServiceIds');
+  if (savedServiceIds) {
+    const parsedIds = JSON.parse(savedServiceIds);
+    this.bookingForm.patchValue({ serviceIds: parsedIds });
+  }
+}
+
 
 
 
@@ -107,18 +141,13 @@ export class HotelCardComponent implements OnInit {
   }
 
   private fetchAvailableServices(): void {
-    // this.loadingServices = true;
     this.hotelCardService.getAllServices().subscribe({
       next: (services) => {
-        // console.log('Available Services:', services);
         this.availableServices = services;
-        // this.loadingServices = false;
-        // this.calculateTotalPrice(); // Recalculate after services load
       },
       error: (err) => {
         console.error('Failed to load services:', err);
-        // this.loadingServices = false;
-        // Consider showing an error message to the user
+        
       }
     });
   }
@@ -140,91 +169,72 @@ export class HotelCardComponent implements OnInit {
   return this.authService.isLoggedIn();
 }
 
+onSubmit(): void {
+  if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
-  onSubmit(): void {
-    if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
+  const formValues = this.bookingForm.value;
+  const formattedCheckInDate = new Date(formValues.checkIn).toISOString().split('T')[0];
+  const formattedCheckOutDate = new Date(formValues.checkOut).toISOString().split('T')[0];
 
-    const formValue = this.bookingForm.value;
-    const formattedCheckInDate = new Date(formValue.checkIn).toISOString().split('T')[0];
-    const formattedCheckOutDate = new Date(formValue.checkOut).toISOString().split('T')[0];
+  const bookingPayload = {
+    checkInDate: formattedCheckInDate,
+    checkOutDate: formattedCheckOutDate,
+    roomId: this.roomId,
+    serviceIds: formValues.serviceIds || [],
+    totalPrice: this.totalPrice
+  };
 
-    const bookingPayload = {
-      checkInDate: formattedCheckInDate,
-      checkOutDate: formattedCheckOutDate,
-      totalPrice: this.totalPrice,
-      roomId: this.roomId,
-      guestDetails: {
-        name: formValue.name,
-        email: formValue.email,
-        password: formValue.password,
-        phone: formValue.phone,
-        role: 'USER'
-      },
-      serviceIds: formValue.serviceIds || []
-    };
+  const dialogRef = this.dialogService.openLoading('Please wait while we confirm your reservation...', 'Booking in Progress');
 
-    if (this.isUserAuthenticated()) {
-    bookingPayload.guestDetails = {
-      name: formValue.name,
-      email: formValue.email,
-      password: formValue.password,
-      phone: formValue.phone,
-      role: 'USER'
-    };
-  }
+  this.hotelCardService.confirmReservation(bookingPayload).subscribe({
+    next: (response) => {
+      dialogRef.componentInstance.data = {
+        title: 'Success',
+        message: response.message || 'Reservation Confirmed!',
+        mode: 'success',
+        statusCode: response.status || 201,
+        close: true,
+      };
 
-    // console.log('Booking Payload:', bookingPayload);
-
-    const dialogRef = this.dialogService.openLoading('Please wait while we confirm your reservation...', 'Booking in Progress');
-
-    this.hotelCardService.confirmReservation(bookingPayload).subscribe({
-      next: (response) => {
-        dialogRef.componentInstance.data = {
-          title: 'Success',
-          message: response.message || 'Reservation Confirmed!',
-          mode: 'success',
-          statusCode: response.status || 201,
-          close: true,
-        };
-
-        this.bookingForm.reset();
-        if (this.checkInDate) {
-          this.bookingForm.patchValue({ checkIn: new Date(this.checkInDate) });
-        }
-        if (this.checkOutDate) {
-          this.bookingForm.patchValue({ checkOut: new Date(this.checkOutDate) });
-        }
-        this.bookingForm.patchValue({ serviceIds: [] });
-        this.selectedServices = [];
-      },
-      error: (error) => {
-        let errorMsg = 'An error occurred during reservation.';
-        const status = error.status || 500;
-
-        const backendResponse = error.error;
-
-        // Handle 400 (Bad Request) and 401 (Unauthorized) and allow custom messages
-        if (status === 400 || status === 401) {
-          if (typeof backendResponse === 'string') {
-            errorMsg = backendResponse;
-          } else if (backendResponse.message) {
-            errorMsg = backendResponse.message;
-          } else if (typeof backendResponse === 'object') {
-            errorMsg = Object.values(backendResponse).join('\n');
-          }
-        }
-
-        dialogRef.componentInstance.data = {
-          title: 'Error',
-          message: errorMsg,
-          mode: 'error',
-          statusCode: status,
-          close: true,
-        };
+      this.bookingForm.reset();
+      if (this.checkInDate) {
+        this.bookingForm.patchValue({ checkIn: new Date(this.checkInDate) });
       }
-      
-      
-    });
-  }
-  
+      if (this.checkOutDate) {
+        this.bookingForm.patchValue({ checkOut: new Date(this.checkOutDate) });
+      }
+      this.bookingForm.patchValue({ serviceIds: [] });
+      this.selectedServices = [];
+      localStorage.removeItem('selectedServiceIds');
+      localStorage.removeItem('selectedRoom');
+      localStorage.removeItem('checkOutDate');
+      localStorage.removeItem('checkInDate');
+      this.store.dispatch(resetReservationDates());
+
+    },
+    error: (error) => {
+      let errorMsg = 'An error occurred during reservation.';
+      const status = error.status || 500;
+      const backendResponse = error.error;
+
+      if (status === 400 || status === 401) {
+        if (typeof backendResponse === 'string') {
+          errorMsg = backendResponse;
+        } else if (backendResponse.message) {
+          errorMsg = backendResponse.message;
+        } else if (typeof backendResponse === 'object') {
+          errorMsg = Object.values(backendResponse).join('\n');
+        }
+      }
+
+      dialogRef.componentInstance.data = {
+        title: 'Error',
+        message: errorMsg,
+        mode: 'error',
+        statusCode: status,
+        close: true,
+      };
+    }
+  });
+}
 }

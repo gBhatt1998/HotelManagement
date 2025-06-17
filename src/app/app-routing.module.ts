@@ -9,7 +9,7 @@ const routes: Routes = [
    { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
   { path: 'login', redirectTo: 'auth/login', pathMatch: 'full'  },
   {path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [authGuard], data: { role: 'ROLE_ADMIN' } },
-  {path: 'guest', loadChildren: () => import('./guest/guest.module').then(m => m.GuestModule),canActivate: [authGuard], data: { role: 'ROLE_USER' } },
+  {path: 'guest', loadChildren: () => import('./guest/guest.module').then(m => m.GuestModule),canActivate: [authGuard], data: { role: ['ROLE_USER','ROLE_ADMIN'] } },
   { path: '**', component: UnauthorizedComponent },
 ];
 

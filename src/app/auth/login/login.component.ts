@@ -4,7 +4,8 @@ import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignupRequest } from 'src/app/shared/models/signup-request.model';
 import { DialogService } from 'src/app/shared/dialog.service';
-
+import { Store } from '@ngrx/store';
+import * as GuestActions from 'src/app/guest/guest/store/guest.actions'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private store: Store // Import Store for dispatching actions
   ) {}
 
   ngOnInit(): void {
@@ -65,7 +67,15 @@ export class LoginComponent implements OnInit {
         next: (res) => {
           localStorage.setItem('jwt', res.jwt);
           this.authService.notifyLogin();
+      
+       
+
+
           const userRole = this.authService.getRole();
+
+           if (userRole === 'ROLE_USER') {
+        this.store.dispatch(GuestActions.loadGuestReservations());
+      }
           this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/']);
         },
         error: (err) => {

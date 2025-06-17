@@ -1,6 +1,8 @@
 /* Global Styles */
 
 /* Smooth scroll behavior */
+
+
 html {
     scroll-behavior: smooth;
     font-family: 'Segoe UI', Roboto, Arial, sans-serif; /* Global font */
@@ -15,6 +17,8 @@ html {
     flex-direction: column;
     font-family: 'Segoe UI', Roboto, Arial, sans-serif;
   }
+
+  
   
   /* Main content starts below navbar */
   main {
