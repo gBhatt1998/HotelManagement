@@ -30,6 +30,7 @@ import { AddLabelDirective } from './directive/add-label.directive';
 import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
 import { NgChartsModule } from 'ng2-charts';
 import { TextFieldModule } from '@angular/cdk/text-field';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { TextFieldModule } from '@angular/cdk/text-field';
     MatDialogModule,
   MatProgressSpinnerModule,
     NgChartsModule, 
-    TextFieldModule
+    TextFieldModule,
+    MatIconModule
   
   ],
   exports:[

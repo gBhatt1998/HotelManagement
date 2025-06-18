@@ -40,20 +40,21 @@
     
 
     <button mat-raised-button color="primary" type="submit" [disabled]="reservationForm.invalid"
-      class="submit-button">Submit</button>
+      class="submit-button">Check</button>
   </form>
  
     
 </div>
 
 <div class="content-container">
-  <div class="roomlist">
+<div class="roomlist">
+  <h3>Available Rooms</h3>
     <app-room-list [filterCriteria]="filterCriteria"
     (sendAllAvailableRoomTypes)="getAllAvailableRoomTypes($event)"></app-room-list>
   </div>
 
-  <div class="hotelcard-wrapper">
-    <div class="hotelcard">
+ <div class="hotelcard">
+  <h4>Booking Summary</h4>
       <app-hotel-card></app-hotel-card>
     </div>
   </div>

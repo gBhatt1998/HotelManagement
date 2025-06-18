@@ -4,44 +4,46 @@
   height: 100vh;
   margin: 0;
   overflow: hidden;
+  background-color: #f9f9fb;
 }
 
 /* --- Sidenav Styling --- */
 .sidenav {
-  width: 200px;
-  background-color: #f0f4f8;
-  padding-top: 20px;
-  border-right: 1px solid #ddd;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
+  width: 220px;
+  background-color: #f4f6f8;
+  padding-top: 24px;
+  border-right: 1px solid #e0e0e0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
 }
 
 /* --- Sidebar Title --- */
 .sidebar-title {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 600;
   margin-left: 24px;
   margin-bottom: 30px;
-  color: #2c3e50;
+  color: #263238;
 }
 
 /* --- Navigation Links --- */
 mat-nav-list a {
-  color: #34495e;
+  color: #37474f;
   font-weight: 500;
   font-size: 15px;
-  padding: 14px 28px;
+  padding: 12px 24px;
   border-left: 4px solid transparent;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+  border-radius: 4px 0 0 4px;
   display: block;
 }
 
 mat-nav-list a:hover {
-  background-color: #e0ebf3;
-  color: #1a237e;
+  background-color: #e3f2fd;
+  color: #1565c0;
 }
 
 .active-link {
-  background-color: #d0eafc;
+  background-color: #bbdefb;
   color: #0d47a1 !important;
   border-left: 4px solid #1976d2;
   font-weight: 600;
@@ -52,31 +54,71 @@ mat-sidenav-content {
   flex: 1;
   height: 100vh;
   overflow-y: auto;
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 0;
   margin: 0;
 }
 
 /* --- Main Content Area --- */
 .main-content {
-  padding: 32px;
-  padding-top: 90px; /* navbar space */
+  padding: 24px;
+  padding-top: 90px; 
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 70px); /* adjust based on navbar height */
+  min-height: 100%;
   width: 100%;
 }
 
-/* --- Utility Classes --- */
-.full-width-table {
-  width: 100%;
-}
-
+/* --- Table and Filters --- */
 .table-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   align-items: center;
+}
+
+.full-width-table {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Paginator Section --- */
+.mat-paginator {
+  padding: 8px 16px;
+  background-color: #f4f6f8;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0 0 10px 10px;
+  font-size: 14px;
+}
+
+/* --- Responsive Behavior --- */
+@media (max-width: 768px) {
+  .sidenav {
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    height: auto;
+  }
+
+  .main-content {
+    padding-top: 140px;
+  }
+
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sidebar-title {
+    margin-left: 16px;
+  }
+
+  mat-nav-list a {
+    padding: 10px 16px;
+  }
 }

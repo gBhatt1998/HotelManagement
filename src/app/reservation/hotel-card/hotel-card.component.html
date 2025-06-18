@@ -12,7 +12,7 @@
         <div class="price">
             <div class="price__l">
                 <span class="price__label">${{ currentRoom?.pricePerNight }} /</span>
-                <span class="measure__label">per-night</span>
+                <span class="measure__label" >per-night</span>
                 <small class="nights-info" style="margin-right: 4px; color: #3d3de0;" *ngIf="calculateNights() > 1">
                     · {{ calculateNights() }} nights
                 </small>
@@ -73,14 +73,7 @@
                     <mat-error *ngIf="bookingForm.get('email')?.hasError('email')">Invalid email</mat-error>
                 </mat-form-field>
 
-                <!-- <mat-form-field appearance="outline" class="form-field">
-                    <mat-label>Password</mat-label>
-                    <input matInput type="password" formControlName="password" />
-                    <mat-error *ngIf="bookingForm.get('password')?.hasError('required')">Password is
-                        required</mat-error>
-                    <mat-error *ngIf="bookingForm.get('password')?.hasError('minlength')">Password must be at least 6
-                        characters</mat-error>
-                </mat-form-field> -->
+               
             </div>
 </ng-container>
             <!-- Services -->
@@ -95,13 +88,18 @@
 
             <!-- Total Price -->
             <div class="price-summary">
-                <p><strong>Total Price:</strong> ${{ totalPrice | number:'1.2-2' }}</p>
-            </div>
+  <p>
+    <strong>Total Price:</strong>
+    <span class="total-price-pill">
+      ${{ totalPrice | number:'1.2-2' }}
+    </span>
+  </p>
+</div>
 
             <!-- Submit -->
           <ng-container *ngIf="isUserAuthenticated(); else loginButton">
   <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">
-    Submit
+    Confirm Booking
   </button>
 </ng-container>
 
