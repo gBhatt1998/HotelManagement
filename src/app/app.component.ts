@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { GuestDetails } from './guest/guest/guest.model';
 import { Store } from '@ngrx/store';
 import { setGuestDetails } from './guest/guest/store/guest.actions';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,12 @@ import { setGuestDetails } from './guest/guest/store/guest.actions';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  title(title: any) {
+    throw new Error('Method not implemented.');
+  }
   isLoggedIn = false;
   userRole: string | null = null;
-
+  menuOpen = false;
   constructor(private authService: AuthService,private route:Router, private store:Store) {}
 
   ngOnInit(): void {
@@ -32,6 +36,12 @@ export class AppComponent implements OnInit {
       this.isLoggedIn = status;
       this.userRole = this.authService.getRole();
     });
+
+    this.route.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe(() => {
+    this.menuOpen = false;
+  });
   }
 
   logout(): void {
@@ -41,4 +51,14 @@ export class AppComponent implements OnInit {
       localStorage.removeItem('guestDetails');  // 🧹 clear guest info
   this.route.navigate(['/login']);
   }
+
+
+
+toggleMenu() {
+  this.menuOpen = !this.menuOpen;
+}
+
+closeMenu() {
+  this.menuOpen = false;
+}
 }

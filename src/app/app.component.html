@@ -1,49 +1,37 @@
-
 <div class="nav-bar">
-  <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #102C57;">
-    <div class="container-fluid">
-      <a class="navbar-brand text-light mt-1" [routerLink]="!isLoggedIn ? '/' : null"
+  <nav class="navbar">
+    <div class="container-fluid nav-container">
+
+      <!-- Brand (always shown) -->
+      <a class="navbar-brand" [routerLink]="!isLoggedIn ? '/' : null"
          [style.pointer-events]="isLoggedIn ? 'none' : 'auto'">
-        <i class="fa-brands fa-monero me-2" style="color: #f8f0e5;"></i>
-        METROPOLITAN
+        <i class="fa-brands fa-monero"></i> METROPOLITAN
       </a>
 
-      <button class="navbar-toggler text-bg-light" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-              aria-label="Toggle navigation">
+      <!-- Toggle button (visible on mobile only) -->
+      <button class="navbar-toggler" type="button" (click)="toggleMenu()">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        
+      <!-- Overlay for mobile -->
+      <div class="navbar-overlay" [class.active]="menuOpen" (click)="closeMenu()"></div>
 
-        <!-- Common to all -->
-        <a class="nav-link text-light" routerLink="/">Make a Reservation</a>
+      <!-- Unified nav links (controlled with CSS) -->
+      <div class="nav-links" [class.active]="menuOpen">
+        <a class="nav-link" routerLink="/" (click)="closeMenu()">Make a Reservation</a>
+        <a *ngIf="isLoggedIn && (userRole === 'ROLE_USER' || userRole === 'ROLE_ADMIN')"
+           class="nav-link" routerLink="/guest" (click)="closeMenu()">My Reservations</a>
+        <a *ngIf="isLoggedIn && userRole === 'ROLE_ADMIN'"
+           class="nav-link" routerLink="/admin" (click)="closeMenu()">Admin Dashboard</a>
 
-        <!-- Logged in Guest -->
-       <!-- Logged in Guest -->
-          <a *ngIf="isLoggedIn && userRole === 'ROLE_USER' ||userRole === 'ROLE_ADMIN' " class="nav-link text-light" routerLink="/guest">
-           My Reservations
-             </a>
-
-<!-- Admin Panel -->
-<a *ngIf="isLoggedIn && userRole === 'ROLE_ADMIN'" class="nav-link text-light" routerLink="/admin">
-  Admin Dashboard
-</a>
-
-
-        <div class="d-flex align-items-center ms-3">
-          <!-- Login Button -->
-          <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login">Login Page</a>
-
-          <!-- Logout Button -->
+        <div class="auth-buttons">
+          <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login" (click)="closeMenu()">Login Page</a>
           <button *ngIf="isLoggedIn" class="btn btn-light" (click)="logout()">Logout</button>
         </div>
       </div>
     </div>
   </nav>
 </div>
-
 
 <main class="content-wrapper">
   <router-outlet></router-outlet>

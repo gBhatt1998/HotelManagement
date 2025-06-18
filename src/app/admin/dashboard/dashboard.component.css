@@ -1,20 +1,21 @@
-/* Layout container takes full viewport */
+/* --- Dashboard Container --- */
 .sidenav-container {
   display: flex;
   height: 100vh;
+  margin: 0;
+  overflow: hidden;
 }
 
-/* Sidebar styles */
+/* --- Sidenav Styling --- */
 .sidenav {
-  width: 170px;
+  width: 200px;
   background-color: #f0f4f8;
-  color: #333;
-  padding: 20px 0;
+  padding-top: 20px;
   border-right: 1px solid #ddd;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
 }
 
-/* Title inside sidebar */
+/* --- Sidebar Title --- */
 .sidebar-title {
   font-size: 20px;
   font-weight: 600;
@@ -23,14 +24,15 @@
   color: #2c3e50;
 }
 
-/* Navigation links */
+/* --- Navigation Links --- */
 mat-nav-list a {
   color: #34495e;
   font-weight: 500;
   font-size: 15px;
   padding: 14px 28px;
   border-left: 4px solid transparent;
-  transition: all 0.3s ease;
+  transition: 0.3s ease;
+  display: block;
 }
 
 mat-nav-list a:hover {
@@ -45,30 +47,33 @@ mat-nav-list a:hover {
   font-weight: 600;
 }
 
-/* Main content area */
+/* --- Sidenav Content Area --- */
 mat-sidenav-content {
-  flex-grow: 1;
-  width: calc(100% - 260px); /* Full width minus sidebar */
-  min-height: 100vh;
+  flex: 1;
+  height: 100vh;
   overflow-y: auto;
   background-color: #fff;
+  padding: 0;
+  margin: 0;
 }
 
+/* --- Main Content Area --- */
 .main-content {
   padding: 32px;
-  width: 100%;
+  padding-top: 90px; /* navbar space */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 70px); /* adjust based on navbar height */
+  width: 100%;
 }
 
-/* Ensure tables and inner content use full width */
+/* --- Utility Classes --- */
 .full-width-table {
   width: 100%;
 }
 
 .table-controls {
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
