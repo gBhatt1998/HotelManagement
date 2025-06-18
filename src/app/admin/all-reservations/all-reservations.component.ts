@@ -12,18 +12,19 @@ import { selectAllReservations } from '../store/all-reservation/all-reservation.
 })
 export class AllReservationsComponent {
  reservations$!: Observable<reservationdetailsresponse[]>;
-displayedColumns: string[] = [
-  'reservationId',
-  'guest.name',
-  'guest.email',
-  'roomNumber',
-  'guest.phone',         
-  'roomTypeName',       
-  'checkInDate',
-  'checkOutDate',
-  'serviceNames',
-  'totalPrice'
+displayedColumns: { key: string; label: string }[] = [
+  { key: 'reservationId', label: 'Reservation ID' },
+  { key: 'guest.name', label: 'Guest Name' },
+  { key: 'guest.email', label: 'Guest Email' },
+  { key: 'guest.phone', label: 'Guest Phone' },
+  { key: 'roomNumber', label: 'Room No.' },
+  { key: 'roomTypeName', label: 'Room Type' },
+  { key: 'checkInDate', label: 'Check-In Date' },
+  { key: 'checkOutDate', label: 'Check-Out Date' },
+  { key: 'serviceNames', label: 'Services' },
+  { key: 'totalPrice', label: 'Total' }
 ];
+
 
 
   constructor(private store: Store) {}

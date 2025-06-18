@@ -11,7 +11,7 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./dynamic-table.component.css'],
 })
 export class DynamicTableComponent<T extends object> implements OnChanges, AfterViewInit {
-  @Input() displayedColumns: string[] = [];
+@Input() displayedColumns: { key: string; label: string }[] = [];
   @Input() data: T[] = [];
   @Input() showDateFilter: boolean = false;
   @Input() enableActions: boolean = true;
@@ -152,4 +152,9 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
     if (total <= 10) return [5, 10];
     return [5, 10, 20];
   }
+
+  get columnKeys(): string[] {
+  return this.displayedColumns.map(c => c.key);
+}
+
 }

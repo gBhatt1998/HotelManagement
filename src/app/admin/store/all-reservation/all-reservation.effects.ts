@@ -50,7 +50,7 @@ delete$ = createEffect(() =>
         }),
         catchError((error) => {
           this.dialogService.openError({
-            title: 'Delete Failed',
+            title: 'Deletion Failed',
             message: error?.error?.message || 'Failed to delete reservation',
           });
           return of(ReservationActions.deleteReservationFailure({ error }));
