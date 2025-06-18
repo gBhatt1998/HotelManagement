@@ -1,79 +1,112 @@
-/* Global Styles */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+}
 
-/* Smooth scroll behavior */
+.navbar {
+    background-color: var(--primary);
+    padding: 0.8rem 1.5rem;
+    transition: var(--transition);
+}
 
+.navbar.scrolled {
+    padding: 0.5rem 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-html {
-    scroll-behavior: smooth;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif; /* Global font */
-  }
-  
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
+.navbar-brand {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
     display: flex;
-    flex-direction: column;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  }
+    align-items: center;
+    color: var(--light);
+}
 
-  
-  
-  /* Main content starts below navbar */
-  main {
-    margin-top: 57px;
-  }
+.navbar-brand i {
+    margin-right: 10px;
+    font-size: 1.8rem;
+    color: var(--secondary);
+    transition: var(--transition);
+}
 
-  
-  
-  /* Section styling */
-  .content-section {
-    padding: 100px 20px;
-    margin-top: 80px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* Navbar z-index for layering */
-  .navbar {
-    z-index: 1050;
-  }
-  
-  /* Heading styles */
-  h2 {
-    color: #102C57;
-    margin-bottom: 20px;
-    font-family: inherit;
-  }
-  
-  /* Paragraph text */
-  p {
-    font-size: 1.1rem;
-    font-family: inherit;
-  }
-  
-  /* Angular Material button styles */
-  button.mat-button,
-  button.mat-raised-button,
-  button.mat-stroked-button,
-  button.mat-flat-button,
-  button.mat-icon-button,
-  button.mat-fab,
-  button.mat-mini-fab {
-    border-radius: 20px;
-    padding: 8px 20px;
-    font-weight: 600;
-    font-size: 14px;
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    text-transform: capitalize;
-    color: white;
-    background-color: #3f51b5;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  /* Hover effect for all buttons */
-  button:hover {
-    background-color: #2c3e9e;
-    transform: scale(1.03);
-  }
-  
+.navbar-brand:hover i {
+    transform: rotate(-15deg);
+}
+
+.navbar-toggler {
+    border: none;
+    background: var(--light);
+    border-radius: 4px;
+    padding: 0.4rem 0.7rem;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(16, 44, 87, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.nav-link {
+    font-size: 1.05rem;
+    font-weight: 500;
+    padding: 0.6rem 1rem !important;
+    transition: var(--transition);
+    border-radius: 4px;
+    color: var(--light);
+    position: relative;
+    margin: 0 5px;
+}
+
+.nav-link:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--secondary);
+    transition: var(--transition);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--secondary);
+}
+
+.nav-link:hover:after, .nav-link.active:after {
+    width: 70%;
+}
+
+.btn-outline-light {
+    border: 2px solid var(--light);
+    background: transparent;
+    color: var(--light);
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    transition: var(--transition);
+}
+
+.btn-outline-light:hover {
+    background: var(--light);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.btn-light {
+    background-color: var(--light);
+    color: var(--primary) !important;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    transition: var(--transition);
+}
+
+.btn-light:hover {
+    background-color: var(--secondary);
+    color: var(--primary) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}

@@ -15,23 +15,16 @@
       </button>
 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <!-- Non-logged in Nav -->
-        <!-- <ul *ngIf="!isLoggedIn" class="navbar-nav nav-underline mt-2 mb-2">
-          <li class="nav-item"><a class="nav-link text-light mx-2" href="#events">Events</a></li>
-          <li class="nav-item"><a class="nav-link text-light mx-2" href="#amenities">Amenities</a></li>
-          <li class="nav-item"><a class="nav-link text-light mx-2" href="#dining">Dining</a></li>
-          <li class="nav-item"><a class="nav-link text-light mx-2" href="#offers">Offers</a></li>
-          <li class="nav-item"><a class="nav-link text-light mx-2" href="#rooms">Rooms</a></li>
-        </ul> -->
+        
 
         <!-- Common to all -->
         <a class="nav-link text-light" routerLink="/">Make a Reservation</a>
 
         <!-- Logged in Guest -->
        <!-- Logged in Guest -->
-<a *ngIf="isLoggedIn && userRole === 'ROLE_USER' ||userRole === 'ROLE_ADMIN' " class="nav-link text-light" routerLink="/guest">
-  My Reservations
-</a>
+          <a *ngIf="isLoggedIn && userRole === 'ROLE_USER' ||userRole === 'ROLE_ADMIN' " class="nav-link text-light" routerLink="/guest">
+           My Reservations
+             </a>
 
 <!-- Admin Panel -->
 <a *ngIf="isLoggedIn && userRole === 'ROLE_ADMIN'" class="nav-link text-light" routerLink="/admin">
