@@ -24,6 +24,12 @@ export class RoomService {
     return this.http.delete<void>(`${this.apiUrl}/${roomNo}`);
   }
 
+  createMultipleRooms(rooms: RoomRequestDTO[]): Observable<RoomResponseDTO[]> {
+    return this.http.post<RoomResponseDTO[]>(`${this.apiUrl}/batch`, { rooms });
+  }
+  
+  
+
   // suggestNextRoomNumber(roomTypeId: number): Observable<number> {
   //   return this.http.get<number>(`${this.apiUrl}/suggest-next/${roomTypeId}`);
   // }

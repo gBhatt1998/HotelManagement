@@ -12,6 +12,10 @@
 .popover-trigger-btn:hover {
   background-color: #bbdefb;
 }
+::ng-deep .chip-color {
+  background-color: #21b1f3 !important;
+}
+
 
 .chip-popover-overlay {
   background: #fff;

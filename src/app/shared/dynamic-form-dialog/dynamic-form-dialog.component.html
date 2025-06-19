@@ -84,9 +84,8 @@
 
 <!-- Attach right below count field -->
 <ng-container *ngIf="field.key === 'count' && data.suggestedRoomNos?.length">
-  <app-chip-popover
-    [services]="formattedSuggestedRooms"
-    buttonLabel="Suggested Room Numbers">
+  <app-chip-popover #chipPopoverRef
+    [services]="formattedSuggestedRooms" buttonLabel="Suggested Room Numbers">
   </app-chip-popover>
 </ng-container>
 

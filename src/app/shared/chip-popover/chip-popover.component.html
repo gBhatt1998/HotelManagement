@@ -7,7 +7,7 @@
     <mat-chip-listbox>
       <mat-chip *ngFor="let service of services; let i = index"
                 selected
-                [ngClass]="'chip-color-' + (i % 5)">
+                [ngClass]="'chip-color'">
         {{ service }}
       </mat-chip>
     </mat-chip-listbox>

@@ -17,21 +17,26 @@ import { TemplatePortal } from '@angular/cdk/portal';
 export class ChipPopoverComponent implements OnDestroy {
   @Input() services: string[] = [];
   @Input() buttonLabel: string = '';
+  @ViewChild('triggerBtn', { static: false }) triggerButton!: any;
 
   @ViewChild('popoverTemplate') popoverTemplate!: TemplateRef<any>;
   overlayRef: OverlayRef | null = null;
 
   constructor(private overlay: Overlay, private vcr: ViewContainerRef) {}
 
-  openPopover(event: MouseEvent): void {
-    event.stopPropagation();
+  openPopover(event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
 
     if (this.overlayRef) {
       this.closePopover();
       return;
     }
 
-    const target = event.currentTarget as HTMLElement;
+    const target = event?.currentTarget as HTMLElement || this.triggerButton?.nativeElement;
+
+    if (!target) return;
 
     const positionStrategy = this.overlay.position()
       .flexibleConnectedTo(target)
@@ -51,7 +56,7 @@ export class ChipPopoverComponent implements OnDestroy {
       positionStrategy,
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
-      scrollStrategy: this.overlay.scrollStrategies.reposition() // or .close()
+      scrollStrategy: this.overlay.scrollStrategies.reposition()
     });
 
     const portal = new TemplatePortal(this.popoverTemplate, this.vcr);
@@ -59,6 +64,7 @@ export class ChipPopoverComponent implements OnDestroy {
 
     this.overlayRef.backdropClick().subscribe(() => this.closePopover());
   }
+  
 
   closePopover(): void {
     if (this.overlayRef) {

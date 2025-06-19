@@ -10,6 +10,7 @@ import { selectRoomTypes } from '../store/room-type/room-type.selectors';
 import { selectAllRooms } from '../store/room/room.selectors';
 import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/dynamic-form-dialog.component';
 import { RoomService } from '../room.service';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-room',
@@ -30,7 +31,8 @@ export class RoomComponent implements OnInit {
   constructor(
     private store: Store,
     private dialog: MatDialog,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private dialogService:DialogService
   ) {
     this.rooms$ = this.store.select(selectAllRooms);
     this.roomTypes$ = this.store.select(selectRoomTypes);
@@ -106,11 +108,14 @@ openCreateDialog(): void {
                 // ✅ update dialog data to reflect suggestions
                 dialogRef.componentInstance.data.suggestedRoomNos = suggested;
               },
-              error: () => {
-                dialogRef.componentInstance.data.suggestedRoomNos = [];
-                alert('Unable to fetch room suggestions. Please try again.');
+              error: (error) => {
+                this.dialogService.openError({
+                  title: 'Room Suggestion Error',
+                  message: error?.error?.message || 'An unexpected error occurred.'
+                });
               }
             });
+            
           } else {
             dialogRef.componentInstance.data.suggestedRoomNos = [];
           }
@@ -119,19 +124,31 @@ openCreateDialog(): void {
     }
   });
 
-  dialogRef.afterClosed().subscribe((result: any) => {
-    const suggestedRoomNos = dialogRef.componentInstance.data.suggestedRoomNos ?? [];
-    if (result?.roomTypeId && suggestedRoomNos.length > 0) {
-      suggestedRoomNos.forEach((roomNo: number) => {
-        const roomRequest: RoomRequestDTO = {
+    dialogRef.afterClosed().subscribe((result: any) => {
+      const suggestedRoomNos = dialogRef.componentInstance.data.suggestedRoomNos ?? [];
+
+      if (result?.roomTypeId && suggestedRoomNos.length > 0) {
+        const roomsToCreate: RoomRequestDTO[] = suggestedRoomNos.map(roomNo => ({
           roomTypeId: result.roomTypeId,
           roomNo,
           availability: true
-        };
-        this.store.dispatch(RoomActions.createRoom({ room: roomRequest }));
-      });
-    }
-  });
-}
+        }));
 
-}
+        this.roomService.createMultipleRooms(roomsToCreate).subscribe({
+          next: (createdRooms) => {
+            this.store.dispatch(RoomActions.loadRooms({ roomType: '' }));
+            this.dialogService.openSuccess({
+              title: 'Rooms Created',
+              message: `${createdRooms.length} rooms successfully created.`
+            });
+          },
+          error: (error) => {
+            this.dialogService.openError({
+              title: 'Creation Error',
+              message: error?.error?.message || 'Failed to create rooms.'
+            });
+          }
+        });
+      }
+    });
+}}

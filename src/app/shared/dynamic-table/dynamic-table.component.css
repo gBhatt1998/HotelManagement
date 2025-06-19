@@ -1,4 +1,28 @@
-/* Controls Section */
+/* ====================== TABLE WRAPPER ====================== */
+.dynamic-table-wrapper {
+  padding: 20px;
+  background-color: #f9fbfc;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+/* Header */
+::ng-deep .mat-mdc-header-cell {
+  background-color: #961e8c !important; /* Green */
+  color: white !important;
+  font-weight: 600;
+  font-size: 14.5px;
+  padding: 16px;
+  text-transform: capitalize;
+  border-bottom: 1px solid #dee4ea;
+}
+::ng-deep .mat-column-roomType {
+  font-weight: bold;
+  color: #172918;         /* Green */
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+/* ====================== FILTER CONTROLS ====================== */
 .table-controls {
   display: flex;
   flex-wrap: wrap;
@@ -9,145 +33,117 @@
 
 mat-form-field {
   min-width: 240px;
-  background: #fff;
+  background: white;
   border-radius: 12px;
   padding: 4px 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* Table */
+button[mat-stroked-button] {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 6px 18px;
+  height: 40px;
+}
+
+/* ====================== MAT TABLE ====================== */
 .full-width-table {
   width: 100%;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background: white;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Header */
-th.mat-header-cell {
-  background: #f4f7fa;
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
-  padding: 16px 20px;
-  text-transform: capitalize;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-/* Body Cells */
+/* Cells */
 td.mat-cell {
-  padding: 14px 20px;
   font-size: 14px;
+  padding: 14px 16px;
+  color: #333;
   border-bottom: 1px solid #f1f1f1;
 }
 
-/* Hover effect */
+/* Row hover effect */
 tr.mat-row:hover {
-  background-color: #f9f9f9;
-  transition: background 0.3s ease;
+  background-color: #f5f9fc;
+  transition: background 0.2s ease;
 }
 
-/* Action buttons */
-button[mat-button] {
-  font-weight: 500;
-  text-transform: none;
-  padding: 4px 12px;
-  border-radius: 6px;
-  margin-right: 8px;
-}
-
-/* Paginator */
-mat-paginator {
-  margin-top: 20px;
-}
-
-/* ===================== BADGES ===================== */
-.badge-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-/* Color variants for service badges */
-.custom-badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1px solid transparent;
-  color: #fff;
-}
-
-/* Alternate badge colors */
-.custom-badge:nth-child(5n+1) {
-  background-color: #4caf50; /* Green */
-}
-
-.custom-badge:nth-child(5n+2) {
-  background-color: #2196f3; /* Blue */
-}
-
-.custom-badge:nth-child(5n+3) {
-  background-color: #ff9800; /* Orange */
-}
-
-.custom-badge:nth-child(5n+4) {
-  background-color: #9c27b0; /* Purple */
-}
-
-.custom-badge:nth-child(5n+5) {
-  background-color: #f44336; /* Red */
-}
-/* Colored chip styles */
-.chip-color-0 {
-  background-color: #4caf50 !important;  /* Green */
-  color: white;
-}
-
-.chip-color-1 {
-  background-color: #2196f3 !important;  /* Blue */
-  color: white;
-}
-
-.chip-color-2 {
-  background-color: #ff9800 !important;  /* Orange */
-  color: white;
-}
-
-.chip-color-3 {
-  background-color: #9c27b0 !important;  /* Purple */
-  color: white;
-}
-
-.chip-color-4 {
-  background-color: #f44336 !important;  /* Red */
-  color: white;
-}
-.chip-popover {
-  position: absolute;
-  background: #fff;
+/* ====================== ACTION BUTTONS ====================== */
+button[mat-icon-button] {
+  margin-right: 4px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  z-index: 1000;
-  min-width: 200px;
-  max-width: 300px;
+  transition: background-color 0.2s;
 }
 
-.chip-popover mat-chip {
-  margin: 4px;
-  font-size: 13px;
-  cursor: default;
+button[mat-icon-button]:hover:not([disabled]) {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.popover-container {
-  position: relative;
-  display: inline-block;
+/* Tooltips for disabled delete buttons */
+button[mat-icon-button][disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
+
+/* ====================== CHIP POPOVER ====================== */
 ::ng-deep .mat-menu-panel.chip-menu {
   background: transparent !important;
   box-shadow: none !important;
   padding: 0 !important;
   overflow: visible !important;
+}
+
+.chip-menu-container {
+  background-color: rgb(171, 130, 130);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 250px;
+}
+
+.chip-menu-container mat-chip {
+  margin: 4px;
+  font-size: 13px;
+}
+
+/* ====================== CHIP COLORS ====================== */
+.chip-color-0 {
+  background-color: #4caf50 !important;  /* Green */
+  color: white;
+}
+.chip-color-1 {
+  background-color: #2196f3 !important;  /* Blue */
+  color: white;
+}
+.chip-color-2 {
+  background-color: #ff9800 !important;  /* Orange */
+  color: white;
+}
+.chip-color-3 {
+  background-color: #9c27b0 !important;  /* Purple */
+  color: white;
+}
+.chip-color-4 {
+  background-color: #f44336 !important;  /* Red */
+  color: white;
+}
+
+/* ====================== PAGINATOR ====================== */
+mat-paginator {
+  margin-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 12px;
+}
+
+/* Responsive tweak for smaller screens */
+@media (max-width: 768px) {
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
 }
