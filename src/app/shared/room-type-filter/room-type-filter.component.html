@@ -1,0 +1,8 @@
+<mat-form-field appearance="outline">
+    <mat-label>Room Type</mat-label>
+    <mat-select [(ngModel)]="selectedRoomType" (selectionChange)="onChange()">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let type of roomTypes" [value]="type">{{ type }}</mat-option>
+    </mat-select>
+</mat-form-field>
+  

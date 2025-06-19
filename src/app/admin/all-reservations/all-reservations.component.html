@@ -1,12 +1,6 @@
-<ng-container *ngIf="reservations$ | async as reservations">
-  <app-dynamic-table
-    [data]="reservations"
-    [displayedColumns]="displayedColumns"
-    [enableActions]="true"
-    [showDateFilter]="true"
-    [enableRoomTypeFilter]="true"
-     [enableEdit]="false"
-   
-    (delete)="onDelete($event)">
-  </app-dynamic-table>
-</ng-container>
+<app-room-type-filter [roomTypes]="roomTypes" (roomTypeChanged)="onRoomTypeChanged($event)">
+</app-room-type-filter>
+
+<app-dynamic-table [data]="(reservations$ | async) ?? []" [displayedColumns]="displayedColumns" [enableActions]="true"
+  [enableEdit]="false" (delete)="onDelete($event)">
+</app-dynamic-table>

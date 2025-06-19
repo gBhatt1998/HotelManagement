@@ -14,7 +14,11 @@ import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/d
 })
 export class DepartmentComponent implements OnInit {
   departments$: Observable<DepartmentResponseDTO[]>;
-  displayedColumns = ['id', 'name'];
+  displayedColumns = [
+    { key: 'id', label: 'Department ID' },
+    { key: 'name', label: 'Department Name' }
+  ];
+  
 
   constructor(private store: Store, private dialog: MatDialog) {
     this.departments$ = this.store.select(selectAllDepartments);

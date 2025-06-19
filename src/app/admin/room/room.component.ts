@@ -20,8 +20,13 @@ export class RoomComponent implements OnInit {
   roomTypes$: Observable<RoomType[]>;
   roomTypeOptions: { label: string; value: number }[] = [];
 
-  displayedColumns = ['roomNo', 'availability', 'roomTypeName', 'canDelete'];
-
+  displayedColumns = [
+    { key: 'roomNo', label: 'Room No.' },
+    { key: 'availability', label: 'Available' },
+    { key: 'roomTypeName', label: 'Room Type' },
+    { key: 'canDelete', label: 'Can Delete' }
+  ];
+  
   constructor(
     private store: Store,
     private dialog: MatDialog,

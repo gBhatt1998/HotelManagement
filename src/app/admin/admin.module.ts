@@ -34,8 +34,7 @@ import { RevenueEffects } from './store/revenue/revenue.effects';
     EmployeeComponent,
     RoomTypeComponent,
     RoomComponent,
-    RevenueComponent
-  ],
+    RevenueComponent,  ],
   imports: [
     CommonModule,
     AdminRoutingModule,

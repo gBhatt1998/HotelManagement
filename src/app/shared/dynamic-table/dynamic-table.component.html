@@ -55,20 +55,24 @@
             {{ row['checkOutDate'] | date: 'dd-MM-yyyy' }}
           </ng-container>
 
-          <!-- Service Chips -->
           <ng-container *ngSwitchCase="'serviceNames'">
             <div *ngIf="row['serviceNames']?.length">
-              <button mat-button (click)="toggleService(row)" color="primary">
-                {{ expandedServiceRowId === row['reservationId'] ? 'Hide Services' : 'View Services' }}
+              <button mat-button [matMenuTriggerFor]="serviceMenu" color="primary">
+                View Services
               </button>
-              <mat-chip-set *ngIf="expandedServiceRowId === row['reservationId']" class="chip-list">
-                <mat-chip *ngFor="let service of row['serviceNames']; let i = index" selected
-                  [ngClass]="'chip-color-' + (i % 5)">
-                  {{ service }}
-                </mat-chip>
-              </mat-chip-set>
+          
+              <mat-menu #serviceMenu="matMenu" class="chip-menu" [overlapTrigger]="false">
+                <mat-chip-listbox style="padding: 8px">
+                  <mat-chip *ngFor="let service of row['serviceNames']; let i = index" selected [ngClass]="'chip-color-' + (i % 5)">
+                    {{ service }}
+                  </mat-chip>
+                </mat-chip-listbox>
+              </mat-menu>
+              
             </div>
           </ng-container>
+          
+          
 
           <!-- Price -->
           <ng-container *ngSwitchCase="'totalPrice'">

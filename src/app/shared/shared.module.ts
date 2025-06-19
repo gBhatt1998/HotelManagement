@@ -31,6 +31,8 @@ import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
 import { NgChartsModule } from 'ng2-charts';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatIconModule } from '@angular/material/icon';
+import { RoomTypeFilterComponent } from './room-type-filter/room-type-filter.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { MatIconModule } from '@angular/material/icon';
     DynamicTableComponent,
     DynamicFormDialogComponent,
     AddLabelDirective,
-    DynamicCardComponent
+    DynamicCardComponent,
+    RoomTypeFilterComponent
   ],  
   imports: [
     CommonModule,
@@ -63,7 +66,8 @@ import { MatIconModule } from '@angular/material/icon';
   MatProgressSpinnerModule,
     NgChartsModule, 
     TextFieldModule,
-    MatIconModule
+    MatIconModule,
+    MatMenuModule
   
   ],
   exports:[
@@ -89,7 +93,8 @@ import { MatIconModule } from '@angular/material/icon';
     DynamicCardComponent,
     MatChipsModule ,
     NgChartsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RoomTypeFilterComponent
   ]
 })
 export class SharedModule { }

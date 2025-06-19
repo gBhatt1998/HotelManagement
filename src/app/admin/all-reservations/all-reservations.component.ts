@@ -25,6 +25,7 @@ displayedColumns: { key: string; label: string }[] = [
   { key: 'totalPrice', label: 'Total' }
 ];
 
+  roomTypes: string[] = [];
 
 
   constructor(private store: Store) {}
@@ -32,9 +33,18 @@ displayedColumns: { key: string; label: string }[] = [
   ngOnInit(): void {
     this.store.dispatch(loadAllReservations());
     this.reservations$ = this.store.select(selectAllReservations);
+
+    this.reservations$.subscribe(reservations => {
+      const set = new Set<string>();
+      reservations.forEach(r => r.roomTypeName && set.add(r.roomTypeName));
+      this.roomTypes = Array.from(set);
+    });
   }
 
- 
+  onRoomTypeChanged(roomType: string): void {
+    const a=roomType;
+    // this.store.dispatch(loadAllReservations({ roomType }));
+  }
 
  onDelete(row: reservationdetailsresponse): void {
   this.store.dispatch(deleteReservation({ id: row.reservationId }));

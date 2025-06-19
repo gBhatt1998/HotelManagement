@@ -18,6 +18,15 @@ import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/d
   styleUrls: ['./employee.component.css']
 })
 export class EmployeeComponent implements OnInit {
+
+  displayedColumns = [
+    { key: 'id', label: 'Employee ID' },
+    { key: 'name', label: 'Employee Name' },
+    { key: 'position', label: 'Position' },
+    { key: 'hireDate', label: 'Hire Date' },
+    { key: 'departments', label: 'Department' }
+  ];
+  
   employees$: Observable<EmployeeResponseDTO[]> = this.store.select(selectAllEmployees);
   departments$: Observable<DepartmentResponseDTO[]> = this.store.select(selectAllDepartments);
 
