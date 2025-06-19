@@ -1,0 +1,15 @@
+<button mat-button class="popover-trigger-btn" (click)="openPopover($event)">
+  {{ buttonLabel }}
+</button>
+
+<ng-template #popoverTemplate>
+  <div class="chip-popover-overlay" (click)="$event.stopPropagation()">
+    <mat-chip-listbox>
+      <mat-chip *ngFor="let service of services; let i = index"
+                selected
+                [ngClass]="'chip-color-' + (i % 5)">
+        {{ service }}
+      </mat-chip>
+    </mat-chip-listbox>
+  </div>
+</ng-template>

@@ -17,6 +17,9 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
   @Input() enableActions: boolean = true;
   @Input() enableEdit: boolean = true;
   @Input() enableRoomTypeFilter: boolean = false;
+  @Input() DeleteMessage: string = 'Cannot delete';
+
+@Input() alwaysShowDelete: boolean = false;
 
   @Output() edit = new EventEmitter<T>();
   @Output() delete = new EventEmitter<T>();
@@ -155,6 +158,13 @@ export class DynamicTableComponent<T extends object> implements OnChanges, After
 
   get columnKeys(): string[] {
   return this.displayedColumns.map(c => c.key);
+}
+isChipArray(value: any): boolean {
+  return Array.isArray(value) && value.length > 0 && typeof value[0] === 'string';
+}
+
+getChipLabel(label: string, chips: string[]): string {
+  return ` ${label}`;
 }
 
 }

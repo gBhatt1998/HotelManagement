@@ -5,6 +5,8 @@
 
     <app-dynamic-table [displayedColumns]="displayedColumns"
         [data]="(employees$ | async) ?? []" [enableActions]="true" [enableEdit]="true" (edit)="openEditDialog($event)"
+          [alwaysShowDelete]="true"
+
         (delete)="deleteEmployee($event.id)">
     </app-dynamic-table>
 </div>

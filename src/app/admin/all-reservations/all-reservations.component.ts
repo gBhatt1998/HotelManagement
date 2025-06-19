@@ -24,30 +24,49 @@ displayedColumns: { key: string; label: string }[] = [
   { key: 'serviceNames', label: 'Services' },
   { key: 'totalPrice', label: 'Total' }
 ];
+roomTypesSet: Set<string> = new Set<string>();
+
 
   roomTypes: string[] = [];
 
 
   constructor(private store: Store) {}
 
-  ngOnInit(): void {
-    this.store.dispatch(loadAllReservations());
-    this.reservations$ = this.store.select(selectAllReservations);
+ngOnInit(): void {
+  this.store.dispatch(loadAllReservations({ roomType: '' }));
+  this.reservations$ = this.store.select(selectAllReservations);
+  
+  this.reservations$.subscribe(res => {
+    this.addNewRoomTypes(res);
+  });
+}
 
-    this.reservations$.subscribe(reservations => {
-      const set = new Set<string>();
-      reservations.forEach(r => r.roomTypeName && set.add(r.roomTypeName));
-      this.roomTypes = Array.from(set);
-    });
-  }
 
-  onRoomTypeChanged(roomType: string): void {
-    const a=roomType;
-    // this.store.dispatch(loadAllReservations({ roomType }));
+onRoomTypeChanged(roomType: string): void {
+  this.store.dispatch(loadAllReservations({ roomType }));
+  
+  this.reservations$.subscribe(res => {
+    this.addNewRoomTypes(res);
+  });
+}
+
+addNewRoomTypes(reservations: reservationdetailsresponse[]): void {
+  let updated = false;
+  reservations.forEach(r => {
+    if (r.roomTypeName && !this.roomTypesSet.has(r.roomTypeName)) {
+      this.roomTypesSet.add(r.roomTypeName);
+      updated = true;
+    }
+  });
+
+  if (updated) {
+    this.roomTypes = Array.from(this.roomTypesSet).sort();
   }
+}
+
+
 
  onDelete(row: reservationdetailsresponse): void {
   this.store.dispatch(deleteReservation({ id: row.reservationId }));
 }
-
 }

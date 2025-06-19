@@ -68,3 +68,12 @@ mat-card-actions {
   justify-content: flex-end;
   gap: 10px;
 }
+button[mat-icon-button] mat-icon {
+  transition: color 0.2s ease;
+}
+button[mat-icon-button]:hover mat-icon {
+  color: #1976d2; /* blue for edit */
+}
+button[mat-icon-button][color="warn"]:hover mat-icon {
+  color: #c62828; /* red for delete */
+}

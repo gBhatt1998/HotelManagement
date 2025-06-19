@@ -2,7 +2,10 @@
 import { createAction, props } from '@ngrx/store';
 import { reservationdetailsresponse } from'src/app/shared/models/reservationdetailsresponse.model';
 
-export const loadAllReservations = createAction('[Reservation] Load All');
+export const loadAllReservations = createAction(
+  '[Reservation] Load All',
+  props<{ roomType?: string }>() // NEW: optional roomType
+);
 
 export const loadAllReservationsSuccess = createAction(
   '[Reservation] Load All Success',

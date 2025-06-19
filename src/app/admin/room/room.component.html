@@ -1,18 +1,24 @@
 <div class="room-container">
-  
 
   <div class="actions-bar">
+    <app-room-type-filter
+  [roomTypes]="filterRoomTypes"
+  (roomTypeChanged)="onRoomTypeChange($event)"
+></app-room-type-filter>
+
+
     <button mat-flat-button color="primary" (click)="openCreateDialog()" appAddLabel>
-      +  Room
+      + Room
     </button>
   </div>
 
-  <!-- 👈 This is missing based on what you shared -->
   <app-dynamic-table
     [data]="(rooms$ | async) || []"
     [displayedColumns]="displayedColumns"
     [enableActions]="true"
     [enableEdit]="false"
+        [DeleteMessage]="'Reserved Room'"
+
     (delete)="onDelete($event)"
   ></app-dynamic-table>
 </div>

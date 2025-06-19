@@ -11,9 +11,13 @@ export class AllReservationService {
 private deleteUrl = 'http://localhost:8080/admin'; // Base URL for delete operation
   constructor(private http: HttpClient) {}
 
-  getAllReservations(): Observable<reservationdetailsresponse[]> {
-    return this.http.get<reservationdetailsresponse[]>(this.baseUrl);
-  }
+  // getAllReservations(): Observable<reservationdetailsresponse[]> {
+  //   return this.http.get<reservationdetailsresponse[]>(this.baseUrl);
+  // }
+getAllReservations(roomType?: string): Observable<reservationdetailsresponse[]> {
+  const options = roomType ? { params: { roomType } } : {};
+  return this.http.get<reservationdetailsresponse[]>(this.baseUrl, options);
+}
 
   deleteReservation(id: number): Observable<{ status: string, message: string, data: string }> {
   return this.http.delete<{ status: string, message: string, data: string }>(

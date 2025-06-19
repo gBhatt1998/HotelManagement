@@ -184,6 +184,8 @@ onSubmit(): void {
     totalPrice: this.totalPrice
   };
 
+console.log("Booking Payload:", JSON.stringify(bookingPayload, null, 2));
+
   const dialogRef = this.dialogService.openLoading('Please wait while we confirm your reservation...', 'Booking in Progress');
 
   this.hotelCardService.confirmReservation(bookingPayload).subscribe({

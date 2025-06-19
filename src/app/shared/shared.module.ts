@@ -33,7 +33,10 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatIconModule } from '@angular/material/icon';
 import { RoomTypeFilterComponent } from './room-type-filter/room-type-filter.component';
 import { MatMenuModule } from '@angular/material/menu';
-
+import { ChipPopoverComponent } from './chip-popover/chip-popover.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -42,7 +45,8 @@ import { MatMenuModule } from '@angular/material/menu';
     DynamicFormDialogComponent,
     AddLabelDirective,
     DynamicCardComponent,
-    RoomTypeFilterComponent
+    RoomTypeFilterComponent,
+    ChipPopoverComponent
   ],  
   imports: [
     CommonModule,
@@ -67,7 +71,10 @@ import { MatMenuModule } from '@angular/material/menu';
     NgChartsModule, 
     TextFieldModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    OverlayModule,
+    PortalModule,
+    MatTooltipModule
   
   ],
   exports:[
@@ -94,7 +101,9 @@ import { MatMenuModule } from '@angular/material/menu';
     MatChipsModule ,
     NgChartsModule,
     MatProgressSpinnerModule,
-    RoomTypeFilterComponent
+    RoomTypeFilterComponent,
+    ChipPopoverComponent,
+    MatTooltipModule  
   ]
 })
 export class SharedModule { }

@@ -18,8 +18,8 @@ export class ReservationEffects {
   loadAll$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReservationActions.loadAllReservations),
-      mergeMap(() =>
-        this.reservationService.getAllReservations().pipe(
+      mergeMap(({ roomType }) =>
+       this.reservationService.getAllReservations(roomType).pipe(
             // tap(res => console.log('[Effect] Fetched Reservations:', res)), // 
           map((reservations) => ReservationActions.loadAllReservationsSuccess({ reservations })),
           
@@ -40,8 +40,7 @@ delete$ = createEffect(() =>
       this.reservationService.deleteReservation(id).pipe(
         mergeMap((response) => [
           ReservationActions.deleteReservationSuccess({ id }),
-          ReservationActions.loadAllReservations(), // Refetch all
-        ]),
+ReservationActions.loadAllReservations({ roomType: '' })         ]),
         tap((response) => {
           this.dialogService.openSuccess({
             title: 'Deleted',

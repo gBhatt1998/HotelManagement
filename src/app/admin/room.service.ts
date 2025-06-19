@@ -9,9 +9,12 @@ export class RoomService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<RoomResponseDTO[]> {
-    return this.http.get<RoomResponseDTO[]>(`${this.apiUrl}`);
-  }
+  getAll(roomType: string = ''): Observable<RoomResponseDTO[]> {
+  const url = roomType
+    ? `${this.apiUrl}?roomType=${encodeURIComponent(roomType)}`
+    : this.apiUrl;
+  return this.http.get<RoomResponseDTO[]>(url);
+}
 
   create(room: RoomRequestDTO): Observable<RoomResponseDTO> {
     return this.http.post<RoomResponseDTO>(`${this.apiUrl}`, room);

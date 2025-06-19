@@ -2,22 +2,25 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as RoomActions from './room.actions';
 import { RoomService } from '../../room.service';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { DialogService } from 'src/app/shared/dialog.service';
+import { Store } from '@ngrx/store';
+import { selectRoomFilter } from './room.selectors'; // 👈 Selector to track current filter
 
 @Injectable()
 export class RoomEffects {
   constructor(
     private actions$: Actions,
     private roomService: RoomService,
-    private dialogService: DialogService
-  ) { }
+    private dialogService: DialogService,
+    private store: Store
+  ) {}
 
   loadRooms$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RoomActions.loadRooms),
-      mergeMap(() =>
-        this.roomService.getAll().pipe(
+      mergeMap(({ roomType }) =>
+        this.roomService.getAll(roomType || '').pipe(
           map(rooms => RoomActions.loadRoomsSuccess({ rooms })),
           catchError(() => of({ type: '[Room] Load Rooms Failure' }))
         )
@@ -52,7 +55,8 @@ export class RoomEffects {
   createRoomSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RoomActions.createRoomSuccess),
-      map(() => RoomActions.loadRooms())
+      withLatestFrom(this.store.select(selectRoomFilter)), // 👈 get latest selected roomType
+      map(([_, roomType]) => RoomActions.loadRooms({ roomType }))
     )
   );
 
@@ -83,7 +87,8 @@ export class RoomEffects {
   deleteRoomSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RoomActions.deleteRoomSuccess),
-      map(() => RoomActions.loadRooms())
+      withLatestFrom(this.store.select(selectRoomFilter)), // 👈 keep filter during reload
+      map(([_, roomType]) => RoomActions.loadRooms({ roomType }))
     )
   );
 }

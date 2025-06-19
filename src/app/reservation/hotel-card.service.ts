@@ -18,7 +18,7 @@ export class HotelCardService {
   getAllServices(): Observable<Service[]> {
     return this.http.get<Service[]>(this.apiUrl);
   }
-  confirmReservation(payload: ReservationConfirmationPayload ): Observable<ApiResponse> {
+  confirmReservation(payload: any ): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.bookingApiUrl, payload);
   }
 

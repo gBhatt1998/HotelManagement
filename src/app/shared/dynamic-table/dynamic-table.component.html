@@ -39,71 +39,84 @@
 
   <!-- Table -->
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width-table">
-    <!-- Dynamic Columns -->
-    <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column.key">
-  <th mat-header-cell *matHeaderCellDef> {{ column.label }} </th>
 
-      <td mat-cell *matCellDef="let row">
-        <ng-container [ngSwitch]="column.key">
+  <!-- Dynamic Columns -->
+  <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column.key">
+    <th mat-header-cell *matHeaderCellDef> {{ column.label }} </th>
 
-          <!-- Date formatting -->
-          <ng-container *ngSwitchCase="'checkInDate'">
-            {{ row['checkInDate'] | date: 'dd-MM-yyyy' }}
+    <td mat-cell *matCellDef="let row">
+      <ng-container [ngSwitch]="column.key">
+
+        <!-- Format Dates -->
+        <ng-container *ngSwitchCase="'checkInDate'">
+          {{ row['checkInDate'] | date: 'dd-MM-yyyy' }}
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'checkOutDate'">
+          {{ row['checkOutDate'] | date: 'dd-MM-yyyy' }}
+        </ng-container>
+
+        <!-- Format Price -->
+        <ng-container *ngSwitchCase="'totalPrice'">
+          ${{ row['totalPrice'] }}
+        </ng-container>
+
+        <!-- Default case for dynamic values -->
+        <ng-container *ngSwitchDefault>
+          <ng-container *ngIf="isChipArray(row[column.key]); else plainText">
+            <app-chip-popover
+              [services]="row[column.key]"
+              [buttonLabel]="getChipLabel(column.label, row[column.key])">
+            </app-chip-popover>
           </ng-container>
-
-          <ng-container *ngSwitchCase="'checkOutDate'">
-            {{ row['checkOutDate'] | date: 'dd-MM-yyyy' }}
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'serviceNames'">
-            <div *ngIf="row['serviceNames']?.length">
-              <button mat-button [matMenuTriggerFor]="serviceMenu" color="primary">
-                View Services
-              </button>
-          
-              <mat-menu #serviceMenu="matMenu" class="chip-menu" [overlapTrigger]="false">
-                <mat-chip-listbox style="padding: 8px">
-                  <mat-chip *ngFor="let service of row['serviceNames']; let i = index" selected [ngClass]="'chip-color-' + (i % 5)">
-                    {{ service }}
-                  </mat-chip>
-                </mat-chip-listbox>
-              </mat-menu>
-              
-            </div>
-          </ng-container>
-          
-          
-
-          <!-- Price -->
-          <ng-container *ngSwitchCase="'totalPrice'">
-            ${{ row['totalPrice'] }}
-          </ng-container>
-
-          <!-- Default -->
-          <ng-container *ngSwitchDefault>
+          <ng-template #plainText>
             {{ getNestedValue(row, column.key) }}
-          </ng-container>
-
+          </ng-template>
         </ng-container>
-      </td>
+
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <!-- Actions Column -->
+  <ng-container *ngIf="enableActions" matColumnDef="actions">
+  <th mat-header-cell *matHeaderCellDef> Actions </th>
+  <td mat-cell *matCellDef="let row">
+
+    <!-- Edit Icon -->
+    <ng-container *ngIf="enableEdit">
+      <button mat-icon-button color="primary" (click)="onEdit(row)" matTooltip="Update">
+        <mat-icon>edit_note</mat-icon>
+      </button>
     </ng-container>
 
-    <!-- Actions -->
-    <ng-container *ngIf="enableActions" matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <td mat-cell *matCellDef="let row">
-        <ng-container *ngIf="enableEdit">
-          <button mat-button color="primary" (click)="onEdit(row)">Edit</button>
-        </ng-container>
-        <button mat-button color="warn" (click)="onDelete(row)">Delete</button>
-      </td>
+    <!-- Delete Icon (based on condition) -->
+    <ng-container *ngIf="alwaysShowDelete || row.canDelete; else cannotDelete">
+      <button mat-icon-button color="warn" (click)="onDelete(row)" matTooltip="Delete">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="enableActions ? columnKeys.concat('actions') : columnKeys"></tr>
-<tr mat-row *matRowDef="let row; columns: enableActions ? columnKeys.concat('actions') : columnKeys"></tr>
+    <!-- Fallback message if delete not allowed -->
+   <ng-template #cannotDelete>
+  <span [matTooltip]="DeleteMessage">
+    <button mat-icon-button disabled>
+      <mat-icon color="warn">block</mat-icon>
+    </button>
+  </span>
+</ng-template>
 
-    <!-- </tr> -->
-  </table>
+  </td>
+</ng-container>
+
+
+
+  <!-- Table Row Definitions -->
+  <tr mat-header-row *matHeaderRowDef="enableActions ? columnKeys.concat('actions') : columnKeys"></tr>
+  <tr mat-row *matRowDef="let row; columns: enableActions ? columnKeys.concat('actions') : columnKeys"></tr>
+
+</table>
+
 
   <mat-paginator *ngIf="shouldShowPaginator()" [length]="dataSource.data.length" [pageSize]="pageSize"
     [pageSizeOptions]="getPageSizeOptions()" showFirstLastButtons>
