@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-export type FieldType = 'text' | 'number' | 'date' | 'multiselect' | 'textarea' | 'select' | 'boolean';
+export type FieldType = 'text' | 'number' | 'date' | 'multiselect' | 'textarea' | 'select' | 'boolean'  | 'button'; //;
 
 export interface FormFieldValidator {
   name: 'minlength' | 'maxlength' | 'min' | 'max' | 'pattern';
@@ -33,9 +33,12 @@ export interface DynamicDialogData {
   formFields: FormField[];
   onFieldChange?: (
     fieldKey: string,
-    value: string | number | string[] | number[] | boolean,
-    patchForm: (key: string, value: any) => void
+    value: string | number | string[] | number[] | boolean | null,
+    patchForm: (key: string, value: any) => void,
+     formValue: any
   ) => void;
+    suggestedRoomNos?: number[]; // ✅ Add this line
+
 }
 
 @Component({
@@ -57,6 +60,8 @@ export class DynamicFormDialogComponent implements OnInit {
     const group: { [key: string]: any } = {};
 
     this.data.formFields.forEach((field: FormField) => {
+        if (field.type === 'button') return; // ✅ Skip adding button fields to form group
+
       const validators = [];
 
       if (field.validators) {
@@ -95,12 +100,21 @@ export class DynamicFormDialogComponent implements OnInit {
 
     // Handle dynamic value changes
     if (this.data.onFieldChange) {
-      this.data.formFields.forEach((field) => {
-        this.form.get(field.key)?.valueChanges.subscribe((value) => {
-          this.data.onFieldChange!(field.key, value, this.patchFormValue.bind(this));
-        });
+  this.data.formFields.forEach((field) => {
+    const control = this.form.get(field.key);
+    if (control && field.type !== 'button') {
+      control.valueChanges.subscribe((value) => {
+        this.data.onFieldChange!(
+          field.key,
+          value,
+          this.patchFormValue.bind(this),
+          this.form.getRawValue()
+        );
       });
     }
+  });
+}
+
 
     this.cdRef.detectChanges();
   }
@@ -140,4 +154,18 @@ export class DynamicFormDialogComponent implements OnInit {
   onCancel(): void {
     this.dialogRef.close(null);
   }
+  get formattedSuggestedRooms(): string[] {
+  return this.data.suggestedRoomNos?.map(num => `Room ${num}`) || [];
+}
+handleButtonClick(fieldKey: string): void {
+  if (this.data.onFieldChange) {
+    this.data.onFieldChange(
+      fieldKey,
+      null,
+      this.patchFormValue.bind(this),
+      this.form.getRawValue()
+    );
+  }
+}
+
 }

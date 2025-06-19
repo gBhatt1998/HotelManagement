@@ -37,6 +37,8 @@ import { ChipPopoverComponent } from './chip-popover/chip-popover.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatTooltipModule } from '@angular/material/tooltip';
+// import { MatChipInputEvent } from '@angular/material/chips';
+
 @NgModule({
   declarations: [
     NavbarComponent,

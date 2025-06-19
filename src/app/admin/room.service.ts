@@ -24,7 +24,18 @@ export class RoomService {
     return this.http.delete<void>(`${this.apiUrl}/${roomNo}`);
   }
 
-  suggestNextRoomNumber(roomTypeId: number): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/suggest-next/${roomTypeId}`);
-  }
+  // suggestNextRoomNumber(roomTypeId: number): Observable<number> {
+  //   return this.http.get<number>(`${this.apiUrl}/suggest-next/${roomTypeId}`);
+  // }
+
+  // getExistingRoomNumbers(roomTypeId: number): Observable<number[]> {
+  //   return this.http.get<number[]>(`${this.apiUrl}/existing-room-numbers/${roomTypeId}`);
+  // }
+
+  suggestRoomNumbers(roomTypeId: number, baseRoomNo: number, count: number): Observable<number[]> {
+  return this.http.get<number[]>(
+    `${this.apiUrl}/suggest-room-numbers?roomTypeId=${roomTypeId}&baseRoomNo=${baseRoomNo}&count=${count}`
+  );
+}
+
 }

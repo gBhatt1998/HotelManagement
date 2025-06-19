@@ -82,6 +82,25 @@
             </mat-error>
           </mat-form-field>
 
+<!-- Attach right below count field -->
+<ng-container *ngIf="field.key === 'count' && data.suggestedRoomNos?.length">
+  <app-chip-popover
+    [services]="formattedSuggestedRooms"
+    buttonLabel="Suggested Room Numbers">
+  </app-chip-popover>
+</ng-container>
+
+
+      
+
+
+<!-- BUTTON -->
+<div *ngSwitchCase="'button'" class="check-availability-btn">
+  <button mat-stroked-button color="primary" type="button" (click)="handleButtonClick(field.key)">
+    {{ field.label }}
+  </button>
+</div>
+
         </ng-container>
 
         <!-- Image Preview -->
@@ -89,6 +108,7 @@
           <img [src]="form.get(field.key)?.value" alt="Image Preview" />
         </div>
       </div>
+      
     </div>
   </mat-dialog-content>
 
