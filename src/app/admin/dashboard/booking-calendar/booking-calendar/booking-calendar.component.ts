@@ -1,11 +1,18 @@
-import { Component, Input, OnInit, AfterViewInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  AfterViewInit,
+  ElementRef,
+  ViewChild
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
 import { BookingDialogComponent } from '../booking-dialog/booking-dialog.component';
-import { selectAllReservations } from 'src/app/admin/store/all-reservation/all-reservation.selectors';
-import { loadAllReservations } from 'src/app/admin/store/all-reservation/all-reservation.actions';
+import { loadFilteredReservations } from '../store/reservation.actions';
+import { selectAllReservations } from '../store/reservation.selectors';
+import { Booking } from '../models/booking.model';
 import { reservationdetailsresponse } from 'src/app/shared/models/reservationdetailsresponse.model';
 
 @Component({
@@ -14,47 +21,97 @@ import { reservationdetailsresponse } from 'src/app/shared/models/reservationdet
   styleUrls: ['./booking-calendar.component.css']
 })
 export class BookingCalendarComponent implements OnInit, AfterViewInit {
-  roomTypes = [
-    { id: 1, type: 'Deluxe' },
-    { id: 2, type: 'Suite' }
-  ];
-
-  rooms = [
-    { id: 101, roomNo: '101', roomTypeId: 1 },
-    { id: 102, roomNo: '102', roomTypeId: 1 },
-    { id: 201, roomNo: '201', roomTypeId: 2 }
-  ];
-
   reservations$: Observable<reservationdetailsresponse[]> = this.store.select(selectAllReservations);
   allBookings: reservationdetailsresponse[] = [];
 
-  dateFilter: 'all' | 'today' | 'thisWeek' = 'all';
+  dateFilter: 'all' | 'today' | 'month' | 'week' = 'all';
   selectedRoomTypeId: number | null = null;
-  currentMonth: Date = new Date();
-  cellWidth = 40;
-  roomCellWidth = 80;
-  monthDays: { label: string, isWeekend: boolean }[] = [];
+  currentMonth: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   todayDay: string = new Date().getDate().toString().padStart(2, '0');
-  @ViewChildren('dayRef') dayRefs!: QueryList<ElementRef<HTMLDivElement>>;
-
+  cellWidth = 0;
   @Input() showRoomTypeFilter = true;
+  @ViewChild('firstDayRef') firstDayRef!: ElementRef<HTMLDivElement>;
 
-  constructor(private dialog: MatDialog, private store: Store) { }
+  roomTypes: { id: number; type: string }[] = [];
+  rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];
+
+  constructor(private dialog: MatDialog, private store: Store) {}
 
   ngOnInit() {
     this.generateMonthDays();
-    this.store.dispatch(loadAllReservations({ roomType: '' }));
+    this.loadFilteredReservationsFromStore();
 
     this.reservations$.subscribe(res => {
+      if (!res || res.length === 0) {
+        this.allBookings = [];
+        this.roomTypes = [];
+        this.rooms = [];
+        return;
+      }
+
       this.allBookings = res;
+
+      // Generate room types
+      const roomTypeMap = new Map<string, number>();
+      let idCounter = 1;
+      res.forEach(r => {
+        if (r.roomTypeName && !roomTypeMap.has(r.roomTypeName)) {
+          roomTypeMap.set(r.roomTypeName, idCounter++);
+        }
+      });
+      this.roomTypes = Array.from(roomTypeMap.entries()).map(([type, id]) => ({ id, type }));
+
+      // Generate unique rooms
+      const roomMap = new Map<number, { roomNo: string; roomTypeName: string }>();
+      res.forEach(r => {
+        if (!roomMap.has(r.roomNumber)) {
+          roomMap.set(r.roomNumber, {
+            roomNo: r.roomNumber.toString(),
+            roomTypeName: r.roomTypeName,
+          });
+        }
+      });
+
+      this.rooms = Array.from(roomMap.entries()).map(([roomNumber, value]) => ({
+        id: roomNumber,
+        roomNo: value.roomNo,
+        roomTypeId: this.roomTypes.find(t => t.type === value.roomTypeName)?.id ?? 0,
+      }));
     });
+    this.roomBookings = {}; // Reset cache when filters change
+
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     setTimeout(() => {
-      const el = document.getElementById('todayCell');
-      if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+      const el = this.firstDayRef?.nativeElement;
+      if (el) {
+        this.cellWidth = el.offsetWidth;
+        console.log('Cell width calculated:', this.cellWidth);
+      }
+
+      // scroll to today
+      const todayCell = document.getElementById('todayCell');
+      if (todayCell) {
+        todayCell.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+      }
     }, 100);
+  }
+
+  getMonthLabel(): string {
+    return this.currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
+  }
+
+  previousMonth() {
+    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() - 1, 1);
+    this.generateMonthDays();
+    this.loadFilteredReservationsFromStore();
+  }
+
+  nextMonth() {
+    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
+    this.generateMonthDays();
+    this.loadFilteredReservationsFromStore();
   }
 
   generateMonthDays() {
@@ -70,33 +127,22 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
     });
   }
 
-  previousMonth() {
-    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() - 1, 1);
-    this.generateMonthDays();
-  }
-
-  nextMonth() {
-    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
-    this.generateMonthDays();
-  }
-
-  getMonthLabel(): string {
-    return this.currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
-  }
-
-  openDialog(booking: reservationdetailsresponse) {
-    const dialogRef = this.dialog.open(BookingDialogComponent, { data: booking });
-    dialogRef.afterClosed().subscribe(res => {
-      if (res?.delete) {
-        // Optionally handle deletion locally if needed
-      }
-    });
-  }
-
   onRoomTypeChange(id: number | null) {
     this.selectedRoomTypeId = id;
-    const selectedRoomType = this.roomTypes.find(t => t.id === id)?.type || '';
-    this.store.dispatch(loadAllReservations({ roomType: selectedRoomType }));
+    this.loadFilteredReservationsFromStore();
+  }
+
+  loadFilteredReservationsFromStore() {
+    const roomTypeName = this.roomTypes.find(t => t.id === this.selectedRoomTypeId)?.type || '';
+    const year = this.currentMonth.getFullYear();
+    const month = this.currentMonth.getMonth() + 1;
+
+    this.store.dispatch(loadFilteredReservations({
+      roomTypeName,
+      dateFilter: this.dateFilter,
+      month,
+      year
+    }));
   }
 
   get filteredRooms() {
@@ -123,32 +169,45 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
       switch (this.dateFilter) {
         case 'today':
           return start <= today && end >= today;
-        case 'thisWeek':
+        case 'week':
           return start <= endOfWeek && end >= startOfWeek;
-        default:
+        case 'month':
           return start <= monthEnd && end >= monthStart;
+        default:
+          return true;
       }
     });
   }
 
-  getBookingsForRoom(roomId: number): booking[] {
-    return this.getFilteredBookings()
+ roomBookings: { [roomId: number]: Booking[] } = {};
+
+getBookingsForRoom(roomId: number): Booking[] {
+  if (!this.roomBookings[roomId]) {
+    this.roomBookings[roomId] = this.getFilteredBookings()
       .filter(r => r.roomNumber === roomId)
       .map(r => this.mapReservationToBooking(r));
   }
-  
+  return this.roomBookings[roomId];
+}
 
-  getDayOffsets(): { left: number; right: number }[] {
-    return this.dayRefs.map(ref => {
-      const el = ref.nativeElement;
-      return {
-        left: el.offsetLeft,
-        right: el.offsetLeft + el.offsetWidth
-      };
+// openDialog(booking: Booking) {
+//   alert('Opening dialog');
+//   this.dialog.open(BookingDialogComponent, {
+//     data: booking,
+//     width: '400px'
+//   });
+// }
+
+  openDialog(booking: Booking) {
+
+    const dialogRef = this.dialog.open(BookingDialogComponent, { data: booking });
+    console.log('clicked');
+    dialogRef.afterClosed().subscribe(res => {
+      if (res?.delete) {
+  setTimeout(() => this.loadFilteredReservationsFromStore(), 0);
+      }
     });
   }
-
-  getDayOffsetFn = () => this.getDayOffsets();
 
   mapReservationToBooking(r: reservationdetailsresponse): Booking {
     return {
@@ -158,8 +217,23 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
       phoneNumber: r.guest.phone,
       startDate: r.checkInDate,
       endDate: r.checkOutDate,
-      totalPrice: r.totalPrice
+      totalPrice: r.totalPrice,
+      serviceNames: r.serviceNames,
+      roomTypeName: r.roomTypeName
     };
   }
-  
+
+  monthDays: { label: string, isWeekend: boolean }[] = [];
+
+  getRowOffsets(gridEl: ElementRef | HTMLElement) {
+    return () => {
+      const dayEls: HTMLElement[] = Array.from(
+        (gridEl as HTMLElement).querySelectorAll('.day-cell')
+      );
+      return dayEls.map(el => ({
+        left: el.offsetLeft,
+        right: el.offsetLeft + el.offsetWidth
+      }));
+    };
+  }
 }

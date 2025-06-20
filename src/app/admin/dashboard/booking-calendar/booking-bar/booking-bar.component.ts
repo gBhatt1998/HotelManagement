@@ -1,6 +1,5 @@
 import {
   Component,
-  ElementRef,
   Input,
   Output,
   EventEmitter,
@@ -11,47 +10,64 @@ import { Booking } from '../models/booking.model';
 @Component({
   selector: 'app-booking-bar',
   template: `
-    <div
-      class="booking-bar"
-      [style.left.px]="left"
-      [style.width.px]="width"
-      [matTooltip]="tooltip"
-      (click)="click.emit()">
-      {{ booking.guestName }}
-    </div>
+<div
+  class="booking-bar"
+  [style.left.px]="left"
+  [style.width.px]="width"
+  [matTooltip]="tooltip"
+  (click)="onClick($event)">
+  {{ booking.guestName }}
+</div>
+
+
+
   `,
   styleUrls: ['./booking-bar.component.css']
 })
 export class BookingBarComponent implements OnInit {
   @Input() booking!: Booking;
-  @Input() getDayOffsets!: () => { left: number; right: number }[];
+  @Input() calendarStartDate!: Date;
+  @Input() totalDaysInMonth!: number;
+  @Input() cellWidth: number = 40;
+@Output() bookingClick = new EventEmitter<Booking>();
 
-  @Output() click = new EventEmitter<void>();
+  // @Output() click = new EventEmitter<void>();
 
-  left: number = 0;
-  width: number = 0;
+  left = 0;
+  width = 0;
 
   ngOnInit() {
-    setTimeout(() => {
-      const dayOffsets = this.getDayOffsets();
-      const start = new Date(this.booking.startDate).getDate() - 1;
-      const end = new Date(this.booking.endDate).getDate() - 1;
+    this.calculateBarPosition();
+  }
 
-      if (dayOffsets[start] && dayOffsets[end]) {
-        this.left = dayOffsets[start].left;
-        this.width = dayOffsets[end].right - dayOffsets[start].left;
-      }
-    }, 0);
+  private calculateBarPosition() {
+    const checkIn = new Date(this.booking.startDate);
+    const checkOut = new Date(this.booking.endDate);
+
+    const startDay = checkIn.getDate();
+    const endDay = checkOut.getDate();
+
+    this.left = (startDay - 1) * this.cellWidth;
+    this.width = Math.max((endDay - startDay + 1) * this.cellWidth, this.cellWidth);
   }
 
   get tooltip() {
     return `
-    Guest: ${this.booking.guestName}
-    📞 ${this.booking.phoneNumber}
-    Room ID: ${this.booking.roomId}
-    From: ${this.booking.startDate}
-    To: ${this.booking.endDate}
-    💰 ₹${this.booking.totalPrice}
+Guest: ${this.booking.guestName}
+📞 ${this.booking.phoneNumber}
+Room: ${this.booking.roomId} (${this.booking.roomTypeName || ''})
+Services: ${this.booking.serviceNames?.join(', ') || 'None'}
+From: ${this.booking.startDate}
+To: ${this.booking.endDate}
+💰 ₹${this.booking.totalPrice}
     `;
   }
+
+ onClick(event: MouseEvent) {
+  event.stopPropagation();
+  console.log('BookingBar clicked:', this.booking);
+  this.bookingClick.emit(this.booking);
+}
+
+
 }

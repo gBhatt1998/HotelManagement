@@ -106,7 +106,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     RoomTypeFilterComponent,
     ChipPopoverComponent,
     MatTooltipModule  ,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule
   ]
 })
 export class SharedModule { }

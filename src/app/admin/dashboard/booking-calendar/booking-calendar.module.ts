@@ -4,6 +4,10 @@ import { BookingCalendarComponent } from './booking-calendar/booking-calendar.co
 import { BookingBarComponent } from './booking-bar/booking-bar.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { BookingDialogComponent } from './booking-dialog/booking-dialog.component';
+import { reservationReducer } from './store/reservation.reducer';
+import { StoreModule } from '@ngrx/store';
+import { ReservationEffects } from './store/reservation.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 
 
@@ -15,7 +19,11 @@ import { BookingDialogComponent } from './booking-dialog/booking-dialog.componen
   ],
   imports: [
     CommonModule,
-    SharedModule  
+    SharedModule ,
+    StoreModule.forFeature('calendarReservations', reservationReducer),
+    EffectsModule.forFeature([ReservationEffects])
+
+ 
   ],
   exports: [BookingCalendarComponent]
 })

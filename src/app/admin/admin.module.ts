@@ -52,7 +52,8 @@ import { BookingCalendarModule } from './dashboard/booking-calendar/booking-cale
     EffectsModule.forFeature([RoomTypeEffects]),
     EffectsModule.forFeature([ReservationEffects]),
     EffectsModule.forFeature([DepartmentEffects]),
-    BookingCalendarModule
+    BookingCalendarModule,
+
 
   ]
 })

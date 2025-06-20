@@ -1,95 +1,94 @@
 .calendar-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    background-color: #fafafa;
-    padding: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-  
-  /* Header section: month nav, filter */
-  .calendar-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-  
-  /* Sticky top header row */
-  .calendar-days {
-    display: flex;
-    position: sticky;
-    top: 0;
-    background: #fff;
-    z-index: 10;
-    border-bottom: 2px solid #e0e0e0;
-  }
-  
-  /* Each date cell */
-  .day-cell {
-    width: 40px;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    font-weight: 500;
-    border-right: 1px solid #eee;
-    box-sizing: border-box;
-  }
-  
-  /* Highlight today’s cell */
-  .day-cell.today {
-    background-color: #c5e1ff;
-    color: #000;
-    font-weight: bold;
-  }
-  
-  /* Weekend styling */
-  .day-cell.weekend {
-    background-color: #f9f9f9;
-  }
-  
-  /* Main vertical list of rows */
-  .calendar-rows {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Each room’s horizontal row */
-  .calendar-row {
-    display: flex;
-    position: relative;
-    border-bottom: 1px solid #e0e0e0;
-    min-height: 36px;
-  }
-  
-  /* First column cell showing room number or dropdown */
-  .room-cell {
-    width: 120px;
-    padding: 4px 8px;
-    background-color: #f0f0f0;
-    border-right: 1px solid #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
-  
-  /* Style for room type dropdown inside header */
-  .room-cell select {
-    width: 100%;
-    padding: 6px 8px;
-    font-weight: 500;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #fff;
-    font-size: 14px;
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24'><path d='M7 10l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px;
-    cursor: pointer;
-  }
-  
+  width: 100%;
+  overflow-x: auto;
+  background-color: #fafafa;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.calendar-days {
+  display: flex;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.day-cell {
+  width: 40px;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+  border-right: 1px solid #eee;
+  box-sizing: border-box;
+}
+
+.day-cell.today {
+  background-color: #c5e1ff;
+  color: #000;
+  font-weight: bold;
+}
+
+.day-cell.weekend {
+  background-color: #f9f9f9;
+}
+
+.calendar-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-row {
+  display: flex;
+  position: relative; /* Enables absolute positioning for bars */
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 40px;
+}
+
+.room-cell {
+  width: 100px;
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  z-index: 1; /* Keep room numbers above bars if they overlap */
+}
+
+.room-cell select {
+  width: 100%;
+  padding: 6px 8px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+/* REMOVE this block as you are no longer using grid-based booking layout */
+.calendar-grid {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+}
+
