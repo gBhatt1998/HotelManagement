@@ -49,6 +49,7 @@
         <div class="day-cell" *ngFor="let day of monthDays"></div>
         <ng-container *ngFor="let booking of getBookingsForRoom(room.id)">
        <app-booking-bar
+        *ngIf="cellWidth > 0"
   [booking]="booking"
   [calendarStartDate]="currentMonth"
   [totalDaysInMonth]="monthDays.length"

@@ -172,7 +172,7 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
         case 'week':
           return start <= endOfWeek && end >= startOfWeek;
         case 'month':
-          return start <= monthEnd && end >= monthStart;
+return start >= monthStart && start <= monthEnd;
         default:
           return true;
       }
