@@ -7,6 +7,7 @@ import { EmployeeComponent } from './employee/employee.component';
 import { RoomTypeComponent } from './room-type/room-type.component';
 import { RoomComponent } from './room/room.component';
 import { RevenueComponent } from './revenue/revenue.component';
+import { BookingCalendarComponent } from './dashboard/booking-calendar/booking-calendar/booking-calendar.component';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
       {path:'room-type',component:RoomTypeComponent},
       {path:'room',component:RoomComponent},
       {path:'revenue',component:RevenueComponent},
-      
+      { path: 'booking-calendar', component: BookingCalendarComponent },
+
       // Add more routes like:
       // { path: 'guests', component: GuestsComponent },
       // { path: 'rooms', component: RoomsComponent },

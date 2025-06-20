@@ -1,0 +1,58 @@
+<div class="calendar-wrapper">
+    <!-- Header -->
+    <div class="calendar-header">
+        <button mat-icon-button (click)="previousMonth()">
+            <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <span class="month-label">{{ getMonthLabel() }}</span>
+
+        <button mat-icon-button (click)="nextMonth()">
+            <mat-icon>chevron_right</mat-icon>
+        </button>
+
+        <!-- Date Filter -->
+        <mat-form-field appearance="fill" class="date-filter-select">
+            <mat-label>Filter</mat-label>
+            <mat-select [(ngModel)]="dateFilter">
+                <mat-option value="all">All</mat-option>
+                <mat-option value="today">Today</mat-option>
+                <mat-option value="thisWeek">This Week</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <!-- Days Header -->
+    <div class="calendar-days">
+        <!-- Room Type Dropdown -->
+        <div class="room-cell">
+            <select [(ngModel)]="selectedRoomTypeId" (change)="onRoomTypeChange(selectedRoomTypeId)">
+                <option [ngValue]="null">All Room Types</option>
+                <option *ngFor="let type of roomTypes" [ngValue]="type.id">{{ type.type }}</option>
+            </select>
+        </div>
+
+        <!-- Days of Month -->
+        <div class="day-cell" *ngFor="let day of monthDays"
+            [ngClass]="{ 'today': day.label === todayDay, 'weekend': day.isWeekend }" #dayRef
+            [attr.id]="day.label === todayDay ? 'todayCell' : null">
+            {{ day.label }}
+        </div>
+    </div>
+
+    <!-- Room Rows -->
+    <div class="calendar-rows">
+        <div *ngFor="let room of filteredRooms" class="calendar-row">
+            <div class="room-cell">{{ room.roomNo }}</div>
+
+            <div class="day-cell" *ngFor="let day of monthDays"></div>
+
+            <!-- Booking Bars -->
+            <ng-container *ngFor="let booking of getBookingsForRoom(room.id)">
+                <app-booking-bar [booking]="booking" [getDayOffsets]="getDayOffsetFn"
+                    (click)="openDialog(booking)"></app-booking-bar>
+            </ng-container>
+        </div>
+    </div>
+</div>
+  

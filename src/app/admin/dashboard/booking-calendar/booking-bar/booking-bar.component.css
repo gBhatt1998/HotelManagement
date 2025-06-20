@@ -1,0 +1,25 @@
+.booking-bar {
+    position: absolute;
+    height: 28px;
+    background-color: #2196f3;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 0 6px;
+    top: 4px;
+  }
+  
+  .booking-bar:hover {
+    background-color: #1976d2;
+    transform: scale(1.02);
+    z-index: 2;
+  }
+  

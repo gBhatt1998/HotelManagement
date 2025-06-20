@@ -24,6 +24,7 @@ import { RoomEffects } from './store/room/room.effects';
 import { RevenueComponent } from './revenue/revenue.component';
 import { revenueReducer } from './store/revenue/revenue.reducer';
 import { RevenueEffects } from './store/revenue/revenue.effects';
+import { BookingCalendarModule } from './dashboard/booking-calendar/booking-calendar.module';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { RevenueEffects } from './store/revenue/revenue.effects';
     EffectsModule.forFeature([RoomTypeEffects]),
     EffectsModule.forFeature([ReservationEffects]),
     EffectsModule.forFeature([DepartmentEffects]),
+    BookingCalendarModule
 
   ]
 })
