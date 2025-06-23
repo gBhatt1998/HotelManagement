@@ -38,6 +38,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+// import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     OverlayModule,
     PortalModule,
     MatTooltipModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatChipsModule
   
   ],
   exports:[
@@ -109,7 +111,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatTooltipModule  ,
     MatIconModule,
     MatDialogModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatChipsModule 
   ]
 })
 export class SharedModule { }

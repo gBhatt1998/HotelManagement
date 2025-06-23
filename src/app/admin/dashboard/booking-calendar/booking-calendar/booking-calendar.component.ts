@@ -37,6 +37,8 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   roomTypes: { id: number; type: string }[] = [];
   rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];
   hasInitializedRoomTypes = false;
+  dateOptions: ('today' | 'week' | 'month')[] = ['today', 'week', 'month'];
+
   constructor(private dialog: MatDialog, private store: Store) { }
 
   ngOnInit() {
@@ -152,6 +154,45 @@ previousMonth() {
     this.selectedRoomTypeId = id;
     this.loadFilteredReservationsFromStore();
   }
+onChipFilterClick(filter: 'today' | 'week' | 'month') {
+  if (this.dateFilter === filter && filter === 'month') {
+    this.goToCurrentMonth();
+    return;
+  }
+
+  this.dateFilter = filter;
+  this.lastClickedFilter = filter;
+  this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  this.generateMonthDays();
+  this.loadFilteredReservationsFromStore();
+}
+
+goToCurrentMonth() {
+  this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  this.generateMonthDays();
+  this.loadFilteredReservationsFromStore();
+}
+
+getFilterLabel(filter: 'today' | 'week' | 'month'): string {
+  switch (filter) {
+    case 'today': return 'Today';
+    case 'week': return 'This Week';
+    case 'month': return 'This Month';
+  }
+}
+
+getCurrentMonthLabel(): string {
+  const now = new Date();
+  return now.toLocaleString('default', { month: 'long', year: 'numeric' });
+}
+
+isCurrentMonthView(): boolean {
+  const now = new Date();
+  return (
+    now.getFullYear() === this.currentMonth.getFullYear() &&
+    now.getMonth() === this.currentMonth.getMonth()
+  );
+}
 
   onDateFilterChange() {
   const today = new Date();

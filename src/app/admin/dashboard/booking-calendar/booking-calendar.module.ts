@@ -9,6 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { ReservationEffects } from './store/reservation.effects';
 import { EffectsModule } from '@ngrx/effects';
 
+import { MatChipsModule } from '@angular/material/chips';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { EffectsModule } from '@ngrx/effects';
     CommonModule,
     SharedModule ,
     StoreModule.forFeature('calendarReservations', reservationReducer),
-    EffectsModule.forFeature([ReservationEffects])
+    EffectsModule.forFeature([ReservationEffects]),
+    MatChipsModule
 
  
   ],

@@ -9,15 +9,31 @@
             <mat-icon>chevron_right</mat-icon>
         </button>
 
-        <mat-form-field appearance="fill" class="date-filter-select">
-            <mat-label>Filter</mat-label>
-            <mat-select [(ngModel)]="dateFilter" (selectionChange)="onDateFilterChange()">
-                <!-- <mat-option value="all">All</mat-option> -->
-                <mat-option value="today">Today</mat-option>
-                <mat-option value="week" >This Week</mat-option>
-                <mat-option value="month" >This Month</mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div class="filter-chips">
+ <mat-chip-listbox>
+  <mat-chip-option
+    *ngFor="let filter of dateOptions"
+    [selected]="dateFilter === filter"
+    (click)="onChipFilterClick(filter)"
+    [color]="dateFilter === filter ? 'primary' : undefined"
+  >
+    {{ getFilterLabel(filter) }}
+  </mat-chip-option>
+
+  <mat-chip-option
+    *ngIf="!isCurrentMonthView()"
+    (click)="goToCurrentMonth()"
+    color="accent"
+    [selected]="false"
+    class="go-to-month-chip"
+  >
+    Go to {{ getCurrentMonthLabel() }}
+  </mat-chip-option>
+</mat-chip-listbox>
+
+
+</div>
+
 
 
     </div>
