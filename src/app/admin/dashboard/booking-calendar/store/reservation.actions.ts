@@ -4,7 +4,7 @@ export const loadFilteredReservations = createAction(
   '[Reservation] Load Filtered Reservations',
   props<{
     roomTypeName?: string;
-    dateFilter: 'today' | 'week' | 'month' | 'all';
+    dateFilter: 'today' | 'week' | 'month' ;
     month: number;
     year: number;
   }>()

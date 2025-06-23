@@ -28,7 +28,7 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   dateFilter: 'today' | 'month' | 'week' = 'month';
   selectedRoomTypeId: number | null = null;
   currentMonth: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  isThisMonthView = true;
+  // isThisMonthView = true;
   todayDay: string = new Date().getDate().toString().padStart(2, '0');
   cellWidth = 0;
   @Input() showRoomTypeFilter = true;
@@ -37,7 +37,6 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   roomTypes: { id: number; type: string }[] = [];
   rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];
   hasInitializedRoomTypes = false;
-isLoading:Boolean=true;
   constructor(private dialog: MatDialog, private store: Store) { }
 
   ngOnInit() {
@@ -45,7 +44,6 @@ isLoading:Boolean=true;
     this.loadFilteredReservationsFromStore();
 
     this.reservations$.subscribe(res => {
-      this.isLoading = false; // stop loading here
 
       if (!res || res.length === 0) {
         this.allBookings = [];
@@ -116,19 +114,26 @@ isLoading:Boolean=true;
     return this.currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
   }
 
-  previousMonth() {
-    this.isThisMonthView = false;
-    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() - 1, 1);
-    this.generateMonthDays();
-    this.loadFilteredReservationsFromStore();
-  }
+nextMonth() {
+  this.dateFilter = 'month';
+  this.lastClickedFilter = 'month';
+  // this.isThisMonthView = true;
 
-  nextMonth() {
-    this.isThisMonthView = false;
-    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
-    this.generateMonthDays();
-    this.loadFilteredReservationsFromStore();
-  }
+  this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
+  this.generateMonthDays();
+  this.loadFilteredReservationsFromStore();
+}
+
+previousMonth() {
+  this.dateFilter = 'month';
+  this.lastClickedFilter = 'month';
+  // this.isThisMonthView = true;
+
+  this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() - 1, 1);
+  this.generateMonthDays();
+  this.loadFilteredReservationsFromStore();
+}
+
 
   generateMonthDays() {
     const year = this.currentMonth.getFullYear();
@@ -149,24 +154,32 @@ isLoading:Boolean=true;
   }
 
   onDateFilterChange() {
-    const today = new Date();
-    this.isThisMonthView = this.dateFilter === 'month';
+  const today = new Date();
+  const selected = this.dateFilter;
 
-    if (this.dateFilter === 'month' || this.dateFilter === 'week' || this.dateFilter === 'today') {
-      this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-      this.generateMonthDays();
-    }
+  if (selected === 'month') {
+    // 🟢 Always reset to actual current month
+    this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  } else if (selected === 'week' || selected === 'today') {
+    // You may still want to keep the currentMonth for header label or rendering
+    this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  }
 
-    this.loadFilteredReservationsFromStore();
-  }
-  onDateOptionClick(option: 'today' | 'week' | 'month') {
-    if (this.dateFilter === option) {
-      // 👉 Same option clicked again — force reload
-      this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-      this.generateMonthDays();
-      this.loadFilteredReservationsFromStore();
-    }
-  }
+  this.generateMonthDays();
+  this.lastClickedFilter = selected;
+  this.loadFilteredReservationsFromStore();
+}
+
+
+
+  // onDateOptionClick(option: 'today' | 'week' | 'month') {
+  //   if (this.dateFilter === option) {
+  //     // 👉 Same option clicked again — force reload
+  //     this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  //     this.generateMonthDays();
+  //     this.loadFilteredReservationsFromStore();
+  //   }
+  // }
   
   isToday(label: string): boolean {
     const today = new Date();
@@ -178,12 +191,11 @@ isLoading:Boolean=true;
   }
 
   loadFilteredReservationsFromStore() {
-    this.isLoading = true; // start loading
 
     this.roomBookings = {};
 
     const roomTypeName = this.roomTypes.find(t => t.id === this.selectedRoomTypeId)?.type || '';
-    const baseDate = this.isThisMonthView ? new Date() : this.currentMonth;
+const baseDate = this.currentMonth;
 
     const month = baseDate.getMonth() + 1;
     const year = baseDate.getFullYear();

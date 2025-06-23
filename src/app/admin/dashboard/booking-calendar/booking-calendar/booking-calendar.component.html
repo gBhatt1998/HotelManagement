@@ -13,15 +13,15 @@
             <mat-label>Filter</mat-label>
             <mat-select [(ngModel)]="dateFilter" (selectionChange)="onDateFilterChange()">
                 <!-- <mat-option value="all">All</mat-option> -->
-                <mat-option value="today" (click)="onDateOptionClick('today')">Today</mat-option>
-                <mat-option value="week" (click)="onDateOptionClick('week')">This Week</mat-option>
-                <mat-option value="month" (click)="onDateOptionClick('month')">This Month</mat-option>
+                <mat-option value="today">Today</mat-option>
+                <mat-option value="week" >This Week</mat-option>
+                <mat-option value="month" >This Month</mat-option>
             </mat-select>
         </mat-form-field>
 
 
     </div>
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar>
+    <!-- <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar> -->
 
     <!-- Day Headers -->
     <!-- Day Headers -->

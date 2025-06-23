@@ -18,32 +18,48 @@ export class ReservationEffects {
     private dialogService: DialogService
   ) {}
 
-  loadFilteredReservations$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ReservationActions.loadFilteredReservations),
+ loadFilteredReservations$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ReservationActions.loadFilteredReservations),
 
-      // 👉 Show loading spinner when action is dispatched
-      tap(() => {
-        this.loadingRef = this.dialogService.openLoading('Fetching reservations...', 'Please wait');
-      }),
+    tap(() => {
+      this.loadingRef = this.dialogService.openLoading('Fetching reservations...', 'Please wait');
+    }),
 
-switchMap(({ roomTypeName, dateFilter, month, year }) =>
-  this.reservationService.getFilteredReservations(roomTypeName, dateFilter, month, year).pipe(
-          map((reservations) =>
-            ReservationActions.loadFilteredReservationsSuccess({ reservations })
-          ),
-          catchError((error) =>
-            of(ReservationActions.loadFilteredReservationsFailure({ error }))
-          ),
-          // 👉 Close loading spinner regardless of success/failure
-          finalize(() => {
-            if (this.loadingRef) {
-              this.loadingRef.close();
-              this.loadingRef = null;
-            }
-          })
-        )
+    switchMap(({ roomTypeName, dateFilter, month, year }) =>
+      this.reservationService.getFilteredReservations(roomTypeName, dateFilter, month, year).pipe(
+        map((reservations) =>
+          ReservationActions.loadFilteredReservationsSuccess({ reservations })
+        ),
+        catchError((error) => {
+          return of(
+            ReservationActions.loadFilteredReservationsFailure({ error }),
+          );
+        }),
+        finalize(() => {
+          // Always close the spinner
+          if (this.loadingRef) {
+            this.loadingRef.close();
+            this.loadingRef = null;
+          }
+        })
       )
     )
-  );
+  )
+);
+
+loadFilteredReservationsFailure$ = createEffect(
+  () =>
+    this.actions$.pipe(
+      ofType(ReservationActions.loadFilteredReservationsFailure),
+      tap(({ error }) => {
+        this.dialogService.openError({
+          title: 'Reservation Load Failed',
+          message: error?.message || 'Something went wrong while fetching reservations.'
+        });
+      })
+    ),
+  { dispatch: false }
+);
+
 }
