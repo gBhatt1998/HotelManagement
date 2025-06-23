@@ -37,7 +37,7 @@ import { ChipPopoverComponent } from './chip-popover/chip-popover.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatTooltipModule } from '@angular/material/tooltip';
-// import { MatChipInputEvent } from '@angular/material/chips';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -76,7 +76,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     OverlayModule,
     PortalModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressBarModule
   
   ],
   exports:[
@@ -107,7 +108,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ChipPopoverComponent,
     MatTooltipModule  ,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressBarModule
   ]
 })
 export class SharedModule { }

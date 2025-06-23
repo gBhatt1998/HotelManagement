@@ -18,9 +18,6 @@ import { Booking } from '../models/booking.model';
   (click)="onClick($event)">
   {{ booking.guestName }}
 </div>
-
-
-
   `,
   styleUrls: ['./booking-bar.component.css']
 })
@@ -29,9 +26,7 @@ export class BookingBarComponent implements OnInit {
   @Input() calendarStartDate!: Date;
   @Input() totalDaysInMonth!: number;
   @Input() cellWidth: number = 40;
-@Output() bookingClick = new EventEmitter<Booking>();
-
-  // @Output() click = new EventEmitter<void>();
+  @Output() bookingClick = new EventEmitter<Booking>();
 
   left = 0;
   width = 0;
@@ -44,12 +39,19 @@ export class BookingBarComponent implements OnInit {
     const checkIn = new Date(this.booking.startDate);
     const checkOut = new Date(this.booking.endDate);
 
-    const startDay = checkIn.getDate();
-    const endDay = checkOut.getDate();
+    const monthStart = new Date(this.calendarStartDate.getFullYear(), this.calendarStartDate.getMonth(), 1);
+    const monthEnd = new Date(this.calendarStartDate.getFullYear(), this.calendarStartDate.getMonth() + 1, 0);
+
+    const startDay = Math.max(1, checkIn < monthStart ? 1 : checkIn.getDate());
+    const endDay = Math.min(
+      this.totalDaysInMonth,
+      checkOut > monthEnd ? this.totalDaysInMonth : checkOut.getDate()
+    );
 
     this.left = (startDay - 1) * this.cellWidth;
     this.width = Math.max((endDay - startDay + 1) * this.cellWidth, this.cellWidth);
   }
+  
 
   get tooltip() {
     return `
@@ -63,11 +65,9 @@ To: ${this.booking.endDate}
     `;
   }
 
- onClick(event: MouseEvent) {
-  event.stopPropagation();
-  console.log('BookingBar clicked:', this.booking);
-  this.bookingClick.emit(this.booking);
-}
-
-
+  onClick(event: MouseEvent) {
+    event.stopPropagation();
+    console.log('BookingBar clicked:', this.booking);
+    this.bookingClick.emit(this.booking);
+  }
 }

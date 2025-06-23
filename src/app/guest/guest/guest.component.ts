@@ -20,7 +20,17 @@ export class GuestComponent implements OnInit {
   allServices: Service[] = [];
   selectedServiceDetails: Service[] = [];
 
-  columns = ['reservationId', 'checkInDate', 'checkOutDate', 'roomNumber', 'roomTypeName', 'totalPrice'];
+  displayedColumns: { key: string; label: string }[] = [
+    { key: 'reservationId', label: 'Reservation ID' },
+   
+    { key: 'roomNumber', label: 'Room No.' },
+    { key: 'roomTypeName', label: 'Room Type' },
+    { key: 'checkInDate', label: 'Check-In Date' },
+    { key: 'checkOutDate', label: 'Check-Out Date' },
+    // { key: 'serviceNames', label: 'Services' },
+    { key: 'totalPrice', label: 'Total Price' }
+  ];
+  
 
   constructor(private store: Store, private hotelCardService: HotelCardService) {
     const guestState$ = this.store.select(selectGuestState);
@@ -42,7 +52,8 @@ export class GuestComponent implements OnInit {
     });
   }
 
-  onDelete(id: number): void {
-    this.store.dispatch(GuestActions.deleteGuestReservation({ id }));
+  onDelete(row: ReservationSummaryDTO): void {
+    this.store.dispatch(GuestActions.deleteGuestReservation({ id: row.reservationId }));
   }
+  
 }

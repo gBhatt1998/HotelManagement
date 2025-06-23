@@ -23,10 +23,12 @@ import { reservationdetailsresponse } from 'src/app/shared/models/reservationdet
 export class BookingCalendarComponent implements OnInit, AfterViewInit {
   reservations$: Observable<reservationdetailsresponse[]> = this.store.select(selectAllReservations);
   allBookings: reservationdetailsresponse[] = [];
+  lastClickedFilter: 'month' | 'week' | 'today' | null = null;
 
-  dateFilter: 'all' | 'today' | 'month' | 'week' = 'all';
+  dateFilter: 'today' | 'month' | 'week' = 'month';
   selectedRoomTypeId: number | null = null;
   currentMonth: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  isThisMonthView = true;
   todayDay: string = new Date().getDate().toString().padStart(2, '0');
   cellWidth = 0;
   @Input() showRoomTypeFilter = true;
@@ -34,34 +36,48 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
 
   roomTypes: { id: number; type: string }[] = [];
   rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];
-
-  constructor(private dialog: MatDialog, private store: Store) {}
+  hasInitializedRoomTypes = false;
+isLoading:Boolean=true;
+  constructor(private dialog: MatDialog, private store: Store) { }
 
   ngOnInit() {
     this.generateMonthDays();
     this.loadFilteredReservationsFromStore();
 
     this.reservations$.subscribe(res => {
+      this.isLoading = false; // stop loading here
+
       if (!res || res.length === 0) {
         this.allBookings = [];
-        this.roomTypes = [];
+        if (!this.hasInitializedRoomTypes) {
+          this.roomTypes = [];
+        }
         this.rooms = [];
+        this.roomBookings = {};
         return;
       }
 
       this.allBookings = res;
+      this.roomBookings = {};
 
-      // Generate room types
-      const roomTypeMap = new Map<string, number>();
-      let idCounter = 1;
-      res.forEach(r => {
-        if (r.roomTypeName && !roomTypeMap.has(r.roomTypeName)) {
-          roomTypeMap.set(r.roomTypeName, idCounter++);
-        }
-      });
-      this.roomTypes = Array.from(roomTypeMap.entries()).map(([type, id]) => ({ id, type }));
+      // Initialize room types once — from full data (not filtered)
+      if (!this.hasInitializedRoomTypes) {
+        const roomTypeMap = new Map<string, number>();
+        let idCounter = 1;
+        res.forEach(r => {
+          if (r.roomTypeName && !roomTypeMap.has(r.roomTypeName)) {
+            roomTypeMap.set(r.roomTypeName, idCounter++);
+          }
+        });
 
-      // Generate unique rooms
+        const allRoomTypes = Array.from(roomTypeMap.entries())
+          .map(([type, id]) => ({ id, type }))
+          .sort((a, b) => a.type.localeCompare(b.type)); // optional alphabetical sort
+
+        this.roomTypes = allRoomTypes;
+        this.hasInitializedRoomTypes = true;
+      }
+
       const roomMap = new Map<number, { roomNo: string; roomTypeName: string }>();
       res.forEach(r => {
         if (!roomMap.has(r.roomNumber)) {
@@ -78,8 +94,7 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
         roomTypeId: this.roomTypes.find(t => t.type === value.roomTypeName)?.id ?? 0,
       }));
     });
-    this.roomBookings = {}; // Reset cache when filters change
-
+    
   }
 
   ngAfterViewInit(): void {
@@ -90,7 +105,6 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
         console.log('Cell width calculated:', this.cellWidth);
       }
 
-      // scroll to today
       const todayCell = document.getElementById('todayCell');
       if (todayCell) {
         todayCell.scrollIntoView({ behavior: 'smooth', inline: 'center' });
@@ -103,12 +117,14 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   }
 
   previousMonth() {
+    this.isThisMonthView = false;
     this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() - 1, 1);
     this.generateMonthDays();
     this.loadFilteredReservationsFromStore();
   }
 
   nextMonth() {
+    this.isThisMonthView = false;
     this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
     this.generateMonthDays();
     this.loadFilteredReservationsFromStore();
@@ -132,10 +148,45 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
     this.loadFilteredReservationsFromStore();
   }
 
+  onDateFilterChange() {
+    const today = new Date();
+    this.isThisMonthView = this.dateFilter === 'month';
+
+    if (this.dateFilter === 'month' || this.dateFilter === 'week' || this.dateFilter === 'today') {
+      this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      this.generateMonthDays();
+    }
+
+    this.loadFilteredReservationsFromStore();
+  }
+  onDateOptionClick(option: 'today' | 'week' | 'month') {
+    if (this.dateFilter === option) {
+      // 👉 Same option clicked again — force reload
+      this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      this.generateMonthDays();
+      this.loadFilteredReservationsFromStore();
+    }
+  }
+  
+  isToday(label: string): boolean {
+    const today = new Date();
+    return (
+      this.currentMonth.getFullYear() === today.getFullYear() &&
+      this.currentMonth.getMonth() === today.getMonth() &&
+      label === today.getDate().toString().padStart(2, '0')
+    );
+  }
+
   loadFilteredReservationsFromStore() {
+    this.isLoading = true; // start loading
+
+    this.roomBookings = {};
+
     const roomTypeName = this.roomTypes.find(t => t.id === this.selectedRoomTypeId)?.type || '';
-    const year = this.currentMonth.getFullYear();
-    const month = this.currentMonth.getMonth() + 1;
+    const baseDate = this.isThisMonthView ? new Date() : this.currentMonth;
+
+    const month = baseDate.getMonth() + 1;
+    const year = baseDate.getFullYear();
 
     this.store.dispatch(loadFilteredReservations({
       roomTypeName,
@@ -172,39 +223,29 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
         case 'week':
           return start <= endOfWeek && end >= startOfWeek;
         case 'month':
-return start >= monthStart && start <= monthEnd;
+          return start <= monthEnd && end >= monthStart;
         default:
           return true;
       }
     });
   }
 
- roomBookings: { [roomId: number]: Booking[] } = {};
+  roomBookings: { [roomId: number]: Booking[] } = {};
 
-getBookingsForRoom(roomId: number): Booking[] {
-  if (!this.roomBookings[roomId]) {
-    this.roomBookings[roomId] = this.getFilteredBookings()
-      .filter(r => r.roomNumber === roomId)
-      .map(r => this.mapReservationToBooking(r));
+  getBookingsForRoom(roomId: number): Booking[] {
+    if (!this.roomBookings[roomId]) {
+      this.roomBookings[roomId] = this.getFilteredBookings()
+        .filter(r => r.roomNumber === roomId)
+        .map(r => this.mapReservationToBooking(r));
+    }
+    return this.roomBookings[roomId];
   }
-  return this.roomBookings[roomId];
-}
-
-// openDialog(booking: Booking) {
-//   alert('Opening dialog');
-//   this.dialog.open(BookingDialogComponent, {
-//     data: booking,
-//     width: '400px'
-//   });
-// }
 
   openDialog(booking: Booking) {
-
     const dialogRef = this.dialog.open(BookingDialogComponent, { data: booking });
-    console.log('clicked');
     dialogRef.afterClosed().subscribe(res => {
       if (res?.delete) {
-  setTimeout(() => this.loadFilteredReservationsFromStore(), 0);
+        setTimeout(() => this.loadFilteredReservationsFromStore(), 0);
       }
     });
   }

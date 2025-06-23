@@ -1,40 +1,6 @@
 <div class="dynamic-table-wrapper">
   <div class="table-controls">
-    <!-- Search Input -->
-      <!-- <mat-form-field appearance="outline">
-        <mat-label>Search</mat-label>
-        <input matInput [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search all columns..." />
-      </mat-form-field> -->
-
-    <!-- Room Type Filter -->
-    <ng-container *ngIf="enableRoomTypeFilter">
-      <mat-form-field appearance="outline">
-        <mat-label>Room Type</mat-label>
-        <mat-select [(ngModel)]="selectedRoomType" (selectionChange)="applyFilters()">
-          <mat-option value="">All</mat-option>
-          <mat-option *ngFor="let type of roomTypes" [value]="type">{{ type }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </ng-container>
-
-    <!-- Date Filter -->
-    <ng-container *ngIf="showDateFilter">
-      <mat-form-field appearance="outline">
-        <mat-label>Start Date</mat-label>
-        <input matInput [matDatepicker]="startPicker" [(ngModel)]="selectedStart" (dateChange)="applyFilters()" />
-        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-        <mat-datepicker #startPicker></mat-datepicker>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>End Date</mat-label>
-        <input matInput [matDatepicker]="endPicker" [(ngModel)]="selectedEnd" (dateChange)="applyFilters()" />
-        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-        <mat-datepicker #endPicker></mat-datepicker>
-      </mat-form-field>
-    </ng-container>
-
-    <button mat-stroked-button color="primary" (click)="clearFilters()">Clear Filters</button>
+    
   </div>
 
   <!-- Table -->

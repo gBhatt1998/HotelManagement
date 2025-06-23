@@ -26,7 +26,7 @@
                 <mat-form-field appearance="outline" class="form-field small-field">
                     <mat-label>Check-in</mat-label>
                     <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn" readonly>
-                    <!-- <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle> -->
+                    
                     <mat-datepicker #checkInPicker></mat-datepicker>
                     <mat-error *ngIf="bookingForm.get('checkIn')?.hasError('required')">Check-in is required</mat-error>
                 </mat-form-field>
@@ -35,7 +35,7 @@
                 <mat-form-field appearance="outline" class="form-field small-field">
                     <mat-label>Check-out</mat-label>
                     <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut" readonly>
-                    <!-- <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle> -->
+                   
                     <mat-datepicker #checkOutPicker></mat-datepicker>
                     <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required')">Check-out is required</mat-error>
                 </mat-form-field>

@@ -13,9 +13,11 @@
 
     <hr />
 
-    <!-- <app-dynamic-table [displayedColumns]="columns" [data]="(reservations$ | async) ?? []" [enableActions]="true"
-        [enableEdit]="false" [showDateFilter]="false" (delete)="onDelete($event.reservationId)">
-    </app-dynamic-table> -->
+    <app-dynamic-table [displayedColumns]="displayedColumns" [data]="(reservations$ | async) ?? []" [enableActions]="true"
+        [enableEdit]="false" [showDateFilter]="false" [DeleteMessage]="'Cannot delete past reservations.'"
+        (delete)="onDelete($event)">
+    </app-dynamic-table>
+
 
     <app-dynamic-card [data]="selectedServiceDetails" [fields]="['name', 'description']" [enableEdit]="false"
         [enableDelete]="false">

@@ -19,5 +19,7 @@ export interface ReservationSummaryDTO {
     roomNumber: number;
     roomTypeName: string;
     totalPrice: number;
+    canDelete: boolean; // ✅ already added
+
 }
   

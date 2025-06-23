@@ -38,8 +38,9 @@ export class RoomListComponent {
 
 this.storeSub = this.store.select(selectReservationState).subscribe(state => {
       const { checkIn, checkOut } = state;
-      this.checkIn = checkIn ? new Date(checkIn).toISOString().split('T')[0] : null;
-      this.checkOut = checkOut ? new Date(checkOut).toISOString().split('T')[0] : null;
+  this.checkIn = checkIn ? this.formatLocalDate(new Date(checkIn)) : null;
+  this.checkOut = checkOut ? this.formatLocalDate(new Date(checkOut)) : null;
+
 
       this.fetchRooms();
     });
@@ -158,5 +159,13 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
       localStorage.setItem('selectedRoom', JSON.stringify(room));
 
   }
+
+  private formatLocalDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
 
 }

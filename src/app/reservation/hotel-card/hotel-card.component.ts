@@ -78,7 +78,7 @@ export class HotelCardComponent implements OnInit {
   // Sync form with NgRx store state
   this.store.select(selectCheckInDate).subscribe(checkIn => {
     if (checkIn) {
-      this.checkInDate = new Date(checkIn).toISOString().split('T')[0];
+      this.checkInDate = this.formatLocalDate(new Date(checkIn));
       this.bookingForm.patchValue({ checkIn: new Date(checkIn) });
     } else {
       this.checkInDate = '';
@@ -89,7 +89,7 @@ export class HotelCardComponent implements OnInit {
 
   this.store.select(selectCheckOutDate).subscribe(checkOut => {
     if (checkOut) {
-      this.checkOutDate = new Date(checkOut).toISOString().split('T')[0];
+      this.checkOutDate = this.formatLocalDate(new Date(checkOut));
       this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
     } else {
       this.checkOutDate = '';
@@ -173,9 +173,9 @@ onSubmit(): void {
   if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
 
   const formValues = this.bookingForm.value;
-  const formattedCheckInDate = new Date(formValues.checkIn).toISOString().split('T')[0];
-  const formattedCheckOutDate = new Date(formValues.checkOut).toISOString().split('T')[0];
-
+  const formattedCheckInDate = this.formatLocalDate(new Date(formValues.checkIn));
+  const formattedCheckOutDate = this.formatLocalDate(new Date(formValues.checkOut));
+  
   const bookingPayload = {
     checkInDate: formattedCheckInDate,
     checkOutDate: formattedCheckOutDate,
@@ -239,4 +239,12 @@ console.log("Booking Payload:", JSON.stringify(bookingPayload, null, 2));
     }
   });
 }
+
+  private formatLocalDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 }
