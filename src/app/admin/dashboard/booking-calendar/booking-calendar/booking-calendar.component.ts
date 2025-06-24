@@ -14,6 +14,7 @@ import { loadFilteredReservations } from '../store/reservation.actions';
 import { selectAllReservations } from '../store/reservation.selectors';
 import { Booking } from '../models/booking.model';
 import { reservationdetailsresponse } from 'src/app/shared/models/reservationdetailsresponse.model';
+import { deleteReservation } from 'src/app/admin/store/all-reservation/all-reservation.actions';  // adjust path if needed
 
 @Component({
   selector: 'app-booking-calendar',
@@ -298,10 +299,13 @@ const baseDate = this.currentMonth;
     const dialogRef = this.dialog.open(BookingDialogComponent, { data: booking });
     dialogRef.afterClosed().subscribe(res => {
       if (res?.delete) {
-        setTimeout(() => this.loadFilteredReservationsFromStore(), 0);
+        this.store.dispatch(deleteReservation({ id: booking.id }));
+        // ✅ NO NEED TO call loadFilteredReservationsFromStore() manually
+        
       }
     });
   }
+  
 
   mapReservationToBooking(r: reservationdetailsresponse): Booking {
     return {
