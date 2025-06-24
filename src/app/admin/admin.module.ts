@@ -40,6 +40,7 @@ import { BookingCalendarModule } from './dashboard/booking-calendar/booking-cale
     CommonModule,
     AdminRoutingModule,
     SharedModule,
+     BookingCalendarModule,
       StoreModule.forFeature('allReservations', reservationReducer),
     StoreModule.forFeature('departments', departmentReducer),
     StoreModule.forFeature('employees', employeeReducer),
@@ -52,7 +53,7 @@ import { BookingCalendarModule } from './dashboard/booking-calendar/booking-cale
     EffectsModule.forFeature([RoomTypeEffects]),
     EffectsModule.forFeature([ReservationEffects]),
     EffectsModule.forFeature([DepartmentEffects]),
-    BookingCalendarModule,
+   
 
 
   ]

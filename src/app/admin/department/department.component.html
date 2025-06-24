@@ -1,9 +1,8 @@
-<div style="position: relative;">
+<div class="department-header">
   <button mat-raised-button color="primary" (click)="openCreateDialog()" appAddLabel>
     + Department
   </button>
-
+</div>
   <app-dynamic-table [data]="(departments$ | async) ?? []" [displayedColumns]="displayedColumns" [enableActions]="true"
     [enableEdit]="true" (edit)="onEdit($event)" (delete)="onDelete($event)">
   </app-dynamic-table>
-</div>

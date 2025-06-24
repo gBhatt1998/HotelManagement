@@ -15,6 +15,9 @@ import { selectAllReservations } from '../store/reservation.selectors';
 import { Booking } from '../models/booking.model';
 import { reservationdetailsresponse } from 'src/app/shared/models/reservationdetailsresponse.model';
 import { deleteReservation } from 'src/app/admin/store/all-reservation/all-reservation.actions';  // adjust path if needed
+import { Actions, ofType } from '@ngrx/effects';
+import { deleteReservationSuccess } from 'src/app/admin/store/all-reservation/all-reservation.actions'; 
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-booking-calendar',
@@ -34,13 +37,14 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   cellWidth = 0;
   @Input() showRoomTypeFilter = true;
   @ViewChild('firstDayRef') firstDayRef!: ElementRef<HTMLDivElement>;
+  monthDays: { label: string, isWeekend: boolean }[] = [];
 
   roomTypes: { id: number; type: string }[] = [];
   rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];
   hasInitializedRoomTypes = false;
   dateOptions: ('today' | 'week' | 'month')[] = ['today', 'week', 'month'];
 
-  constructor(private dialog: MatDialog, private store: Store) { }
+constructor(private dialog: MatDialog, private store: Store, private actions$: Actions) { }
 
   ngOnInit() {
     this.generateMonthDays();
@@ -296,16 +300,23 @@ const baseDate = this.currentMonth;
   }
 
   openDialog(booking: Booking) {
-    const dialogRef = this.dialog.open(BookingDialogComponent, { data: booking });
-    dialogRef.afterClosed().subscribe(res => {
-      if (res?.delete) {
-        this.store.dispatch(deleteReservation({ id: booking.id }));
-        // ✅ NO NEED TO call loadFilteredReservationsFromStore() manually
-        
-      }
-    });
-  }
-  
+  const dialogRef = this.dialog.open(BookingDialogComponent, { data: booking });
+
+  dialogRef.afterClosed().subscribe(res => {
+    if (res?.delete) {
+      this.store.dispatch(deleteReservation({ id: booking.id }));
+
+      // 🟢 Wait for success and then reload filtered reservations
+      this.actions$.pipe(
+        ofType(deleteReservationSuccess),
+        take(1) // unsubscribe after the first match
+      ).subscribe(() => {
+        this.loadFilteredReservationsFromStore();
+      });
+    }
+  });
+}
+
 
   mapReservationToBooking(r: reservationdetailsresponse): Booking {
     return {
@@ -321,17 +332,6 @@ const baseDate = this.currentMonth;
     };
   }
 
-  monthDays: { label: string, isWeekend: boolean }[] = [];
 
-  getRowOffsets(gridEl: ElementRef | HTMLElement) {
-    return () => {
-      const dayEls: HTMLElement[] = Array.from(
-        (gridEl as HTMLElement).querySelectorAll('.day-cell')
-      );
-      return dayEls.map(el => ({
-        left: el.offsetLeft,
-        right: el.offsetLeft + el.offsetWidth
-      }));
-    };
-  }
+  
 }

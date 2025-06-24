@@ -39,8 +39,8 @@ delete$ = createEffect(() =>
     mergeMap(({ id }) =>
       this.reservationService.deleteReservation(id).pipe(
         mergeMap((response) => [
-          ReservationActions.deleteReservationSuccess({ id }),
-ReservationActions.loadAllReservations({ roomType: '' })         ]),
+          ReservationActions.deleteReservationSuccess({ id })
+       ]),
         tap((response) => {
           this.dialogService.openSuccess({
             title: 'Deleted',

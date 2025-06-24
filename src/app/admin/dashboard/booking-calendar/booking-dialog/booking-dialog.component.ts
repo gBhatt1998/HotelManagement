@@ -14,7 +14,7 @@ import { Booking } from '../models/booking.model';
       <p><strong>Room ID:</strong> {{ data.roomId }}</p>
       <p><strong>From:</strong> {{ data.startDate }}</p>
       <p><strong>To:</strong> {{ data.endDate }}</p>
-      <p><strong>Total Price:</strong> ₹{{ data.totalPrice }}</p>
+      <p><strong>Total Price:</strong> '$'{{ data.totalPrice }}</p>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button (click)="onClose()">Close</button>

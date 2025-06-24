@@ -4,6 +4,12 @@
   </button>
 </div>
 
-<app-dynamic-card [data]="(roomTypes$ | async) || []" [fields]="['type', 'description', 'pricePerNight',]"
-  imageField="imageUrl" (edit)="onEdit($event)" (delete)="onDelete($event)">
-</app-dynamic-card>
+<div class="card-wrapper">
+  <app-dynamic-card
+    [data]="(roomTypes$ | async) || []"
+    [fields]="['type', 'description', 'pricePerNight']"
+    imageField="imageUrl"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)">
+  </app-dynamic-card>
+</div>

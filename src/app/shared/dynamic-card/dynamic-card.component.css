@@ -1,9 +1,9 @@
 .card-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
-  justify-content: flex-start;
 }
+
 
 .dynamic-card {
   width: 300px;
@@ -76,4 +76,8 @@ button[mat-icon-button]:hover mat-icon {
 }
 button[mat-icon-button][color="warn"]:hover mat-icon {
   color: #c62828; /* red for delete */
+}
+:host {
+  display: block;
+  width: 100%;
 }

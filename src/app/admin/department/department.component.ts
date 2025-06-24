@@ -11,6 +11,8 @@ import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/d
 @Component({
   selector: 'app-department',
   templateUrl: './department.component.html',
+    styleUrls: ['./department.component.css']  // ✅ make sure this file contains `.department-header`
+
 })
 export class DepartmentComponent implements OnInit {
   departments$: Observable<DepartmentResponseDTO[]>;

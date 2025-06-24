@@ -37,9 +37,7 @@
 
 
     </div>
-    <!-- <mat-progress-bar *ngIf="isLoading" mode="indeterminate" color="primary"></mat-progress-bar> -->
 
-    <!-- Day Headers -->
     <!-- Day Headers -->
     <div class="calendar-days">
         <!-- Room Type Cell with label and dropdown -->
@@ -72,8 +70,11 @@
                 <div class="day-cell" *ngFor="let day of monthDays"></div>
             
                 <ng-container *ngFor="let booking of getBookingsForRoom(room.id)">
-                    <app-booking-bar *ngIf="cellWidth > 0" [booking]="booking" [calendarStartDate]="currentMonth"
-                        [totalDaysInMonth]="monthDays.length" [cellWidth]="cellWidth" (bookingClick)="openDialog($event)">
+                    <app-booking-bar *ngIf="cellWidth > 0" 
+                        [booking]="booking" [calendarStartDate]="currentMonth"
+                        [totalDaysInMonth]="monthDays.length"
+                         [cellWidth]="cellWidth"
+                          (bookingClick)="openDialog($event)">
                     </app-booking-bar>
                 </ng-container>
             </div>

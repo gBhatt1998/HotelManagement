@@ -9,10 +9,13 @@
 .nav-bar {
   position: fixed;
   top: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
+  height: 70px;
   z-index: 1000;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
 }
+
 
 .navbar {
   background-color: var(--primary);
@@ -108,6 +111,11 @@
   display: flex;
   gap: 0.5rem;
 }
+.content-wrapper {
+  margin-top: 75px; 
+  /* padding: 24px; */
+}
+
 
 /* OVERLAY */
 .navbar-overlay {

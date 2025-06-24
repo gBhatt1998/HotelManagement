@@ -1,7 +1,10 @@
-/* room-type.component.css */
 .room-type-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  position: relative; /* keep for floating button */
+  height: 60px; /* or however tall the button needs */
+  margin-bottom: 24px;
+}
+
+.card-wrapper {
+  padding: 0 24px;
+  width: 100%;
 }

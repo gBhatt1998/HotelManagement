@@ -1,23 +1,29 @@
 <mat-card class="card">
-    <div class="card__img">
-        <picture>
-            <img [src]="currentRoom?.imageUrl" alt="{{ currentRoom?.type }} image">
-        </picture>
-    </div>
-
+    <!-- Room Image -->
+  <div class="card__img" *ngIf="currentRoom">
+    <picture>
+      <img [src]="currentRoom.imageUrl" alt="{{ currentRoom.type }} image">
+    </picture>
+  </div>
     <mat-card-content class="card__details">
-        <h3>{{ currentRoom?.type }} Room</h3>
-        <p>{{ currentRoom?.description }}</p>
 
-        <div class="price">
-            <div class="price__l">
-                <span class="price__label">${{ currentRoom?.pricePerNight }} /</span>
-                <span class="measure__label" >per-night</span>
-                <small class="nights-info" style="margin-right: 4px; color: #3d3de0;" *ngIf="calculateNights() > 1">
-                    · {{ calculateNights() }} nights
-                </small>
-            </div>
+         <div *ngIf="!currentRoom" class="no-room-message" >
+    No room selected. Please choose a room to continue booking.
+  </div>
+         <ng-container *ngIf="currentRoom">
+      <h3>{{ currentRoom.type }} Room</h3>
+      <p>{{ currentRoom.description }}</p>
+
+      <div class="price">
+        <div class="price__l">
+          <span class="price__label">${{ currentRoom.pricePerNight }} /</span>
+          <span class="measure__label">per-night</span>
+          <small class="nights-info" *ngIf="calculateNights() > 1">
+            · {{ calculateNights() }} nights
+          </small>
         </div>
+      </div>
+    </ng-container>
 
         <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
             <!-- Check-in and Check-out -->
@@ -28,7 +34,9 @@
                     <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn" readonly>
                     
                     <mat-datepicker #checkInPicker></mat-datepicker>
-                    <mat-error *ngIf="bookingForm.get('checkIn')?.hasError('required')">Check-in is required</mat-error>
+                   <mat-error *ngIf="bookingForm.get('checkIn')?.hasError('required') && (bookingForm.get('checkIn')?.touched || submitted)">
+  Check-in is required
+</mat-error>              
                 </mat-form-field>
                 
                 <!-- Check-out -->
@@ -37,7 +45,9 @@
                     <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut" readonly>
                    
                     <mat-datepicker #checkOutPicker></mat-datepicker>
-                    <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required')">Check-out is required</mat-error>
+                   <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required') && (bookingForm.get('checkOut')?.touched || submitted)">
+  Check-out is required
+</mat-error>
                 </mat-form-field>
   
             </div>
@@ -98,9 +108,10 @@
 
             <!-- Submit -->
           <ng-container *ngIf="isUserAuthenticated(); else loginButton">
-  <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">
-    Confirm Booking
-  </button>
+<button mat-raised-button color="primary" type="submit"
+        [disabled]="bookingForm.invalid || !currentRoom || !bookingForm.get('checkIn')?.value || !bookingForm.get('checkOut')?.value">
+  Confirm Booking
+</button>
 </ng-container>
 
 <ng-template #loginButton>

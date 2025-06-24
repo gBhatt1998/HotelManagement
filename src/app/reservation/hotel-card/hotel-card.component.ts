@@ -31,6 +31,7 @@ export class HotelCardComponent implements OnInit {
   roomId!: number;
   checkInDate!: string;
   checkOutDate!: string;
+submitted = false;
 
   previousSelectedServiceIds: number[] = [];
   selectedServices: Service[] = [];
@@ -42,90 +43,90 @@ export class HotelCardComponent implements OnInit {
 ) { }
 
 
- ngOnInit(): void {
-  // Initialize the form
+ngOnInit(): void {
+  // Initialize booking form
   this.bookingForm = this.fb.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-    checkIn: [null, Validators.required],
-    checkOut: [null, Validators.required],
+    checkIn: [null ],
+    checkOut: [null ],
     serviceIds: [[]],
   });
 
-  // Auto-fill guest details if available
-  this.storeGuest.select(selectGuestDetails).subscribe((guestDetails) => {
-  if (guestDetails && this.authService.isLoggedIn()) {
-    this.bookingForm.patchValue({
-      name: guestDetails.name,
-      email: guestDetails.email,
-      phone: guestDetails.phone,
-    });
-  } else {
-    const stored = localStorage.getItem('guestDetails');
-    if (stored) {
-      const parsed = JSON.parse(stored);
+  // Auto-fill guest details
+  this.storeGuest.select(selectGuestDetails).subscribe(guestDetails => {
+    if (guestDetails && this.authService.isLoggedIn()) {
       this.bookingForm.patchValue({
-        name: parsed.name,
-        email: parsed.email,
-        phone: parsed.phone,
+        name: guestDetails.name,
+        email: guestDetails.email,
+        phone: guestDetails.phone,
       });
+    } else {
+      const stored = localStorage.getItem('guestDetails');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        this.bookingForm.patchValue({
+          name: parsed.name,
+          email: parsed.email,
+          phone: parsed.phone,
+        });
+      }
     }
-  }
-});
+  });
 
-
-  // Sync form with NgRx store state
+  // Check-in date from store (skip if null or already filled)
   this.store.select(selectCheckInDate).subscribe(checkIn => {
     if (checkIn) {
+      const current = this.bookingForm.get('checkIn')?.value;
+      if (!current) {
+        this.bookingForm.patchValue({ checkIn: new Date(checkIn) });
+      }
       this.checkInDate = this.formatLocalDate(new Date(checkIn));
-      this.bookingForm.patchValue({ checkIn: new Date(checkIn) });
-    } else {
-      this.checkInDate = '';
-      this.bookingForm.patchValue({ checkIn: null });
+      this.calculateTotalPrice();
     }
-    this.calculateTotalPrice();
   });
 
+  // Check-out date from store (skip if null or already filled)
   this.store.select(selectCheckOutDate).subscribe(checkOut => {
     if (checkOut) {
+      const current = this.bookingForm.get('checkOut')?.value;
+      if (!current) {
+        this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
+      }
       this.checkOutDate = this.formatLocalDate(new Date(checkOut));
-      this.bookingForm.patchValue({ checkOut: new Date(checkOut) });
-    } else {
-      this.checkOutDate = '';
-      this.bookingForm.patchValue({ checkOut: null });
+      this.calculateTotalPrice();
     }
-    this.calculateTotalPrice();
   });
 
+  // Selected room from store
   this.store.select(selectSelectedRoom).subscribe(room => {
     if (room) {
       this.currentRoom = room;
       this.roomId = room.roomNumber;
     } else {
-      this.currentRoom = {} as Room;
+this.currentRoom = null!;
       this.roomId = 0;
     }
     this.calculateTotalPrice();
   });
 
-  // Fetch service list and restore any previous selections
+  // Fetch services
   this.fetchAvailableServices();
 
-  // Listen for serviceIds change and save to localStorage
+  // Listen for service selection changes
   this.bookingForm.get('serviceIds')?.valueChanges.subscribe((selectedIds) => {
     localStorage.setItem('selectedServiceIds', JSON.stringify(selectedIds));
     this.calculateTotalPrice();
   });
 
-  // Restore selected services (if available and valid)
+  // Restore selected services (if saved)
   const savedServiceIds = localStorage.getItem('selectedServiceIds');
   if (savedServiceIds) {
     const parsedIds = JSON.parse(savedServiceIds);
     this.bookingForm.patchValue({ serviceIds: parsedIds });
   }
 }
-
 
 
 
@@ -170,8 +171,12 @@ export class HotelCardComponent implements OnInit {
 }
 
 onSubmit(): void {
-  if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) return;
+    this.submitted = true;
 
+  if (this.bookingForm.invalid || !this.checkInDate || !this.checkOutDate || !this.roomId) {
+    this.bookingForm.markAllAsTouched();
+    return;
+  }
   const formValues = this.bookingForm.value;
   const formattedCheckInDate = this.formatLocalDate(new Date(formValues.checkIn));
   const formattedCheckOutDate = this.formatLocalDate(new Date(formValues.checkOut));
@@ -197,22 +202,32 @@ console.log("Booking Payload:", JSON.stringify(bookingPayload, null, 2));
         statusCode: response.status || 201,
         close: true,
       };
+      // this.formSubmittedSuccessfully = true; // ✅ Set flag
 
-      this.bookingForm.reset();
-      if (this.checkInDate) {
-        this.bookingForm.patchValue({ checkIn: new Date(this.checkInDate) });
-      }
-      if (this.checkOutDate) {
-        this.bookingForm.patchValue({ checkOut: new Date(this.checkOutDate) });
-      }
-      this.bookingForm.patchValue({ serviceIds: [] });
+   // ✅ Reset form fields
+      this.bookingForm.reset({
+        name: formValues.name, // keep guest data
+        email: formValues.email,
+        phone: formValues.phone,
+        checkIn: null,
+        checkOut: null,
+        serviceIds: []
+      });
+
+      // ✅ Clear validations
+      this.bookingForm.markAsPristine();
+      this.bookingForm.markAsUntouched();
+      this.bookingForm.updateValueAndValidity();
+  this.submitted = false;
+
+      // ✅ Cleanup
       this.selectedServices = [];
+      this.totalPrice = 0;
       localStorage.removeItem('selectedServiceIds');
       localStorage.removeItem('selectedRoom');
-      localStorage.removeItem('checkOutDate');
       localStorage.removeItem('checkInDate');
+      localStorage.removeItem('checkOutDate');
       this.store.dispatch(resetReservationDates());
-
     },
     error: (error) => {
       let errorMsg = 'An error occurred during reservation.';

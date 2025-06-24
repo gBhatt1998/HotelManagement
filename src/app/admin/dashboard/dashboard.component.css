@@ -5,15 +5,23 @@
   margin: 0;
   overflow: hidden;
   background-color: #f9f9fb;
+  padding-top: 75px; /* Adjust if you have a fixed top nav */
 }
 
 /* --- Sidenav Styling --- */
 .sidenav {
-  width: 220px;
+  width: 160px;
+  min-width: 160px;
   background-color: #f4f6f8;
   padding-top: 24px;
   border-right: 1px solid #e0e0e0;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+  z-index: 2;
+}
+.mat-drawer-inner-container {
+  height: auto;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 /* --- Sidebar Title --- */
@@ -51,25 +59,21 @@ mat-nav-list a:hover {
 
 /* --- Sidenav Content Area --- */
 mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  height: 100vh;
-  overflow-y: auto;
+  overflow: hidden;
   background-color: #ffffff;
-  padding: 0;
-  margin: 0;
 }
 
 /* --- Main Content Area --- */
 .main-content {
+  flex: 1;
+  overflow-y: auto;
   padding: 24px;
-  padding-top: 90px; 
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  width: 100%;
+  min-height: 0; /* Prevent growing beyond */
 }
-
 /* --- Table and Filters --- */
 .table-controls {
   display: flex;
@@ -88,13 +92,13 @@ mat-sidenav-content {
 }
 
 /* --- Paginator Section --- */
-.mat-paginator {
+/* .mat-paginator {
   padding: 8px 16px;
   background-color: #f4f6f8;
   border-top: 1px solid #e0e0e0;
   border-radius: 0 0 10px 10px;
   font-size: 14px;
-}
+} */
 
 /* --- Responsive Behavior --- */
 @media (max-width: 768px) {

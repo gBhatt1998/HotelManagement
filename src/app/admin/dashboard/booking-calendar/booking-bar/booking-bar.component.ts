@@ -61,7 +61,7 @@ Room: ${this.booking.roomId} (${this.booking.roomTypeName || ''})
 Services: ${this.booking.serviceNames?.join(', ') || 'None'}
 From: ${this.booking.startDate}
 To: ${this.booking.endDate}
-💰 ₹${this.booking.totalPrice}
+💰 $${this.booking.totalPrice}
     `;
   }
 

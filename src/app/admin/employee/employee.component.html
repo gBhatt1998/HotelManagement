@@ -1,13 +1,13 @@
-<div class="employee-container" style="position: relative;">
+<div class="employee-header" >
     <button mat-flat-button color="primary" (click)="openCreateDialog()" appAddLabel>
         + Employee
     </button>
-
+</div>
     <app-dynamic-table [displayedColumns]="displayedColumns"
         [data]="(employees$ | async) ?? []" [enableActions]="true" [enableEdit]="true" (edit)="openEditDialog($event)"
           [alwaysShowDelete]="true"
 
         (delete)="deleteEmployee($event.id)">
     </app-dynamic-table>
-</div>
+
   
