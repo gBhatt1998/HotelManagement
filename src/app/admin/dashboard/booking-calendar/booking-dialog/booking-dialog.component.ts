@@ -16,10 +16,13 @@ import { Booking } from '../models/booking.model';
       <p><strong>To:</strong> {{ data.endDate }}</p>
       <p><strong>Total Price:</strong> '$'{{ data.totalPrice }}</p>
     </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="onClose()">Close</button>
-      <button mat-raised-button color="warn" (click)="onDelete()">Cancel Booking</button>
-    </mat-dialog-actions>
+   <mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">Close</button>
+  <button mat-raised-button color="warn"
+          *ngIf="data.canDelete"
+          (click)="onDelete()">Cancel Booking</button>
+</mat-dialog-actions>
+
   `
 })
 export class BookingDialogComponent {

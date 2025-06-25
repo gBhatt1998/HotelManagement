@@ -13,7 +13,7 @@ import { BookingDialogComponent } from '../booking-dialog/booking-dialog.compone
 import { loadFilteredReservations } from '../store/reservation.actions';
 import { selectAllReservations } from '../store/reservation.selectors';
 import { Booking } from '../models/booking.model';
-import { reservationdetailsresponse } from 'src/app/shared/models/reservationdetailsresponse.model';
+import { ReservationDetailsResponse } from '../models/reservation-details-response.model';
 import { deleteReservation } from 'src/app/admin/store/all-reservation/all-reservation.actions';  // adjust path if needed
 import { Actions, ofType } from '@ngrx/effects';
 import { deleteReservationSuccess } from 'src/app/admin/store/all-reservation/all-reservation.actions'; 
@@ -25,8 +25,8 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./booking-calendar.component.css']
 })
 export class BookingCalendarComponent implements OnInit, AfterViewInit {
-  reservations$: Observable<reservationdetailsresponse[]> = this.store.select(selectAllReservations);
-  allBookings: reservationdetailsresponse[] = [];
+  reservations$: Observable<ReservationDetailsResponse[]> = this.store.select(selectAllReservations);
+  allBookings: ReservationDetailsResponse[] = [];
   lastClickedFilter: 'month' | 'week' | 'today' | null = null;
 
   dateFilter: 'today' | 'month' | 'week' = 'month';
@@ -259,7 +259,7 @@ const baseDate = this.currentMonth;
     return this.rooms.filter(r => r.roomTypeId === this.selectedRoomTypeId);
   }
 
-  getFilteredBookings(): reservationdetailsresponse[] {
+  getFilteredBookings(): ReservationDetailsResponse[] {
     const today = new Date();
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay());
@@ -306,7 +306,7 @@ const baseDate = this.currentMonth;
     if (res?.delete) {
       this.store.dispatch(deleteReservation({ id: booking.id }));
 
-      // 🟢 Wait for success and then reload filtered reservations
+      // Wait for success and then reload filtered reservations
       this.actions$.pipe(
         ofType(deleteReservationSuccess),
         take(1) // unsubscribe after the first match
@@ -318,7 +318,7 @@ const baseDate = this.currentMonth;
 }
 
 
-  mapReservationToBooking(r: reservationdetailsresponse): Booking {
+  mapReservationToBooking(r: ReservationDetailsResponse): Booking {
     return {
       id: r.reservationId,
       roomId: r.roomNumber,
@@ -328,9 +328,44 @@ const baseDate = this.currentMonth;
       endDate: r.checkOutDate,
       totalPrice: r.totalPrice,
       serviceNames: r.serviceNames,
-      roomTypeName: r.roomTypeName
+      roomTypeName: r.roomTypeName,
+          canDelete: r.canDelete
+
     };
   }
+
+
+  roomTypeColorMap: { [type: string]: string } = {
+    'Single':'#5b6cf9',
+  
+  'Double': '#7373f4',
+  'Executive': '#8b7bef',
+  'Deluxe': '#a382ea',
+  'Family':'#ba89e4',
+  'Suite':'#d291df',
+  'Presidental suite': '#ea98da',
+  
+  
+  // Add others as needed
+};
+
+getRoomTypeColor(type: string | null | undefined): string {
+  return this.roomTypeColorMap[type ?? ''] || '#9E9E9E';
+}
+
+getSelectedRoomTypeBackground(): string {
+  const selectedType = this.roomTypes.find(t => t.id === this.selectedRoomTypeId)?.type || '';
+  return this.hexToRGBA(this.getRoomTypeColor(selectedType), 0.4);
+}
+
+hexToRGBA(hex: string, alpha: number): string {
+  const bigint = parseInt(hex.replace('#', ''), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 
 
   

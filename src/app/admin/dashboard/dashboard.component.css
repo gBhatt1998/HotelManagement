@@ -1,11 +1,11 @@
 /* --- Dashboard Container --- */
 .sidenav-container {
   display: flex;
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0;
   overflow: hidden;
   background-color: #f9f9fb;
-  padding-top: 75px; 
+  /* padding-top: 75px;  */
 }
 /* --- Sidenav Styling --- */
 .sidenav {
@@ -16,10 +16,11 @@
   border-right: 1px solid #e0e0e0;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
   z-index: 2;
+  min-height: auto;
 }
 .mat-drawer-inner-container {
   height: auto;
-  max-height: 100vh;
+  /* max-height: 100vh; */
   overflow-y: auto;
 }
 
@@ -37,7 +38,7 @@ mat-nav-list a {
   color: #37474f;
   font-weight: 500;
   font-size: 15px;
-  padding: 12px 24px;
+  padding:8px 12px;
   border-left: 4px solid transparent;
   transition: all 0.3s ease;
   border-radius: 4px 0 0 4px;
@@ -61,18 +62,20 @@ mat-sidenav-content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow: hidden;
+  overflow: auto;
   background-color: #ffffff;
 }
 
 /* --- Main Content Area --- */
 .main-content {
   flex: 1;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   padding: 75px 24px 24px;
   /* padding: 24px; */
   box-sizing: border-box;
   /* min-height: 0;    */
+    min-height: calc(100vh - 75px); /* if top nav is 75px */
+
 }
 /* --- Table and Filters --- */
 .table-controls {
@@ -85,7 +88,7 @@ mat-sidenav-content {
 
 .full-width-table {
   width: 100%;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -105,8 +108,8 @@ mat-sidenav-content {
   .sidenav {
     width: 100%;
     position: fixed;
-    z-index: 1000;
-    height: auto;
+    /* z-index: 1000; */
+    /* height: auto; */
   }
 
   .main-content {

@@ -12,6 +12,7 @@ import { Booking } from '../models/booking.model';
   template: `
 <div
   class="booking-bar"
+  [ngStyle]="{ 'background-color': color }"
   [style.left.px]="left"
   [style.width.px]="width"
   [matTooltip]="tooltip"
@@ -27,6 +28,7 @@ export class BookingBarComponent implements OnInit {
   @Input() totalDaysInMonth!: number;
   @Input() cellWidth: number = 40;
   @Output() bookingClick = new EventEmitter<Booking>();
+@Input() color: string = '#9E9E9E';
 
   left = 0;
   width = 0;
@@ -56,9 +58,9 @@ export class BookingBarComponent implements OnInit {
   get tooltip() {
     return `
 Guest: ${this.booking.guestName}
-📞 ${this.booking.phoneNumber}
-Room: ${this.booking.roomId} (${this.booking.roomTypeName || ''})
-Services: ${this.booking.serviceNames?.join(', ') || 'None'}
+
+Room:(${this.booking.roomTypeName || ''})
+
 From: ${this.booking.startDate}
 To: ${this.booking.endDate}
 💰 $${this.booking.totalPrice}

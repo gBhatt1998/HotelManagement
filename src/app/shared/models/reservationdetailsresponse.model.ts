@@ -7,10 +7,11 @@ export interface reservationdetailsresponse {
   roomTypeName: string;
   serviceNames: string[];
   guest: guestDetails;
+    // canDelete: boolean; 
 }
 
 export interface guestDetails {
-  id: number;
+  // id: number;
   name: string;
   email: string;
   phone: string;

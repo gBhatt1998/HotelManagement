@@ -3,8 +3,8 @@
     <div class="calendar-header">
 
         <div class=" room-type-filter">
-            <!-- <span class="room-type-label">Room Type</span> -->
-            <select [(ngModel)]="selectedRoomTypeId" (ngModelChange)="onRoomTypeChange($event)">
+            <select [(ngModel)]="selectedRoomTypeId" (ngModelChange)="onRoomTypeChange($event)"   [ngStyle]="{ 'background-color': getSelectedRoomTypeBackground() }">
+>
                 <option [ngValue]="null">All Types</option>
                 <option *ngFor="let type of roomTypes" [ngValue]="type.id">{{ type.type }}</option>
             </select>
@@ -76,6 +76,8 @@
                         [booking]="booking" [calendarStartDate]="currentMonth"
                         [totalDaysInMonth]="monthDays.length"
                          [cellWidth]="cellWidth"
+                           [color]="getRoomTypeColor(booking.roomTypeName)"  
+
                           (bookingClick)="openDialog($event)">
                     </app-booking-bar>
                 </ng-container>
