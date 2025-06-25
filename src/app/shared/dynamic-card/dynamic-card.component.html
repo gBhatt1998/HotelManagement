@@ -1,15 +1,16 @@
 <div class="card-container">
-  <mat-card *ngFor="let item of data" class="dynamic-card mat-elevation-z4">
 
-    <!-- Image (if available) -->
-    <img *ngIf="imageField" class="room-image" [src]="getNestedValue(item, imageField)" alt="Image" />
+  <!-- ✅ Single Card Mode -->
+  <mat-card *ngIf="singleItem" class="dynamic-card mat-elevation-z4">
+
+    <!-- Image -->
+    <img *ngIf="imageField" class="room-image" [src]="getNestedValue(singleItem, imageField)" alt="Image" />
 
     <!-- Title -->
     <mat-card-title class="card-title">
-      {{ getNestedValue(item, fields[0]) }}
+      {{ getNestedValue(singleItem, fields[0]) }}
     </mat-card-title>
 
-    <!-- Other Fields -->
     <mat-card-content>
       <div *ngFor="let field of fields.slice(imageField ? 1 : 0)" class="field-line">
         <span class="field-label">
@@ -17,19 +18,39 @@
         </span>
         <span class="field-value">
           {{
-          field === 'pricePerNight'
-          ? ('$' + getNestedValue(item, field))
-          : getNestedValue(item, field)
+            field === 'pricePerNight'
+              ? ('₹' + getNestedValue(singleItem, field))
+              : getNestedValue(singleItem, field)
           }}
         </span>
       </div>
     </mat-card-content>
+<!-- Chip Popover for Single Card -->
+<app-chip-popover
+  *ngIf="chipField && getAsArray(getNestedValue(singleItem, chipField))?.length"
+  [services]="getAsArray(getNestedValue(singleItem, chipField))"
+  [buttonLabel]="chipButtonLabel || 'Services'">
+</app-chip-popover>
 
-    <!-- Action Buttons -->
+
+  </mat-card>
+
+  <!-- ✅ Multiple Cards (existing logic preserved) -->
+  <mat-card *ngFor="let item of data" class="dynamic-card mat-elevation-z4">
+    <img *ngIf="imageField" class="room-image" [src]="getNestedValue(item, imageField)" alt="Image" />
+    <mat-card-title class="card-title">{{ getNestedValue(item, fields[0]) }}</mat-card-title>
+
+    <mat-card-content>
+      <div *ngFor="let field of fields.slice(imageField ? 1 : 0)" class="field-line">
+        <span class="field-label">{{ field | titlecase }}:</span>
+        <span class="field-value">{{ getNestedValue(item, field) }}</span>
+      </div>
+    </mat-card-content>
+
+    <!-- Optional Buttons (disable with inputs) -->
     <mat-card-actions *ngIf="enableEdit || enableDelete">
       <button *ngIf="enableEdit" mat-stroked-button color="primary" (click)="onEdit(item)">Edit</button>
       <button *ngIf="enableDelete" mat-stroked-button color="warn" (click)="onDelete(item)">Delete</button>
     </mat-card-actions>
-
   </mat-card>
 </div>

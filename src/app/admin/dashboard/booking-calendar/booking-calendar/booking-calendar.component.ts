@@ -324,6 +324,8 @@ const baseDate = this.currentMonth;
       roomId: r.roomNumber,
       guestName: r.guest.name,
       phoneNumber: r.guest.phone,
+          email: r.guest.email, 
+
       startDate: r.checkInDate,
       endDate: r.checkOutDate,
       totalPrice: r.totalPrice,

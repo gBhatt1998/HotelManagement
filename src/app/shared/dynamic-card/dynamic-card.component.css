@@ -81,3 +81,7 @@ button[mat-icon-button][color="warn"]:hover mat-icon {
   display: block;
   width: 100%;
 }
+app-chip-popover {
+  display: block;
+  margin-top: 8px;
+}

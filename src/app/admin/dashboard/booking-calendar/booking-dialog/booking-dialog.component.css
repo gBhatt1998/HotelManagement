@@ -1,0 +1,14 @@
+.dialog-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 12px;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.section-box {
+  flex: 1 1 300px; /* Grow/shrink with a min width of 300px */
+  min-width: 280px;
+  box-sizing: border-box;
+}

@@ -23,3 +23,4 @@ export const selectRoomTypeError = createSelector(
   selectRoomTypeState,
   (state) => state.error
 );
+export const selectAllRoomTypes = selectRoomTypes;

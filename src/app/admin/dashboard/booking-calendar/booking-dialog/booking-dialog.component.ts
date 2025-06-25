@@ -1,41 +1,53 @@
-// booking-dialog.component.ts
-
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Booking } from '../models/booking.model';
+import { RoomType } from 'src/app/shared/models/room-type.model';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { loadRoomTypes } from 'src/app/admin/store/room-type/room-type.actions';
+import { selectAllRoomTypes } from 'src/app/admin/store/room-type/room-type.selectors';
 
 @Component({
   selector: 'app-booking-dialog',
-  template: `
-    <h2 mat-dialog-title>Booking Details</h2>
-    <mat-dialog-content>
-      <p><strong>Guest:</strong> {{ data.guestName }}</p>
-      <p><strong>Phone:</strong> {{ data.phoneNumber }}</p>
-      <p><strong>Room ID:</strong> {{ data.roomId }}</p>
-      <p><strong>From:</strong> {{ data.startDate }}</p>
-      <p><strong>To:</strong> {{ data.endDate }}</p>
-      <p><strong>Total Price:</strong> '$'{{ data.totalPrice }}</p>
-    </mat-dialog-content>
-   <mat-dialog-actions align="end">
-  <button mat-button (click)="onClose()">Close</button>
-  <button mat-raised-button color="warn"
-          *ngIf="data.canDelete"
-          (click)="onDelete()">Cancel Booking</button>
-</mat-dialog-actions>
-
-  `
+  templateUrl: './booking-dialog.component.html',
+  styleUrls: ['./booking-dialog.component.css']
 })
 export class BookingDialogComponent {
+  roomTypes$: Observable<RoomType[]>;
+  selectedRoomType: RoomType | null = null;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Booking,
-    private dialogRef: MatDialogRef<BookingDialogComponent>
-  ) { }
+    private dialogRef: MatDialogRef<BookingDialogComponent>,
+    private store: Store
+  ) {
+    this.roomTypes$ = this.store.select(selectAllRoomTypes);
+  }
+  ngOnInit(): void {
+    this.store.dispatch(loadRoomTypes());
 
-  onClose() {
+    this.roomTypes$.subscribe(roomTypes => {
+      this.selectedRoomType = roomTypes.find(rt => rt.name === this.data.roomTypeName) ?? null;
+    });
+  }
+  onClose(): void {
     this.dialogRef.close();
   }
 
-  onDelete() {
+  onDelete(): void {
     this.dialogRef.close({ delete: true });
+  }
+
+  // Guest + Booking info for dynamic card
+  getCardData() {
+    return [{
+      guestName: this.data.guestName,
+      phoneNumber: this.data.phoneNumber,
+      roomId: this.data.roomId,
+      roomTypeName: this.data.roomTypeName,
+      startDate: this.data.startDate,
+      endDate: this.data.endDate,
+      totalPrice: '$' + this.data.totalPrice
+    }];
   }
 }
