@@ -1,6 +1,14 @@
 <div class="calendar-wrapper">
     <!-- Header -->
     <div class="calendar-header">
+
+        <div class=" room-type-filter">
+            <!-- <span class="room-type-label">Room Type</span> -->
+            <select [(ngModel)]="selectedRoomTypeId" (ngModelChange)="onRoomTypeChange($event)">
+                <option [ngValue]="null">All Types</option>
+                <option *ngFor="let type of roomTypes" [ngValue]="type.id">{{ type.type }}</option>
+            </select>
+        </div>
         <button mat-icon-button (click)="previousMonth()">
             <mat-icon>chevron_left</mat-icon>
         </button>
@@ -41,14 +49,8 @@
     <!-- Day Headers -->
     <div class="calendar-days">
         <!-- Room Type Cell with label and dropdown -->
-        <div class="room-cell room-type-header">
-            <span class="room-type-label">Room Type</span>
-            <select [(ngModel)]="selectedRoomTypeId" (ngModelChange)="onRoomTypeChange($event)">
-                <option [ngValue]="null">All Types</option>
-                <option *ngFor="let type of roomTypes" [ngValue]="type.id">{{ type.type }}</option>
-            </select>
-        </div>
-    
+        <div class="room-cell room-label-cell">
+            Room    </div>
         <!-- Hidden first cell for width measurement -->
         <div class="day-cell" #firstDayRef style="visibility: hidden; position: absolute;"></div>
     

@@ -5,9 +5,8 @@
   margin: 0;
   overflow: hidden;
   background-color: #f9f9fb;
-  padding-top: 75px; /* Adjust if you have a fixed top nav */
+  padding-top: 75px; 
 }
-
 /* --- Sidenav Styling --- */
 .sidenav {
   width: 160px;
@@ -70,9 +69,10 @@ mat-sidenav-content {
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  padding: 75px 24px 24px;
+  /* padding: 24px; */
   box-sizing: border-box;
-  min-height: 0; /* Prevent growing beyond */
+  /* min-height: 0;    */
 }
 /* --- Table and Filters --- */
 .table-controls {
