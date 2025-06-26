@@ -9,7 +9,7 @@ import { ApiResponse } from '../shared/models/api-response.model';
 })
 export class RoomlistService {
 
-  private baseUrl = 'http://localhost:8080/room-types/available'; 
+  private baseUrl = 'http://localhost:8080/room-numbers/available'; 
   constructor(private http: HttpClient) {}
 
   getAllAvailableRooms(): Observable<Room[]> {

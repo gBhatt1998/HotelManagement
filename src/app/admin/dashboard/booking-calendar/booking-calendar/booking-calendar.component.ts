@@ -204,10 +204,8 @@ isCurrentMonthView(): boolean {
   const selected = this.dateFilter;
 
   if (selected === 'month') {
-    // 🟢 Always reset to actual current month
     this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   } else if (selected === 'week' || selected === 'today') {
-    // You may still want to keep the currentMonth for header label or rendering
     this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   }
 
@@ -218,15 +216,7 @@ isCurrentMonthView(): boolean {
 
 
 
-  // onDateOptionClick(option: 'today' | 'week' | 'month') {
-  //   if (this.dateFilter === option) {
-  //     // 👉 Same option clicked again — force reload
-  //     this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  //     this.generateMonthDays();
-  //     this.loadFilteredReservationsFromStore();
-  //   }
-  // }
-  
+ 
   isToday(label: string): boolean {
     const today = new Date();
     return (

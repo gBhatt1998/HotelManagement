@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RoomService {
-  private apiUrl = 'http://localhost:8080/admin/rooms';
+  private apiUrl = 'http://localhost:8080/rooms';
 
   constructor(private http: HttpClient) {}
 
@@ -30,14 +30,7 @@ export class RoomService {
   
   
 
-  // suggestNextRoomNumber(roomTypeId: number): Observable<number> {
-  //   return this.http.get<number>(`${this.apiUrl}/suggest-next/${roomTypeId}`);
-  // }
-
-  // getExistingRoomNumbers(roomTypeId: number): Observable<number[]> {
-  //   return this.http.get<number[]>(`${this.apiUrl}/existing-room-numbers/${roomTypeId}`);
-  // }
-
+ 
   suggestRoomNumbers(roomTypeId: number, baseRoomNo: number, count: number): Observable<number[]> {
   return this.http.get<number[]>(
     `${this.apiUrl}/suggest-room-numbers?roomTypeId=${roomTypeId}&baseRoomNo=${baseRoomNo}&count=${count}`

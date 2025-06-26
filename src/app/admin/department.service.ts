@@ -7,7 +7,7 @@ import { DepartmentResponseDTO, CreateDepartmentDTO }  from 'src/app/shared/mode
 
 @Injectable({ providedIn: 'root' })
 export class DepartmentService {
-  private readonly baseUrl = 'http://localhost:8080/admin/departments';
+  private readonly baseUrl = 'http://localhost:8080/departments';
 
   constructor(private http: HttpClient) {}
 

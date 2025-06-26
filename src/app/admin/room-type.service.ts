@@ -5,7 +5,7 @@ import { RoomType } from '../shared/models/room-type.model';
 
 @Injectable({ providedIn: 'root' })
 export class RoomTypeService {
-  private apiUrl = 'http://localhost:8080/admin/room-types';
+  private apiUrl = 'http://localhost:8080/room-types';
 
   constructor(private http: HttpClient) { }
 

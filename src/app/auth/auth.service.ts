@@ -19,7 +19,7 @@ export interface DecodedToken {
 export class AuthService {
 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
-  private apiUrl = 'http://localhost:8080/api/auth'; // Adjust the API URL as needed
+  private apiUrl = 'http://localhost:8080/auth'; 
 
   constructor(private http: HttpClient) {}
 

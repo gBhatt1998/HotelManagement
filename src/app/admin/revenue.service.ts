@@ -5,7 +5,7 @@ import { RevenueAggregation } from '../shared/models/RevenueAggregation.model';
 
 @Injectable({ providedIn: 'root' })
 export class RevenueService {
-  private baseUrl = 'http://localhost:8080/admin/analytics/revenue'; // Adjust the base URL as needed
+  private baseUrl = 'http://localhost:8080/analytics/revenue'; // Adjust the base URL as needed
 
   constructor(private http: HttpClient) { }
 
