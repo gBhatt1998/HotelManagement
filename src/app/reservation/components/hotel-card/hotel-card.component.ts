@@ -11,10 +11,10 @@ import { HotelCardService } from '../../services/hotel-card.service';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/modules/auth/auth.service';
 // import { GuestDetails } from '../models/reservationpayload.model';
-import { GuestDetails } from 'src/app/guest/components/guest/guest.model'; // 👈 This is what the selector uses
-import { selectGuestDetails } from 'src/app/guest/store/guest.selectors';
+import { GuestDetails } from 'src/app/modules/guest/components/guest/guest.model'; // 👈 This is what the selector uses
+import { selectGuestDetails } from 'src/app/modules/guest/store/guest.selectors';
 import { resetReservationDates } from '../../store/reservation/reservation.action';
 @Component({
   selector: 'app-hotel-card',

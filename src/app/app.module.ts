@@ -7,12 +7,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from './interceptor/jwt.interceptor';
 import { EffectsModule } from '@ngrx/effects';
 import { MatChipsModule } from '@angular/material/chips';
-import { GuestModule } from './guest/guest.module';
-import { guestReducer } from './guest/store/guest.reducer';
-import { GuestEffects } from './guest/store/guest.effects';
+import { GuestModule } from './modules/guest/guest.module';
+import { guestReducer } from './modules/guest/store/guest.reducer';
+import { GuestEffects } from './modules/guest/store/guest.effects';
+import { JwtInterceptor } from './interceptor/jwt.interceptor';
 
 // import { JwtInterceptor } from './auth/Jwt.interceptor';
 

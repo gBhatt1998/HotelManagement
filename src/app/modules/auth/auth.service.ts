@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { jwtDecode as jwt_decode } from 'jwt-decode';
-import { SignupRequest } from '../shared/models/signup-request.model';
 import { GuestDetails } from '../guest/components/guest/guest.model';
+import { SignupRequest } from 'src/app/shared/models/signup-request.model';
 
 export interface DecodedToken {
   sub: string;       // email
