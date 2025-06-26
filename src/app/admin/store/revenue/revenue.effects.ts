@@ -5,7 +5,7 @@ import * as RevenueActions from './revenue.actions';
 import { map, mergeMap, catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { RevenueService } from '../../services/revenue.service';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 
 @Injectable()
 export class RevenueEffects {

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import * as ReservationActions from './all-reservation.actions';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 import { AllReservationService } from '../../all-reservation.service';
 
 @Injectable()

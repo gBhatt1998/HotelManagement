@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { selectCheckInDate, selectCheckOutDate, selectSelectedRoom } from '../store/reservation/reservation.selectors';
-import { ReservationState } from '../store/reservation/reservation.state';
+import { selectCheckInDate, selectCheckOutDate, selectSelectedRoom } from '../../store/reservation/reservation.selectors';
+import { ReservationState } from '../../store/reservation/reservation.state';
 import { Store } from '@ngrx/store';
-import { Room } from '../models/room.model';
-import { Service } from '../models/service.model';
-import { HotelCardService } from '../hotel-card.service';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { Room } from '../../models/room.model';
+import { Service } from '../../models/service.model';
+import { HotelCardService } from '../../services/hotel-card.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
 import { AuthService } from 'src/app/auth/auth.service';
 // import { GuestDetails } from '../models/reservationpayload.model';
-import { GuestDetails } from 'src/app/guest/guest/guest.model'; // 👈 This is what the selector uses
+import { GuestDetails } from 'src/app/guest/components/guest/guest.model'; // 👈 This is what the selector uses
 import { selectGuestDetails } from 'src/app/guest/store/guest.selectors';
-import { resetReservationDates } from '../store/reservation/reservation.action';
+import { resetReservationDates } from '../../store/reservation/reservation.action';
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',

@@ -1,7 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReservationModule } from './reservation/reservation.module';
-import { authGuard } from './auth/auth.guard';
+import { authGuard } from './guard/auth.guard';
 import { UnauthorizedComponent } from './auth/unauthorized/unauthorized.component';
 
 const routes: Routes = [

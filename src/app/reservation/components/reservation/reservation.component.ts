@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { setReservationDate } from '../store/reservation/reservation.action';
+import { setReservationDate } from '../../store/reservation/reservation.action';
 @Component({
   selector: 'app-reservation',
   templateUrl: './reservation.component.html',

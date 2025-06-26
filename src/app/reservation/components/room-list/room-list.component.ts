@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { setReservationRoom } from '../store/reservation/reservation.action';
-import { RoomlistService } from '../roomlist.service';
+import { setReservationRoom } from '../../store/reservation/reservation.action';
+import { RoomlistService } from '../../services/roomlist.service';
 import { Subscription } from 'rxjs';
-import { Room } from '../models/room.model';
-import { selectReservationState } from '../store/reservation/reservation.selectors';
-import { AppState } from '../store/root.state'; // where your AppState interface is
-import { DialogService } from 'src/app/shared/dialog.service';
+import { Room } from '../../models/room.model';
+import { selectReservationState } from '../../store/reservation/reservation.selectors';
+import { AppState } from '../../store/root.state'; // where your AppState interface is
+import { DialogService } from 'src/app/shared/services/dialog.service';
 
 
 @Component({

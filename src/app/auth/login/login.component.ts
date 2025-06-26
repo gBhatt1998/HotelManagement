@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignupRequest } from 'src/app/shared/models/signup-request.model';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 import { Store } from '@ngrx/store';
 import * as GuestActions from 'src/app/guest/store/guest.actions'
 @Component({

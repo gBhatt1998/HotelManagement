@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { jwtDecode as jwt_decode } from 'jwt-decode';
 import { SignupRequest } from '../shared/models/signup-request.model';
-import { GuestDetails } from '../guest/guest/guest.model';
+import { GuestDetails } from '../guest/components/guest/guest.model';
 
 export interface DecodedToken {
   sub: string;       // email

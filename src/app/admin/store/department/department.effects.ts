@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
 import * as DepartmentActions from './department.actions';
 import { DepartmentService } from '../../services/department.service';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 
 @Injectable()
 export class DepartmentEffects {

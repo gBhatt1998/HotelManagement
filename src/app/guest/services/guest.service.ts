@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GuestReservationsResponse } from './guest/guest.model';
+import { GuestReservationsResponse } from '../components/guest/guest.model'; 
 
 @Injectable({ providedIn: 'root' })
 export class GuestService {

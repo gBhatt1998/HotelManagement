@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as GuestActions from './guest.actions';
-import { GuestReservationsResponse } from '../guest/guest.model';
+import { GuestReservationsResponse } from '../components/guest/guest.model';
 
 
 export interface GuestState {

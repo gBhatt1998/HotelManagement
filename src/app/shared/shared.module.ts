@@ -20,23 +20,23 @@ import { FormsModule } from '@angular/forms';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { DynamicTableComponent } from './dynamic-table/dynamic-table.component';
+import { DynamicTableComponent } from './components/dynamic-table/dynamic-table.component';
 // import {MatChipsModule} from '@angular/material/chips';
-import { DynamicFormDialogComponent } from './dynamic-form-dialog/dynamic-form-dialog.component';
+import { DynamicFormDialogComponent } from './components/dynamic-form-dialog/dynamic-form-dialog.component';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { AddLabelDirective } from './directive/add-label.directive';
 import { NgChartsModule } from 'ng2-charts';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatIconModule } from '@angular/material/icon';
-import { RoomTypeFilterComponent } from './room-type-filter/room-type-filter.component';
+import { RoomTypeFilterComponent } from './components/room-type-filter/room-type-filter.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { ChipPopoverComponent } from './components/chip-popover/chip-popover.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { DynamicCardComponent } from './dynamic-card/dynamic-card.component';
+import { DynamicCardComponent } from './components/dynamic-card/dynamic-card.component';
 // import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({

@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateDepartmentDTO, DepartmentResponseDTO } from 'src/app/shared/models/departmentresponseDTO.model';
 import * as DepartmentActions from '../../store/department/department.actions';
 import { selectAllDepartments } from '../../store/department/department.selectors';
-import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/dynamic-form-dialog.component'; 
+import { DynamicFormDialogComponent } from 'src/app/shared/components/dynamic-form-dialog/dynamic-form-dialog.component'; 
 
 @Component({
   selector: 'app-department',

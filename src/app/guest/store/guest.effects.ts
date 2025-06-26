@@ -3,9 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 // import { GuestService } from 'src/app/shared/services/guest.service';
 import * as GuestActions from './guest.actions';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { DialogService } from 'src/app/shared/dialog.service';
-import { GuestService } from '../guest.service';
-
+import { DialogService } from 'src/app/shared/services/dialog.service';
+import { GuestService } from '../services/guest.service'; 
 @Injectable()
 export class GuestEffects {
     constructor(private actions$: Actions, private guestService: GuestService, private dialog: DialogService) { }

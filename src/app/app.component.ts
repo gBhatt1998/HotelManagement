@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { GuestDetails } from './guest/guest/guest.model';
+import { GuestDetails } from './guest/components/guest/guest.model';
 import { Store } from '@ngrx/store';
 import { setGuestDetails } from './guest/store/guest.actions';
 import { filter } from 'rxjs';

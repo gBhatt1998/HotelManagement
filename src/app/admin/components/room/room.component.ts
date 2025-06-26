@@ -8,9 +8,9 @@ import * as RoomActions from '../../store/room/room.actions';
 import * as RoomTypeActions from '../../store/room-type/room-type.actions';
 import { selectRoomTypes } from '../../store/room-type/room-type.selectors';
 import { selectAllRooms } from '../../store/room/room.selectors';
-import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/dynamic-form-dialog.component';
+import { DynamicFormDialogComponent } from 'src/app/shared/components/dynamic-form-dialog/dynamic-form-dialog.component';
 import { RoomService } from '../../services/room.service';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 
 @Component({
   selector: 'app-room',

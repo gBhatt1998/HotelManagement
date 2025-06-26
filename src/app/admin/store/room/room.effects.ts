@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as RoomActions from './room.actions';
 import { RoomService } from '../../services/room.service';
 import { catchError, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
-import { DialogService } from 'src/app/shared/dialog.service';
+import { DialogService } from 'src/app/shared/services/dialog.service';
 import { Store } from '@ngrx/store';
 import { selectRoomFilter } from './room.selectors'; // 👈 Selector to track current filter
 

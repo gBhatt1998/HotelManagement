@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
-import * as GuestActions from '../store/guest.actions';
+import * as GuestActions from '../../store/guest.actions';
 import { GuestDetails, ReservationSummaryDTO } from './guest.model';
-import { selectGuestReservations, selectGuestState } from '../store/guest.selectors';
-import { HotelCardService } from 'src/app/reservation/hotel-card.service';
+import { selectGuestReservations, selectGuestState } from '../../store/guest.selectors';
+import { HotelCardService } from 'src/app/reservation/services/hotel-card.service';
 import { Service } from 'src/app/reservation/models/service.model';
 
 @Component({

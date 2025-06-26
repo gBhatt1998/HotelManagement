@@ -10,7 +10,7 @@ import * as EmployeeActions from '../../store/employee/employee.actions';
 import { selectAllEmployees } from '../../store/employee/employee.selectors';
 import { selectAllDepartments } from '../../store/department/department.selectors';
 
-import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/dynamic-form-dialog.component';
+import { DynamicFormDialogComponent } from 'src/app/shared/components/dynamic-form-dialog/dynamic-form-dialog.component';
 
 @Component({
   selector: 'app-employee',
