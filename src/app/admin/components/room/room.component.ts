@@ -4,12 +4,12 @@ import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { RoomResponseDTO, RoomRequestDTO } from 'src/app/shared/models/room.model';
 import { RoomType } from 'src/app/shared/models/room-type.model';
-import * as RoomActions from '../store/room/room.actions';
-import * as RoomTypeActions from '../store/room-type/room-type.actions';
-import { selectRoomTypes } from '../store/room-type/room-type.selectors';
-import { selectAllRooms } from '../store/room/room.selectors';
+import * as RoomActions from '../../store/room/room.actions';
+import * as RoomTypeActions from '../../store/room-type/room-type.actions';
+import { selectRoomTypes } from '../../store/room-type/room-type.selectors';
+import { selectAllRooms } from '../../store/room/room.selectors';
 import { DynamicFormDialogComponent } from 'src/app/shared/dynamic-form-dialog/dynamic-form-dialog.component';
-import { RoomService } from '../room.service';
+import { RoomService } from '../../services/room.service';
 import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({

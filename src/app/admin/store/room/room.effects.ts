@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as RoomActions from './room.actions';
-import { RoomService } from '../../room.service';
+import { RoomService } from '../../services/room.service';
 import { catchError, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { DialogService } from 'src/app/shared/dialog.service';
 import { Store } from '@ngrx/store';

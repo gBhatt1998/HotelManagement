@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AllReservationsComponent } from './all-reservations/all-reservations.component';
-import { DepartmentComponent } from './department/department.component';
-import { EmployeeComponent } from './employee/employee.component';
-import { RoomTypeComponent } from './room-type/room-type.component';
-import { RoomComponent } from './room/room.component';
-import { RevenueComponent } from './revenue/revenue.component';
+import { DepartmentComponent } from './components/department/department.component';
+import { EmployeeComponent } from './components/employee/employee.component';
+import { RoomTypeComponent } from './components/room-type/room-type.component';
+import { RoomComponent } from './components/room/room.component';
+import { RevenueComponent } from './components/revenue/revenue.component';
 import { BookingCalendarComponent } from './dashboard/booking-calendar/booking-calendar/booking-calendar.component';
 
 const routes: Routes = [

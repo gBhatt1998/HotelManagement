@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
 import * as EmployeeActions from './employee.actions';
-import { EmployeeService } from '../../employee.service';
+import { EmployeeService } from '../../services/employee.service';
 import { DialogService } from 'src/app/shared/dialog.service';
 
 @Injectable()

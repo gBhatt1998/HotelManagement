@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RoomType } from '../shared/models/room-type.model';
+import { RoomType } from '../../shared/models/room-type.model';
 
 @Injectable({ providedIn: 'root' })
 export class RoomTypeService {

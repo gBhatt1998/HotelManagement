@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import * as RoomTypeActions from './room-type.actions';
-import { RoomTypeService } from '../../room-type.service';
+import { RoomTypeService } from '../../services/room-type.service';
 import { DialogService } from 'src/app/shared/dialog.service';
 
 @Injectable()

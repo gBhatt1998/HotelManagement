@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { ChartOptions, ChartType, ChartData } from 'chart.js';
 import { RevenueAggregation } from 'src/app/shared/models/RevenueAggregation.model';
-import * as RevenueActions from '../store/revenue/revenue.actions';
-import { selectRevenueData, selectRevenueLoading } from '../store/revenue/revenue.selectors';
+import * as RevenueActions from '../../store/revenue/revenue.actions';
+import { selectRevenueData, selectRevenueLoading } from '../../store/revenue/revenue.selectors';
 
 @Component({
   selector: 'app-revenue',
