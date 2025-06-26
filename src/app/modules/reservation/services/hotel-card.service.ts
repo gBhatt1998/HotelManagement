@@ -2,9 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Service } from '../models/service.model';
-import { ApiResponse } from '../../shared/models/api-response.model';
-import { reservationdetailsresponse } from '../../shared/models/reservationdetailsresponse.model';
 import { ReservationConfirmationPayload } from '../models/ReservationConfirmationPayload.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root'

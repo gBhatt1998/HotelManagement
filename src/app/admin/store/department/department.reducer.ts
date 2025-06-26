@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as DepartmentActions from './department.actions';
-import { DepartmentResponseDTO } from 'src/app/shared/models/departmentresponseDTO.model';
+import { DepartmentResponseDTO } from 'src/app/admin/models/departmentresponseDTO.model';
 
 export interface DepartmentState {
   departments: DepartmentResponseDTO[];

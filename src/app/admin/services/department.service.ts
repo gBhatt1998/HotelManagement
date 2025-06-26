@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DepartmentResponseDTO, CreateDepartmentDTO }  from 'src/app/shared/models/departmentresponseDTO.model';
+import { DepartmentResponseDTO, CreateDepartmentDTO }  from 'src/app/admin/models/departmentresponseDTO.model';
 
 @Injectable({ providedIn: 'root' })
 export class DepartmentService {

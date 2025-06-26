@@ -1,6 +1,6 @@
 
 import { createAction, props } from '@ngrx/store';
-import { EmployeeRequestDTO, EmployeeResponseDTO } from 'src/app/shared/models/employeeresponseDTO.model';
+import { EmployeeRequestDTO, EmployeeResponseDTO } from 'src/app/admin/models/employeeresponseDTO.model';
 
 export const loadEmployees = createAction('[Employee] Load Employees');
 export const loadEmployeesSuccess = createAction('[Employee] Load Employees Success', props<{ employees: EmployeeResponseDTO[] }>());

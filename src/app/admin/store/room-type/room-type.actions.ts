@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { RoomType } from 'src/app/shared/models/room-type.model';
+import { RoomType } from 'src/app/admin/models/room-type.model';
 
 export const loadRoomTypes = createAction('[RoomType] Load RoomTypes');
 export const loadRoomTypesSuccess = createAction('[RoomType] Load RoomTypes Success', props<{ roomTypes: RoomType[] }>());

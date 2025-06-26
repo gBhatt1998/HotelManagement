@@ -4,8 +4,8 @@ import { map, Observable } from 'rxjs';
 import * as GuestActions from '../../store/guest.actions';
 import { GuestDetails, ReservationSummaryDTO } from './guest.model';
 import { selectGuestReservations, selectGuestState } from '../../store/guest.selectors';
-import { HotelCardService } from 'src/app/reservation/services/hotel-card.service';
-import { Service } from 'src/app/reservation/models/service.model';
+import { HotelCardService } from 'src/app/modules/reservation/services/hotel-card.service';
+import { Service } from 'src/app/modules/reservation/models/service.model';
 
 @Component({
   selector: 'app-guest-reservations',

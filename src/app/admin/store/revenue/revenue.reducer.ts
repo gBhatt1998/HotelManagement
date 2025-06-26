@@ -1,7 +1,7 @@
 // revenue.reducer.ts
 import { createReducer, on } from '@ngrx/store';
 import * as RevenueActions from './revenue.actions';
-import { RevenueAggregation } from 'src/app/shared/models/RevenueAggregation.model';
+import { RevenueAggregation } from 'src/app/admin/models/RevenueAggregation.model';
 
 export interface RevenueState {
     data: RevenueAggregation[];

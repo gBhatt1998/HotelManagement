@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { RoomType } from 'src/app/shared/models/room-type.model';
+import { RoomType } from 'src/app/admin/models/room-type.model';
 import * as RoomTypeActions from '../../store/room-type/room-type.actions';
 import { DynamicFormDialogComponent } from 'src/app/shared/components/dynamic-form-dialog/dynamic-form-dialog.component';
 import { selectRoomTypes } from '../../store/room-type/room-type.selectors';

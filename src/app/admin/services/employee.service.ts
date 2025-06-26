@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EmployeeResponseDTO, EmployeeRequestDTO } from 'src/app/shared/models/employeeresponseDTO.model';
+import { EmployeeResponseDTO, EmployeeRequestDTO } from 'src/app/admin/models/employeeresponseDTO.model';
 import { Observable } from 'rxjs';
 
 @Injectable({

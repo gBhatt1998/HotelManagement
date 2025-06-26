@@ -1,6 +1,6 @@
 // ===== department.actions.ts =====
 import { createAction, props } from '@ngrx/store';
-import { DepartmentResponseDTO, CreateDepartmentDTO }  from 'src/app/shared/models/departmentresponseDTO.model';
+import { DepartmentResponseDTO, CreateDepartmentDTO }  from 'src/app/admin/models/departmentresponseDTO.model';
 
 export const loadDepartments = createAction('[Department] Load Departments');
 export const loadDepartmentsSuccess = createAction('[Department] Load Departments Success', props<{ departments: DepartmentResponseDTO[] }>());

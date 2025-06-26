@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
-import { CreateDepartmentDTO, DepartmentResponseDTO } from 'src/app/shared/models/departmentresponseDTO.model';
+import { CreateDepartmentDTO, DepartmentResponseDTO } from 'src/app/admin/models/departmentresponseDTO.model';
 import * as DepartmentActions from '../../store/department/department.actions';
 import { selectAllDepartments } from '../../store/department/department.selectors';
 import { DynamicFormDialogComponent } from 'src/app/shared/components/dynamic-form-dialog/dynamic-form-dialog.component'; 

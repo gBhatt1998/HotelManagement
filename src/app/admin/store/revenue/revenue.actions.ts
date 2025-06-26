@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { RevenueAggregation } from 'src/app/shared/models/RevenueAggregation.model';
+import { RevenueAggregation } from 'src/app/admin/models/RevenueAggregation.model';
 
 export const loadMonthlyRevenue = createAction('[Revenue] Load Monthly');
 export const loadWeeklyRevenue = createAction('[Revenue] Load Weekly');

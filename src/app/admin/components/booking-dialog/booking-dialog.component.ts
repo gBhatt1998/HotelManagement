@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Booking } from '../../models/booking.model';
-import { RoomType } from 'src/app/shared/models/room-type.model';
+import { RoomType } from 'src/app/admin/models/room-type.model';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { loadRoomTypes } from 'src/app/admin/store/room-type/room-type.actions';

@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as RoomTypeActions from './room-type.actions';
-import { RoomType } from 'src/app/shared/models/room-type.model';
+import { RoomType } from 'src/app/admin/models/room-type.model';
 
 export interface RoomTypeState {
     roomTypes: RoomType[];

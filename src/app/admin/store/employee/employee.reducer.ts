@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as EmployeeActions from './employee.actions';
-import { EmployeeResponseDTO } from 'src/app/shared/models/employeeresponseDTO.model';
+import { EmployeeResponseDTO } from 'src/app/admin/models/employeeresponseDTO.model';
 export interface EmployeeState {
   employees: EmployeeResponseDTO[];
   loading: boolean;

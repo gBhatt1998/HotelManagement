@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RevenueAggregation } from '../../shared/models/RevenueAggregation.model';
+import { RevenueAggregation } from '../models/RevenueAggregation.model';
 
 @Injectable({ providedIn: 'root' })
 export class RevenueService {

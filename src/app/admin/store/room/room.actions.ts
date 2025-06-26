@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { RoomRequestDTO, RoomResponseDTO } from "src/app/shared/models/room.model";
+import { RoomRequestDTO, RoomResponseDTO } from "src/app/admin/models/room.model";
 
 export const loadRooms = createAction(
   '[Room] Load Rooms',

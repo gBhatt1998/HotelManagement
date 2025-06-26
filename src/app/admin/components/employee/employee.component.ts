@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, take } from 'rxjs';
 
-import { EmployeeResponseDTO, EmployeeRequestDTO } from 'src/app/shared/models/employeeresponseDTO.model';
-import { DepartmentResponseDTO } from 'src/app/shared/models/departmentresponseDTO.model';
+import { EmployeeResponseDTO, EmployeeRequestDTO } from 'src/app/admin/models/employeeresponseDTO.model';
+import { DepartmentResponseDTO } from 'src/app/admin/models/departmentresponseDTO.model';
 
 import * as EmployeeActions from '../../store/employee/employee.actions';
 import { selectAllEmployees } from '../../store/employee/employee.selectors';

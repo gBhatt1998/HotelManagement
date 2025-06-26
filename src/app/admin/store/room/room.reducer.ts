@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as RoomActions from './room.actions';
-import { RoomResponseDTO } from 'src/app/shared/models/room.model';
+import { RoomResponseDTO } from 'src/app/admin/models/room.model';
 
 export interface RoomState {
   rooms: RoomResponseDTO[];

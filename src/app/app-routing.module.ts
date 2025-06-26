@@ -1,11 +1,11 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ReservationModule } from './reservation/reservation.module';
+import { ReservationModule } from './modules/reservation/reservation.module';
 import { authGuard } from './guard/auth.guard';
 import { UnauthorizedComponent } from './modules/auth/unauthorized/unauthorized.component';
 
 const routes: Routes = [
- { path:'',loadChildren:()=>import('./reservation/reservation.module').then(m=>ReservationModule)},
+ { path:'',loadChildren:()=>import('./modules/reservation/reservation.module').then(m=>ReservationModule)},
    { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
   { path: 'login', redirectTo: 'auth/login', pathMatch: 'full'  },
   {path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [authGuard], data: { role: 'ROLE_ADMIN' } },
