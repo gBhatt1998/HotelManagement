@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ReservationDetailsResponse } from './booking-calendar/models/reservation-details-response.model';
+import { ReservationDetailsResponse } from '../models/reservation-details-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardReservationService {

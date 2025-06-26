@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { GuestDetails, GuestReservationsResponse } from '../guest.model';
+import { GuestDetails, GuestReservationsResponse } from '../guest/guest.model';
 
 
 export const loadGuestReservations = createAction('[Guest] Load Reservations');

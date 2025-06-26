@@ -10,10 +10,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BookingDialogComponent } from '../booking-dialog/booking-dialog.component';
-import { loadFilteredReservations } from '../store/reservation.actions';
-import { selectAllReservations } from '../store/reservation.selectors';
-import { Booking } from '../models/booking.model';
-import { ReservationDetailsResponse } from '../models/reservation-details-response.model';
+import { loadFilteredReservations } from '../../store/resevation/reservation.actions';
+import { selectAllReservations } from '../../store/resevation/reservation.selectors';
+import { Booking } from '../../models/booking.model';
+import { ReservationDetailsResponse } from '../../models/reservation-details-response.model';
 import { deleteReservation } from 'src/app/admin/store/all-reservation/all-reservation.actions';  // adjust path if needed
 import { Actions, ofType } from '@ngrx/effects';
 import { deleteReservationSuccess } from 'src/app/admin/store/all-reservation/all-reservation.actions'; 

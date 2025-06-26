@@ -5,7 +5,7 @@ import {
   EventEmitter,
   OnInit
 } from '@angular/core';
-import { Booking } from '../models/booking.model';
+import { Booking } from '../../models/booking.model';
 
 @Component({
   selector: 'app-booking-bar',

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ReservationDetailsResponse } from '../models/reservation-details-response.model';
+import { ReservationDetailsResponse } from '../../models/reservation-details-response.model';
 export const loadFilteredReservations = createAction(
   '[Reservation] Load Filtered Reservations',
   props<{

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
-import * as GuestActions from '../guest/store/guest.actions';
+import * as GuestActions from '../store/guest.actions';
 import { GuestDetails, ReservationSummaryDTO } from './guest.model';
-import { selectGuestReservations, selectGuestState } from './store/guest.selectors';
+import { selectGuestReservations, selectGuestState } from '../store/guest.selectors';
 import { HotelCardService } from 'src/app/reservation/hotel-card.service';
 import { Service } from 'src/app/reservation/models/service.model';
 
@@ -29,7 +29,7 @@ export class GuestComponent implements OnInit {
     { key: 'checkOutDate', label: 'Check-Out Date' },
     // { key: 'serviceNames', label: 'Services' },
     { key: 'totalPrice', label: 'Total Price' }
-  ];
+  ];   
   
 
   constructor(private store: Store, private hotelCardService: HotelCardService) {

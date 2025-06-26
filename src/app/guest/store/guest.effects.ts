@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as GuestActions from './guest.actions';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { DialogService } from 'src/app/shared/dialog.service';
-import { GuestService } from '../../guest.service';
+import { GuestService } from '../guest.service';
 
 @Injectable()
 export class GuestEffects {

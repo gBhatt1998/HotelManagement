@@ -3,7 +3,7 @@ import { AuthService } from './auth/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { GuestDetails } from './guest/guest/guest.model';
 import { Store } from '@ngrx/store';
-import { setGuestDetails } from './guest/guest/store/guest.actions';
+import { setGuestDetails } from './guest/store/guest.actions';
 import { filter } from 'rxjs';
 
 @Component({

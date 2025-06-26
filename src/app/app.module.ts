@@ -11,8 +11,8 @@ import { JwtInterceptor } from './auth/jwt.interceptor';
 import { EffectsModule } from '@ngrx/effects';
 import { MatChipsModule } from '@angular/material/chips';
 import { GuestModule } from './guest/guest.module';
-import { guestReducer } from './guest/guest/store/guest.reducer';
-import { GuestEffects } from './guest/guest/store/guest.effects';
+import { guestReducer } from './guest/store/guest.reducer';
+import { GuestEffects } from './guest/store/guest.effects';
 
 // import { JwtInterceptor } from './auth/Jwt.interceptor';
 

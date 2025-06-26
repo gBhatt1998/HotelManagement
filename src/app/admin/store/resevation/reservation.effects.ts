@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, switchMap, tap, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { DashboardReservationService } from '../../dashboard.service';
-import * as ReservationActions from 'src/app/admin/dashboard/booking-calendar/store/reservation.actions';
+import { DashboardReservationService } from '../../services/dashboard.service';
+import * as ReservationActions from 'src/app/admin/store/resevation/reservation.actions';
 import { DialogService } from 'src/app/shared/dialog.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DialogComponent } from 'src/app/shared/dialog/dialog.component';
+import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
 
 @Injectable()
 export class ReservationEffects {

@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ReservationState } from 'src/app/admin/dashboard/booking-calendar/store/reservation.reducer';
+import { ReservationState } from 'src/app/admin/store/resevation/reservation.reducer';
 
 export const selectReservationState = createFeatureSelector<ReservationState>('calendarReservations');
 

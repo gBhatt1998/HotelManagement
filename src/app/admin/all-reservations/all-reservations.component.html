@@ -1,9 +1,0 @@
-<app-room-type-filter [roomTypes]="roomTypes" (roomTypeChanged)="onRoomTypeChanged($event)">
-</app-room-type-filter>
-
-<app-dynamic-table [data]="(reservations$ | async) ?? []" [displayedColumns]="displayedColumns" [enableActions]="true"
-  [enableEdit]="false"
-    [DeleteMessage]="'Room has reservations'"
-
-  (delete)="onDelete($event)">
-</app-dynamic-table>

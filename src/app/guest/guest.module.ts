@@ -6,8 +6,8 @@ import { GuestComponent } from './guest/guest.component';
 import { share } from 'rxjs';
 import { SharedModule } from '../shared/shared.module';
 import { StoreModule } from '@ngrx/store';
-import { guestReducer } from './guest/store/guest.reducer';
-import { GuestEffects } from './guest/store/guest.effects';
+import { guestReducer } from './store/guest.reducer';
+import { GuestEffects } from './store/guest.effects';
 import { EffectsModule } from '@ngrx/effects';
 
 

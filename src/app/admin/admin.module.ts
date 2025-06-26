@@ -2,11 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SharedModule } from '../shared/shared.module';
-import { AllReservationsComponent } from './all-reservations/all-reservations.component';
-import { reservationReducer } from './store/all-reservation/all-reservation.reducer';
-import { ReservationEffects } from './store/all-reservation/all-reservation.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { DepartmentComponent } from './components/department/department.component';
@@ -24,34 +21,44 @@ import { RoomEffects } from './store/room/room.effects';
 import { RevenueComponent } from './components/revenue/revenue.component';
 import { revenueReducer } from './store/revenue/revenue.reducer';
 import { RevenueEffects } from './store/revenue/revenue.effects';
-import { BookingCalendarModule } from './dashboard/booking-calendar/booking-calendar.module';
+// import { BookingCalendarModule } from './dashboard/booking-calendar/booking-calendar.module';
+import { reservationReducer } from './store/resevation/reservation.reducer';
+import { ReservationEffects } from './store/resevation/reservation.effects';
+import { BookingBarComponent } from './components/booking-bar/booking-bar.component';
+import { BookingCalendarComponent } from './components/booking-calendar/booking-calendar.component';
+import { BookingDialogComponent } from './components/booking-dialog/booking-dialog.component';
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    AllReservationsComponent,
     DepartmentComponent,
     EmployeeComponent,
     RoomTypeComponent,
     RoomComponent,
-    RevenueComponent,  ],
+    RevenueComponent,
+  BookingBarComponent,
+BookingCalendarComponent,
+BookingDialogComponent  ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     SharedModule,
-     BookingCalendarModule,
-      StoreModule.forFeature('allReservations', reservationReducer),
+    //  BookingCalendarModule,
+      // StoreModule.forFeature('allReservations', reservationReducer),
     StoreModule.forFeature('departments', departmentReducer),
     StoreModule.forFeature('employees', employeeReducer),
       StoreModule.forFeature('roomTypes', roomTypeReducer),  
        StoreModule.forFeature('rooms', roomReducer),
     StoreModule.forFeature('revenue', revenueReducer),
+
+    StoreModule.forFeature('calendarReservations', reservationReducer),
+        EffectsModule.forFeature([ReservationEffects]),
     EffectsModule.forFeature([RevenueEffects]),
     EffectsModule.forFeature([EmployeeEffects]) ,
     EffectsModule.forFeature([RoomEffects]),
     EffectsModule.forFeature([RoomTypeEffects]),
-    EffectsModule.forFeature([ReservationEffects]),
+    // EffectsModule.forFeature([ReservationEffects]),
     EffectsModule.forFeature([DepartmentEffects]),
    
 

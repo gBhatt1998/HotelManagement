@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import * as ReservationActions from '../store/reservation.actions';
-import { ReservationDetailsResponse } from '../models/reservation-details-response.model';
+import * as ReservationActions from './reservation.actions';
+import { ReservationDetailsResponse } from '../../models/reservation-details-response.model';
 
 export interface ReservationState {
   allReservations: ReservationDetailsResponse[];

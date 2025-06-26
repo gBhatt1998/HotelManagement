@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignupRequest } from 'src/app/shared/models/signup-request.model';
 import { DialogService } from 'src/app/shared/dialog.service';
 import { Store } from '@ngrx/store';
-import * as GuestActions from 'src/app/guest/guest/store/guest.actions'
+import * as GuestActions from 'src/app/guest/store/guest.actions'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
