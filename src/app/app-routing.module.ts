@@ -8,7 +8,7 @@ const routes: Routes = [
  { path:'',loadChildren:()=>import('./modules/reservation/reservation.module').then(m=>ReservationModule)},
    { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
   { path: 'login', redirectTo: 'auth/login', pathMatch: 'full'  },
-  {path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [authGuard], data: { role: 'ROLE_ADMIN' } },
+  {path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule), canActivate: [authGuard], data: { role: 'ROLE_ADMIN' } },
   {path: 'guest', loadChildren: () => import('./modules/guest/guest.module').then(m => m.GuestModule),canActivate: [authGuard], data: { role: ['ROLE_USER','ROLE_ADMIN'] } },
   { path: '**', component: UnauthorizedComponent },
 ];

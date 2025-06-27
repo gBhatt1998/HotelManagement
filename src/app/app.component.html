@@ -25,7 +25,7 @@
            class="nav-link" routerLink="/admin" (click)="closeMenu()">Admin Dashboard</a>
 
         <div class="auth-buttons">
-          <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login" (click)="closeMenu()">Login Page</a>
+          <!-- <a *ngIf="!isLoggedIn" class="btn btn-outline-light me-2" routerLink="/login" (click)="closeMenu()">Login Page</a> -->
           <button *ngIf="isLoggedIn" class="btn btn-light" (click)="logout()">Logout</button>
         </div>
       </div>

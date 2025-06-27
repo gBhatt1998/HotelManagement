@@ -6,6 +6,7 @@ import { SignupRequest } from 'src/app/shared/models/signup-request.model';
 import { DialogService } from 'src/app/shared/services/dialog.service';
 import { Store } from '@ngrx/store';
 import * as GuestActions from 'src/app/modules/guest/store/guest.actions'
+import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,7 +22,9 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private dialogService: DialogService,
-    private store: Store // Import Store for dispatching actions
+    private store: Store ,
+      private dialogRef: MatDialogRef<LoginComponent>
+
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +79,10 @@ export class LoginComponent implements OnInit {
            if (userRole === 'ROLE_USER') {
         this.store.dispatch(GuestActions.loadGuestReservations());
       }
+
+      this.dialogRef.close('logged-in');
+this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/']);
+
           this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/']);
         },
         error: (err) => {

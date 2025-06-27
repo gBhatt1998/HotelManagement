@@ -16,6 +16,7 @@ import { AuthService } from 'src/app/modules/auth/auth.service';
 import { GuestDetails } from 'src/app/modules/guest/components/guest/guest.model'; // 👈 This is what the selector uses
 import { selectGuestDetails } from 'src/app/modules/guest/store/guest.selectors';
 import { resetReservationDates } from '../../store/reservation/reservation.action';
+import { LoginComponent } from 'src/app/modules/auth/login/login.component';
 @Component({
   selector: 'app-hotel-card',
   templateUrl: './hotel-card.component.html',
@@ -40,6 +41,7 @@ submitted = false;
     private dialogService: DialogService,
     public authService: AuthService ,
     private storeGuest:Store,
+    private dialog: MatDialog
 ) { }
 
 
@@ -261,5 +263,21 @@ console.log("Booking Payload:", JSON.stringify(bookingPayload, null, 2));
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+openLoginDialog(): void {
+  const dialogRef = this.dialog.open(LoginComponent, {
+    width: '400px',
+    autoFocus: true,
+    disableClose: false, // 👈 allow close on outside click or ESC
+    panelClass: 'custom-login-dialog',
+    backdropClass: 'custom-dialog-backdrop' // for blur
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result === 'logged-in') {
+      this.authService.notifyLogin();
+    }
+  });
+}
+
 
 }

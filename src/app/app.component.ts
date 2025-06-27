@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
     this.isLoggedIn = false;
     this.userRole = null;
       localStorage.removeItem('guestDetails');  // 🧹 clear guest info
-  this.route.navigate(['/login']);
+  this.route.navigate(['/']);
   }
 
 
