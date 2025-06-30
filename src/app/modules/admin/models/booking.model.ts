@@ -10,6 +10,6 @@ export interface Booking {
   totalPrice: number;
   serviceNames?: string[];
   roomTypeName?: string;
-    canDelete: boolean; // ✅
+    canDelete: boolean;
 
 }

@@ -31,7 +31,7 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
 
   dateFilter: 'today' | 'month' | 'week' = 'month';
   selectedRoomTypeId: number | null = null;
-  currentMonth: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  currentMonth: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);// June 1, 2025
   // isThisMonthView = true;
   todayDay: string = new Date().getDate().toString().padStart(2, '0');
   cellWidth = 0;
@@ -43,6 +43,7 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];
   hasInitializedRoomTypes = false;
   dateOptions: ('today' | 'week' | 'month')[] = ['today', 'week', 'month'];
+  roomBookings: { [roomId: number]: Booking[] } = {};
 
 constructor(private dialog: MatDialog, private store: Store, private actions$: Actions) { }
 
@@ -107,13 +108,13 @@ constructor(private dialog: MatDialog, private store: Store, private actions$: A
       const el = this.firstDayRef?.nativeElement;
       if (el) {
         this.cellWidth = el.offsetWidth;
-        console.log('Cell width calculated:', this.cellWidth);
+        // console.log('Cell width calculated:', this.cellWidth);
       }
 
-      const todayCell = document.getElementById('todayCell');
-      if (todayCell) {
-        todayCell.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-      }
+      // const todayCell = document.getElementById('todayCell');
+      // if (todayCell) {
+      //   todayCell.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+      // }
     }, 100);
   }
 
@@ -172,7 +173,7 @@ onChipFilterClick(filter: 'today' | 'week' | 'month') {
   this.loadFilteredReservationsFromStore();
 }
 
-goToCurrentMonth() {
+goToCurrentMonth() { 
   this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   this.generateMonthDays();
   this.loadFilteredReservationsFromStore();
@@ -241,7 +242,7 @@ const baseDate = this.currentMonth;
       dateFilter: this.dateFilter,
       month,
       year
-    }));
+    })); 
   }
 
   get filteredRooms() {
@@ -278,7 +279,6 @@ const baseDate = this.currentMonth;
     });
   }
 
-  roomBookings: { [roomId: number]: Booking[] } = {};
 
   getBookingsForRoom(roomId: number): Booking[] {
     if (!this.roomBookings[roomId]) {

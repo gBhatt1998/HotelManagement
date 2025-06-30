@@ -81,9 +81,9 @@
   flex: 1;
   padding: 0 0.5rem;
   font-size: clamp(0.8rem, 1.5vw, 0.95rem);
-  line-height: 1.4; /* Better readability */
-  overflow-y: auto; /* Handle long descriptions */
-  max-height: 100px; /* Match image height */
+  line-height: 1.4; 
+  overflow-y: auto; 
+  max-height: 100px; 
 }
 
 .sidebar {
@@ -122,13 +122,6 @@ mat-card-actions button {
 
 
 
-/* Left column for controls */
-/* .controls-column {
-  flex: 0 0 200px; 
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-} */
 
 /* Cards area */
 .cards-container {

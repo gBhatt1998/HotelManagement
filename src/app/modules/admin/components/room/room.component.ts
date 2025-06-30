@@ -65,7 +65,7 @@ openCreateDialog(): void {
       formTitle: 'Create Room(s)',
       moduleName: 'Room',
       isEdit: false,
-      suggestedRoomNos: [], // ✅ initialize here
+      suggestedRoomNos: [], 
       formFields: [
         {
           key: 'roomTypeId',
