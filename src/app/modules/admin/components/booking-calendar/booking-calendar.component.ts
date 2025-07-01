@@ -35,7 +35,7 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   // isThisMonthView = true;
   todayDay: string = new Date().getDate().toString().padStart(2, '0');
   cellWidth = 0;
-  @Input() showRoomTypeFilter = true;
+  // @Input() showRoomTypeFilter = true;
   @ViewChild('firstDayRef') firstDayRef!: ElementRef<HTMLDivElement>;
   monthDays: { label: string, isWeekend: boolean }[] = [];
 
@@ -66,7 +66,7 @@ constructor(private dialog: MatDialog, private store: Store, private actions$: A
       this.allBookings = res;
       this.roomBookings = {};
 
-      // Initialize room types once — from full data (not filtered)
+      // intialise room types
       if (!this.hasInitializedRoomTypes) {
         const roomTypeMap = new Map<string, number>();
         let idCounter = 1;
@@ -78,7 +78,7 @@ constructor(private dialog: MatDialog, private store: Store, private actions$: A
 
         const allRoomTypes = Array.from(roomTypeMap.entries())
           .map(([type, id]) => ({ id, type }))
-          .sort((a, b) => a.type.localeCompare(b.type)); // optional alphabetical sort
+          .sort((a, b) => a.type.localeCompare(b.type)); 
 
         this.roomTypes = allRoomTypes;
         this.hasInitializedRoomTypes = true;
@@ -108,13 +108,7 @@ constructor(private dialog: MatDialog, private store: Store, private actions$: A
       const el = this.firstDayRef?.nativeElement;
       if (el) {
         this.cellWidth = el.offsetWidth;
-        // console.log('Cell width calculated:', this.cellWidth);
-      }
-
-      // const todayCell = document.getElementById('todayCell');
-      // if (todayCell) {
-      //   todayCell.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-      // }
+      } 
     }, 100);
   }
 
@@ -125,8 +119,6 @@ constructor(private dialog: MatDialog, private store: Store, private actions$: A
 nextMonth() {
   this.dateFilter = 'month';
   this.lastClickedFilter = 'month';
-  // this.isThisMonthView = true;
-
   this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
   this.generateMonthDays();
   this.loadFilteredReservationsFromStore();
@@ -135,8 +127,6 @@ nextMonth() {
 previousMonth() {
   this.dateFilter = 'month';
   this.lastClickedFilter = 'month';
-  // this.isThisMonthView = true;
-
   this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() - 1, 1);
   this.generateMonthDays();
   this.loadFilteredReservationsFromStore();
@@ -200,20 +190,7 @@ isCurrentMonthView(): boolean {
   );
 }
 
-  onDateFilterChange() {
-  const today = new Date();
-  const selected = this.dateFilter;
 
-  if (selected === 'month') {
-    this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  } else if (selected === 'week' || selected === 'today') {
-    this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  }
-
-  this.generateMonthDays();
-  this.lastClickedFilter = selected;
-  this.loadFilteredReservationsFromStore();
-}
 
 
 
@@ -250,44 +227,18 @@ const baseDate = this.currentMonth;
     return this.rooms.filter(r => r.roomTypeId === this.selectedRoomTypeId);
   }
 
-  getFilteredBookings(): ReservationDetailsResponse[] {
-    const today = new Date();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay());
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
+ 
 
-    const year = this.currentMonth.getFullYear();
-    const month = this.currentMonth.getMonth();
-    const monthStart = new Date(year, month, 1);
-    const monthEnd = new Date(year, month + 1, 0);
 
-    return this.allBookings.filter(b => {
-      const start = new Date(b.checkInDate);
-      const end = new Date(b.checkOutDate);
-
-      switch (this.dateFilter) {
-        case 'today':
-          return start <= today && end >= today;
-        case 'week':
-          return start <= endOfWeek && end >= startOfWeek;
-        case 'month':
-          return start <= monthEnd && end >= monthStart;
-        default:
-          return true;
-      }
-    });
+getBookingsForRoom(roomId: number): Booking[] {
+  if (!this.roomBookings[roomId]) {
+    this.roomBookings[roomId] = this.allBookings
+      .filter(r => r.roomNumber === roomId)
+      .map(r => this.mapReservationToBooking(r));
   }
+  return this.roomBookings[roomId];
+}
 
-
-  getBookingsForRoom(roomId: number): Booking[] {
-    if (!this.roomBookings[roomId]) {
-      this.roomBookings[roomId] = this.getFilteredBookings()
-        .filter(r => r.roomNumber === roomId)
-        .map(r => this.mapReservationToBooking(r));
-    }
-    return this.roomBookings[roomId];
-  }
 
   openDialog(booking: Booking) {
   const dialogRef = this.dialog.open(BookingDialogComponent, { data: booking });
@@ -338,7 +289,7 @@ const baseDate = this.currentMonth;
   'Presidental suite': '#ea98da',
   
   
-  // Add others as needed
+  
 };
 
 getRoomTypeColor(type: string | null | undefined): string {

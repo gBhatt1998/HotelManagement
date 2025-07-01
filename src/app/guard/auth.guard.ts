@@ -31,9 +31,7 @@ export const authGuard: CanActivateFn = (
     }
   }
 
-  console.log('Token:', token);
-console.log('Decoded Role:', role);
-console.log('Expected Role:', requiredRoles);
+
 
   if (requiredRoles) {
     if (Array.isArray(requiredRoles)) {

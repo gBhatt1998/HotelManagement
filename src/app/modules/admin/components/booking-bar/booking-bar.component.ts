@@ -69,7 +69,6 @@ To: ${this.booking.endDate}
 
   onClick(event: MouseEvent) {
     event.stopPropagation();
-    console.log('BookingBar clicked:', this.booking);
     this.bookingClick.emit(this.booking);
   }
 }

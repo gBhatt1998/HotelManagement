@@ -31,7 +31,7 @@ export class RoomListComponent {
   hasRoomLoadFailed = false;
   @Output() sendAllAvailableRoomTypes=new EventEmitter<string[]>();
   constructor(private roomlist: RoomlistService, private store: Store<AppState>, private dialogService: DialogService
-) {} // Inject 
+) {}  
   
 
   ngOnInit() {
@@ -95,7 +95,6 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
           });
           return;
         }
-        console.log("rooms query"+data)
         this.rooms = data;
         this.availableRoomType = Array.from(new Set(data.map(room => room.type)));
         this.sendAllAvailableRoomTypes.emit(this.availableRoomType);
@@ -108,7 +107,7 @@ this.storeSub = this.store.select(selectReservationState).subscribe(state => {
         this.applyFilters();
       },
       error: (error) => {
-        dialogRef.close(); // close the loading dialog
+        dialogRef.close(); 
 
         this.dialogService.openError({
           title: 'Failed to Load Rooms',
