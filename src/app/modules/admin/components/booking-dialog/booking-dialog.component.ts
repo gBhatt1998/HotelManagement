@@ -38,7 +38,6 @@ export class BookingDialogComponent {
     this.dialogRef.close({ delete: true });
   }
 
-  // Guest + Booking info for dynamic card
   getCardData() {
     return [{
       guestName: this.data.guestName,

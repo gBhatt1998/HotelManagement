@@ -18,33 +18,28 @@
         </button>
 
         <div class="filter-chips">
- <mat-chip-listbox>
-  <mat-chip-option
-    *ngFor="let filter of dateOptions"
-    [selected]="dateFilter === filter"
-    (click)="onChipFilterClick(filter)"
-    [color]="dateFilter === filter ? 'primary' : undefined"
-  >
-    {{ getFilterLabel(filter) }}
-  </mat-chip-option>
+        <mat-chip-listbox>
+        <mat-chip-option
+          *ngFor="let filter of dateOptions"
+          [selected]="dateFilter === filter"
+          (click)="onChipFilterClick(filter)"
+       [color]="dateFilter === filter ? 'primary' : undefined"
+          >
+         {{ getFilterLabel(filter) }}
+           </mat-chip-option>
 
-  <mat-chip-option
-    *ngIf="!isCurrentMonthView()"
-    (click)="goToCurrentMonth()"
-    color="accent"
-    [selected]="false"
-    class="go-to-month-chip"
-  >
-    Go to {{ getCurrentMonthLabel() }}
-  </mat-chip-option>
-</mat-chip-listbox>
-
-
-</div>
-
-
-
-    </div>
+         <mat-chip-option
+        *ngIf="!isCurrentMonthView()"
+         (click)="goToCurrentMonth()"
+         color="accent"
+          [selected]="false"
+          class="go-to-month-chip"
+        >
+           Go to {{ getCurrentMonthLabel() }}
+          </mat-chip-option>
+          </mat-chip-listbox>
+     </div>
+  </div>
 
     <!-- Day Headers -->
     <div class="calendar-days">

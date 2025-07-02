@@ -247,10 +247,9 @@ getBookingsForRoom(roomId: number): Booking[] {
     if (res?.delete) {
       this.store.dispatch(deleteReservation({ id: booking.id }));
 
-      // Wait for success and then reload filtered reservations
       this.actions$.pipe(
         ofType(deleteReservationSuccess),
-        take(1) // unsubscribe after the first match
+        take(1)
       ).subscribe(() => {
         this.loadFilteredReservationsFromStore();
       });

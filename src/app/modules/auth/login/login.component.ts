@@ -102,7 +102,7 @@ this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/']);
             title: 'Signup Successful',
             message: 'You can now login with your credentials.'
           });
-          this.toggleMode(); // switch to login
+          this.toggleMode(); 
         },
         error: (err) => {
           const message = this.extractErrorMessage(err);
@@ -117,7 +117,6 @@ this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/']);
   private extractErrorMessage(error: any): string {
     if (!error || !error.error) return 'An unknown error occurred.';
 
-    // Direct message
     if (typeof error.error === 'string') {
       return error.error;
     }
@@ -126,7 +125,6 @@ this.router.navigate([userRole === 'ROLE_ADMIN' ? '/admin' : '/']);
       return error.error.message;
     }
 
-    // Handle validation error structure (if used)
     if (typeof error.error === 'object') {
       return Object.values(error.error).join(', ');
     }

@@ -6,7 +6,7 @@ import { GuestDetails } from '../guest/components/guest/guest.model';
 import { SignupRequest } from 'src/app/shared/models/signup-request.model';
 
 export interface DecodedToken {
-  sub: string;       // email
+  sub: string;       
   role: string;
   name: string;
   iat: number;

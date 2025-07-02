@@ -22,7 +22,7 @@
     flex-wrap: wrap;
   }
   
-  /* Sticky Header Row for Days */
+  /* sticky header row for days */
   .calendar-days {
     display: flex;
     position: sticky;
@@ -115,7 +115,7 @@
   .room-type-header::after {
     content: '▼';
     position: absolute;
-    top: 16px; /* 👈 adjust as needed */
+    top: 16px; 
     font-size: 10px;
     color: #666;
     pointer-events: none;

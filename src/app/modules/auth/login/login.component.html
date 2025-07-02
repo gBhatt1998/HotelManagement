@@ -2,7 +2,6 @@
   <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
     <h2>{{ isLoginMode ? 'Login' : 'Sign Up' }}</h2>
 
-    <!-- Name and Phone for Sign Up -->
     <ng-container *ngIf="!isLoginMode">
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Name</mat-label>
@@ -28,7 +27,6 @@
 
     </ng-container>
 
-    <!-- Common Fields -->
     <mat-form-field appearance="outline" class="form-field">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email" type="email" />
