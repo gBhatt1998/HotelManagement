@@ -16,6 +16,7 @@ export const initialState: ReservationState = {
 
 export const reservationReducer = createReducer(
   initialState,
+
   on(ReservationActions.loadFilteredReservations, (state) => ({
     ...state,
     loading: true,
@@ -27,6 +28,21 @@ export const reservationReducer = createReducer(
     allReservations: reservations,
   })),
   on(ReservationActions.loadFilteredReservationsFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  on(ReservationActions.deleteReservation, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ReservationActions.deleteReservationSuccess, (state) => ({
+    ...state,
+    loading: false,
+  })),
+  on(ReservationActions.deleteReservationFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,

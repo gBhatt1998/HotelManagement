@@ -37,7 +37,7 @@
       patchForm: (key: string, value: any) => void,
       formValue: any
     ) => void;
-      suggestedRoomNos?: number[]; // ✅ Add this line
+      suggestedRoomNos?: number[]; 
 
   }
 
@@ -48,7 +48,7 @@
   })
   export class DynamicFormDialogComponent implements OnInit {
     form!: FormGroup;
-    @ViewChild('chipPopoverRef') chipPopoverRef: any; // 👈 get reference
+    @ViewChild('chipPopoverRef') chipPopoverRef: any; 
     private popoverOpened = false;
 
     constructor(
@@ -62,8 +62,7 @@
       const group: { [key: string]: any } = {};
 
       this.data.formFields.forEach((field: FormField) => {
-          if (field.type === 'button') return; // ✅ Skip adding button fields to form group
-
+          if (field.type === 'button') return; 
         const validators = [];
 
         if (field.validators) {
@@ -100,7 +99,7 @@
 
       this.form = this.fb.group(group);
 
-      // Handle dynamic value changes
+      //  dynamic value changes
       if (this.data.onFieldChange) {
     this.data.formFields.forEach((field) => {
       const control = this.form.get(field.key);

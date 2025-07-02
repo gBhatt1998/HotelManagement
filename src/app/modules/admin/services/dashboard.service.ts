@@ -32,4 +32,12 @@ export class DashboardReservationService {
 
     return this.http.get<ReservationDetailsResponse[]>(`${this.baseUrl}/filtered`, { params });
   }
+
+   deleteReservation(id: number): Observable<{ status: string, message: string, data: string }> {
+    return this.http.delete<{ status: string, message: string, data: string }>(
+      `${this.baseUrl}/${id}/delete`
+    );
+  }
+  
+  
 }

@@ -19,3 +19,18 @@ export const loadFilteredReservationsFailure = createAction(
   '[Reservation] Load Filtered Reservations Failure',
   props<{ error: any }>()
 );
+
+
+export const deleteReservation = createAction(
+  '[Reservation] Delete Reservation',
+  props<{ reservationId: number }>()
+);
+
+export const deleteReservationSuccess = createAction(
+  '[Reservation] Delete Reservation Success'
+);
+
+export const deleteReservationFailure = createAction(
+  '[Reservation] Delete Reservation Failure',
+  props<{ error: any }>()
+);

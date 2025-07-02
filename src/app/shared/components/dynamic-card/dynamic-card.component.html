@@ -1,6 +1,6 @@
 <div class="card-container">
 
-  <!-- ✅ Single Card Mode -->
+  <!-- Single Card Mode -->
   <mat-card *ngIf="singleItem" class="dynamic-card mat-elevation-z4">
 
     <!-- Image -->
@@ -19,23 +19,18 @@
         <span class="field-value">
           {{
             field === 'pricePerNight'
-              ? ('₹' + getNestedValue(singleItem, field))
+              ? ('$' + getNestedValue(singleItem, field))
               : getNestedValue(singleItem, field)
           }}
         </span>
       </div>
     </mat-card-content>
-<!-- Chip Popover for Single Card -->
-<app-chip-popover
-  *ngIf="chipField && getAsArray(getNestedValue(singleItem, chipField))?.length"
-  [services]="getAsArray(getNestedValue(singleItem, chipField))"
-  [buttonLabel]="chipButtonLabel || 'Services'">
-</app-chip-popover>
+
 
 
   </mat-card>
 
-  <!-- ✅ Multiple Cards (existing logic preserved) -->
+  <!--  Multiple Cards -->
   <mat-card *ngFor="let item of data" class="dynamic-card mat-elevation-z4">
     <img *ngIf="imageField" class="room-image" [src]="getNestedValue(item, imageField)" alt="Image" />
     <mat-card-title class="card-title">{{ getNestedValue(item, fields[0]) }}</mat-card-title>
@@ -47,7 +42,6 @@
       </div>
     </mat-card-content>
 
-    <!-- Optional Buttons (disable with inputs) -->
     <mat-card-actions *ngIf="enableEdit || enableDelete">
       <button *ngIf="enableEdit" mat-stroked-button color="primary" (click)="onEdit(item)">Edit</button>
       <button *ngIf="enableDelete" mat-stroked-button color="warn" (click)="onDelete(item)">Delete</button>

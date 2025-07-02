@@ -13,22 +13,15 @@ import { selectAllRoomTypes } from 'src/app/modules/admin/store/room-type/room-t
   styleUrls: ['./booking-dialog.component.css']
 })
 export class BookingDialogComponent {
-  roomTypes$: Observable<RoomType[]>;
-  selectedRoomType: RoomType | null = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Booking,
     private dialogRef: MatDialogRef<BookingDialogComponent>,
     private store: Store
   ) {
-    this.roomTypes$ = this.store.select(selectAllRoomTypes);
   }
   ngOnInit(): void {
-    this.store.dispatch(loadRoomTypes());
-
-    this.roomTypes$.subscribe(roomTypes => {
-      this.selectedRoomType = roomTypes.find(rt => rt.name === this.data.roomTypeName) ?? null;
-    });
+   
   }
   onClose(): void {
     this.dialogRef.close();
@@ -38,15 +31,15 @@ export class BookingDialogComponent {
     this.dialogRef.close({ delete: true });
   }
 
-  getCardData() {
-    return [{
-      guestName: this.data.guestName,
-      phoneNumber: this.data.phoneNumber,
-      roomId: this.data.roomId,
-      roomTypeName: this.data.roomTypeName,
-      startDate: this.data.startDate,
-      endDate: this.data.endDate,
-      totalPrice: '$' + this.data.totalPrice
-    }];
-  }
+//   getCardData() {
+//     return [{
+//       guestName: this.data.guestName,
+//       phoneNumber: this.data.phoneNumber,
+//       roomId: this.data.roomId,
+//       roomTypeName: this.data.roomTypeName,
+//       startDate: this.data.startDate,
+//       endDate: this.data.endDate,
+//       totalPrice: '$' + this.data.totalPrice
+//     }];
+//   }
 }

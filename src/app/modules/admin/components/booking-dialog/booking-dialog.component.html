@@ -2,7 +2,6 @@
 
 <mat-dialog-content class="dialog-content">
 
-  <!-- 🧍 Guest Details -->
   <div class="section-box">
     <h3>Guest</h3>
     <app-dynamic-card
@@ -13,7 +12,6 @@
     </app-dynamic-card>
   </div>
 
-  <!-- 🛏️ Reservation Info -->
   <div class="section-box">
     <h3>Reservation</h3>
     <app-dynamic-card
@@ -23,7 +21,6 @@
       [enableDelete]="false">
     </app-dynamic-card>
 
-    <!-- Optional: Services via ChipPopover -->
     <app-chip-popover
       *ngIf="data.serviceNames?.length"
       [services]="data.serviceNames ?? []"
@@ -31,17 +28,7 @@
     </app-chip-popover>
   </div>
 
-  <!-- 🏨 Room Type -->
-  <div class="section-box" *ngIf="selectedRoomType">
-    <h3>Room Type</h3>
-    <app-dynamic-card
-      [data]="[selectedRoomType]"
-      [fields]="['name', 'pricePerNight', 'capacity', 'description']"
-      [imageField]="'imageUrl'"
-      [enableEdit]="false"
-      [enableDelete]="false">
-    </app-dynamic-card>
-  </div>
+ 
 
 </mat-dialog-content>
 

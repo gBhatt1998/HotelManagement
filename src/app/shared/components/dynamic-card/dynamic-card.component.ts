@@ -12,8 +12,6 @@ export class DynamicCardComponent<T = any> {
   @Input() enableEdit = true;
   @Input() enableDelete = true;
 @Input() singleItem?: T;
-@Input() chipField?: string; // e.g. 'services'
-@Input() chipButtonLabel?: string; // e.g. 'Included Services'
 
   @Output() edit = new EventEmitter<T>();
   @Output() delete = new EventEmitter<T>();
@@ -41,11 +39,6 @@ export class DynamicCardComponent<T = any> {
     return result != null ? String(result) : '';
   }
 
-  getAsArray(value: any): string[] {
-  if (Array.isArray(value)) return value;
-  if (typeof value === 'string') return [value];
-  return [];
-}
 
   
 }

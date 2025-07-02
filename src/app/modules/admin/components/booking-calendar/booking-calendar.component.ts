@@ -14,10 +14,11 @@ import { loadFilteredReservations } from '../../store/resevation/reservation.act
 import { selectAllReservations } from '../../store/resevation/reservation.selectors';
 import { Booking } from '../../models/booking.model';
 import { ReservationDetailsResponse } from '../../models/reservation-details-response.model';
-import { deleteReservation } from 'src/app/modules/admin/store/all-reservation/all-reservation.actions';  // adjust path if needed
+// import { deleteReservation } from 'src/app/modules/admin/store/all-reservation/all-reservation.actions';  // adjust path if needed
 import { Actions, ofType } from '@ngrx/effects';
-import { deleteReservationSuccess } from 'src/app/modules/admin/store/all-reservation/all-reservation.actions'; 
+// import { deleteReservationSuccess } from 'src/app/modules/admin/store/all-reservation/all-reservation.actions'; 
 import { take } from 'rxjs/operators';
+import { deleteReservation, deleteReservationSuccess } from '../../store/resevation/reservation.actions';
 
 @Component({
   selector: 'app-booking-calendar',
@@ -40,9 +41,15 @@ export class BookingCalendarComponent implements OnInit, AfterViewInit {
   monthDays: { label: string, isWeekend: boolean }[] = [];
 
   roomTypes: { id: number; type: string }[] = [];
-  rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];
+
+  // { id: 101, roomNo: "101", roomTypeId: 1 }
+
+  rooms: { id: number; roomNo: string; roomTypeId: number }[] = [];  
+
   hasInitializedRoomTypes = false;
   dateOptions: ('today' | 'week' | 'month')[] = ['today', 'week', 'month'];
+
+//   roomBookings = {   101: [Booking1, Booking2], 102: [Booking3] }
   roomBookings: { [roomId: number]: Booking[] } = {};
 
 constructor(private dialog: MatDialog, private store: Store, private actions$: Actions) { }
@@ -245,14 +252,8 @@ getBookingsForRoom(roomId: number): Booking[] {
 
   dialogRef.afterClosed().subscribe(res => {
     if (res?.delete) {
-      this.store.dispatch(deleteReservation({ id: booking.id }));
+this.store.dispatch(deleteReservation({ reservationId: booking.id }));
 
-      this.actions$.pipe(
-        ofType(deleteReservationSuccess),
-        take(1)
-      ).subscribe(() => {
-        this.loadFilteredReservationsFromStore();
-      });
     }
   });
 }

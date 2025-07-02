@@ -62,4 +62,33 @@ loadFilteredReservationsFailure$ = createEffect(
   { dispatch: false }
 );
 
+
+
+
+deleteReservation$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ReservationActions.deleteReservation),
+    switchMap(({ reservationId }) =>
+      this.reservationService.deleteReservation(reservationId).pipe(
+        map(() => ReservationActions.deleteReservationSuccess()),
+        tap(() => {
+          this.dialogService.openSuccess({message:'Reservation deleted successfully.'});
+        }),
+        // Reload all reservations after successful delete
+        switchMap(() =>
+          of(ReservationActions.loadFilteredReservations({
+            roomTypeName: undefined, // or keep filters
+            dateFilter: 'month',     // replace with current filter
+            month: new Date().getMonth() + 1,
+            year: new Date().getFullYear(),
+          }))
+        ),
+        catchError((error) =>
+          of(ReservationActions.deleteReservationFailure({ error }))
+        )
+      )
+    )
+  )
+);
+
 }

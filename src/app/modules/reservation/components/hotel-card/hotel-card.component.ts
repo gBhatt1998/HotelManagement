@@ -267,9 +267,9 @@ openLoginDialog(): void {
   const dialogRef = this.dialog.open(LoginComponent, {
     width: '400px',
     autoFocus: true,
-    disableClose: false, // 👈 allow close on outside click or ESC
+    disableClose: false, 
     panelClass: 'custom-login-dialog',
-    backdropClass: 'custom-dialog-backdrop' // for blur
+    backdropClass: 'custom-dialog-backdrop' 
   });
 
   dialogRef.afterClosed().subscribe((result) => {
