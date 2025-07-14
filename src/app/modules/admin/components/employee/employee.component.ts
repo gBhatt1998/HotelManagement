@@ -11,6 +11,7 @@ import { selectAllEmployees } from '../../store/employee/employee.selectors';
 import { selectAllDepartments } from '../../store/department/department.selectors';
 
 import { DynamicFormDialogComponent } from 'src/app/shared/components/dynamic-form-dialog/dynamic-form-dialog.component';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
   selector: 'app-employee',
@@ -30,11 +31,12 @@ export class EmployeeComponent implements OnInit {
   employees$: Observable<EmployeeResponseDTO[]> = this.store.select(selectAllEmployees);
   departments$: Observable<DepartmentResponseDTO[]> = this.store.select(selectAllDepartments);
 
-  constructor(private store: Store, private dialog: MatDialog) { }
+  constructor(private store: Store, private dialog: MatDialog, private employeeService:EmployeeService) { }
 
   ngOnInit(): void {
     this.store.dispatch(EmployeeActions.loadEmployees());
     this.store.dispatch({ type: '[Department] Load Departments' });
+    
   }
 
   openCreateDialog(): void {
@@ -45,7 +47,7 @@ export class EmployeeComponent implements OnInit {
       }));
 
       const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
-        width: '500px',
+        width: '600px',
         data: {
           formTitle: 'Create Employee',
           moduleName: 'Employee',
@@ -59,11 +61,29 @@ export class EmployeeComponent implements OnInit {
               label: 'Departments',
               type: 'multiselect',
               options: departmentOptions
-            }
-          ]
-        }
+            },
+            {
+        key: 'email',
+        label: 'Email',
+        type: 'text',
+        disabled: true
+      },
+      {
+        key: 'password',
+        label: 'Password',
+        type: 'text',
+        disabled: true
+      }
+          ],
+       onGenerateCredentials: (name: string, cb:(email:string,password:string)=>void) => {
+        console.log('Generating credentials for:', name);
+      this.employeeService.generateCredentials(name).subscribe({
+        next: (data) => cb(data.email, data.password),
+        error: (err) => console.error('Credential generation failed', err)
       });
-
+    }
+  }
+});
       dialogRef.afterClosed().subscribe((result: EmployeeRequestDTO) => {
         if (result) {
           this.store.dispatch(EmployeeActions.createEmployee({ employee: result }));

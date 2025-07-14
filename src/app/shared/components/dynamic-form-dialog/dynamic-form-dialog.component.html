@@ -12,9 +12,24 @@
           <mat-form-field *ngSwitchCase="'text'" appearance="outline" class="full-width">
             <mat-label>{{ field.label }}</mat-label>
             <input matInput type="text" [formControlName]="field.key" />
-            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-              {{ getErrorMessage(field.key) }}
-            </mat-error>
+
+             <button
+             *ngIf="field.key === 'name' && isEmployeeModule && !data.isEdit"
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="generateCredentials()"
+              [disabled]="!form.get('name')?.valid"
+              matTooltip="Generate Email and Password">
+               <mat-icon>bolt</mat-icon>
+              </button>
+
+                <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+               {{ getErrorMessage(field.key) }}
+                </mat-error>
+            
+
+
           </mat-form-field>
 
           <!-- NUMBER -->

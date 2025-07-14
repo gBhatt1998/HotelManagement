@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EmployeeResponseDTO, EmployeeRequestDTO } from 'src/app/modules/admin/models/employeeresponseDTO.model';
+import { EmployeeResponseDTO, EmployeeRequestDTO, CredentialsResponse } from 'src/app/modules/admin/models/employeeresponseDTO.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -25,5 +25,9 @@ export class EmployeeService {
 
   deleteEmployee(id: number): Observable<string> {
     return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
+
+  generateCredentials(name:string):Observable<CredentialsResponse> {
+    return this.http.get<CredentialsResponse>(`${this.apiUrl}/generate-credentials`, { params: { name } });
   }
 }

@@ -13,3 +13,8 @@ export interface EmployeeRequestDTO {
   hireDate: string; // ISO string
   departments: string[];
 }
+
+export interface CredentialsResponse {
+  email: string;
+  password: string;
+}

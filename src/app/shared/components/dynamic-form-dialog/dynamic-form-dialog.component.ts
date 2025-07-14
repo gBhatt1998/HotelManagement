@@ -38,6 +38,10 @@
       formValue: any
     ) => void;
       suggestedRoomNos?: number[]; 
+       onGenerateCredentials?: (
+    name: string,
+    cb: (email: string, password: string) => void
+  ) => void;
 
   }
 
@@ -50,6 +54,7 @@
     form!: FormGroup;
     @ViewChild('chipPopoverRef') chipPopoverRef: any; 
     private popoverOpened = false;
+isEmployeeModule = false;
 
     constructor(
       public dialogRef: MatDialogRef<DynamicFormDialogComponent>,
@@ -61,6 +66,9 @@
     ngOnInit(): void {
       const group: { [key: string]: any } = {};
 
+    this.isEmployeeModule = this.data.moduleName === 'Employee';
+
+console.log('Dynamic Form Dialog Data:', this.data.moduleName);
       this.data.formFields.forEach((field: FormField) => {
           if (field.type === 'button') return; 
         const validators = [];
@@ -101,7 +109,7 @@
 
       //  dynamic value changes
       if (this.data.onFieldChange) {
-    this.data.formFields.forEach((field) => {
+     this.data.formFields.forEach((field) => {
       const control = this.form.get(field.key);
       if (control && field.type !== 'button') {
         control.valueChanges.subscribe((value) => {
@@ -114,6 +122,8 @@
         });
       }
     });
+
+
   }
 
 
@@ -175,5 +185,29 @@
       );
     }
   }
+
+//   generateCredentials(): void {
+//   // const name = this.form.get('name')?.value;
+//   // if (!name) return;
+
+//   // fetch(`/api/employees/generate-credentials?name=${encodeURIComponent(name)}`)
+//   //   .then(res => res.json())
+//   //   .then(data => {
+//   //     this.patchFormValue('email', data.email);
+//   //     this.patchFormValue('password', data.password);
+//   //   })
+//   //   .catch(err => console.error('Error generating credentials:', err));
+//     console.log('Generate Credentials clicked');
+// }
+
+generateCredentials(): void {
+  const name = this.form.get('name')?.value;
+  if (!name || !this.data.onGenerateCredentials) return;
+
+  this.data.onGenerateCredentials(name, (email, password) => {
+    this.patchFormValue('email', email);
+    this.patchFormValue('password', password);
+  });
+}
 
   }

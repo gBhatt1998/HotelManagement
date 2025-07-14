@@ -87,7 +87,7 @@ export class RoomEffects {
   deleteRoomSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RoomActions.deleteRoomSuccess),
-      withLatestFrom(this.store.select(selectRoomFilter)), // 👈 keep filter during reload
+      withLatestFrom(this.store.select(selectRoomFilter)), 
       map(([_, roomType]) => RoomActions.loadRooms({ roomType }))
     )
   );

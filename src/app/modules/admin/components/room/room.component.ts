@@ -105,7 +105,7 @@ openCreateDialog(): void {
           if (roomTypeId && baseRoomNo > 0 && count > 0 && count <= 8) {
             this.roomService.suggestRoomNumbers(roomTypeId, baseRoomNo, count).subscribe({
               next: (suggested) => {
-                // ✅ update dialog data to reflect suggestions
+
                 dialogRef.componentInstance.data.suggestedRoomNos = suggested;
               },
               error: (error) => {
