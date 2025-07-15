@@ -30,6 +30,8 @@ export class RoomTypeComponent implements OnInit {
     const dialogRef = this.dialog.open(DynamicFormDialogComponent, {
       data: {
         formTitle: 'Create Room Type',
+            layout: 'two-column', 
+
         formFields: [
           {
             key: 'type',

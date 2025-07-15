@@ -64,6 +64,8 @@ openCreateDialog(): void {
     data: {
       formTitle: 'Create Room(s)',
       moduleName: 'Room',
+    layout: 'two-column', 
+
       isEdit: false,
       suggestedRoomNos: [], 
       formFields: [

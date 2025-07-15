@@ -24,11 +24,19 @@
     validators?: FormFieldValidator[];
     required?: boolean;
     disabled?: boolean;
+      icon?: string;               
+  suffixIcon?: string;         
+  suffixAction?: () => void;   
+  helper?: string; 
   }
 
   export interface DynamicDialogData {
+      layout?: 'single-column' | 'two-column'; // default = two-column
+
     formTitle: string;
     isEdit: boolean;
+      formDescription?: string; 
+
     moduleName: string;
     formFields: FormField[];
     onFieldChange?: (
@@ -186,19 +194,7 @@ console.log('Dynamic Form Dialog Data:', this.data.moduleName);
     }
   }
 
-//   generateCredentials(): void {
-//   // const name = this.form.get('name')?.value;
-//   // if (!name) return;
 
-//   // fetch(`/api/employees/generate-credentials?name=${encodeURIComponent(name)}`)
-//   //   .then(res => res.json())
-//   //   .then(data => {
-//   //     this.patchFormValue('email', data.email);
-//   //     this.patchFormValue('password', data.password);
-//   //   })
-//   //   .catch(err => console.error('Error generating credentials:', err));
-//     console.log('Generate Credentials clicked');
-// }
 
 generateCredentials(): void {
   const name = this.form.get('name')?.value;

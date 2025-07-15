@@ -1,42 +1,61 @@
 <h2 mat-dialog-title class="dialog-title">
-  {{ data.isEdit ? 'Update' : 'Create' }} {{ data.moduleName }}
+  {{ data.isEdit ? "Update" : "Create" }} {{ data.moduleName }}
 </h2>
-
+<p *ngIf="data.formDescription" class="form-description">
+  {{ data.formDescription }}
+</p>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <mat-dialog-content class="dialog-container">
-    <div class="form-grid">
-      <div *ngFor="let field of data.formFields" class="form-field">
+    <!-- <div [ngClass]="{ 'form-grid': true, 'two-column-layout': data.layout !== 'single-column' }"> -->
+    <div class="form-grid" [ngClass]="data.layout || 'two-column'">
+      <!-- <div class="form-grid"> -->
+      <div *ngFor="let field of data.formFields" class="form-field-wrapper">
         <ng-container [ngSwitch]="field.type">
-
           <!-- TEXT INPUT -->
-          <mat-form-field *ngSwitchCase="'text'" appearance="outline" class="full-width">
+          <mat-form-field
+            *ngSwitchCase="'text'"
+            appearance="outline"
+            class="full-width"
+          >
             <mat-label>{{ field.label }}</mat-label>
+            <mat-icon matPrefix *ngIf="field.icon">{{ field.icon }}</mat-icon>
+
             <input matInput type="text" [formControlName]="field.key" />
 
-             <button
-             *ngIf="field.key === 'name' && isEmployeeModule && !data.isEdit"
+            <button
+              *ngIf="field.key === 'name' && isEmployeeModule && !data.isEdit"
               mat-icon-button
               matSuffix
               type="button"
               (click)="generateCredentials()"
               [disabled]="!form.get('name')?.valid"
-              matTooltip="Generate Email and Password">
-               <mat-icon>bolt</mat-icon>
-              </button>
+              matTooltip="Generate Email and Password"
+            >
+              <mat-icon>bolt</mat-icon>
+            </button>
 
-                <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
-               {{ getErrorMessage(field.key) }}
-                </mat-error>
-            
-
-
+            <mat-error
+              *ngIf="
+                form.get(field.key)?.invalid && form.get(field.key)?.touched
+              "
+            >
+              {{ getErrorMessage(field.key) }}
+            </mat-error>
           </mat-form-field>
 
           <!-- NUMBER -->
-          <mat-form-field *ngSwitchCase="'number'" appearance="outline" class="full-width">
+          <mat-form-field
+            *ngSwitchCase="'number'"
+            appearance="outline"
+            class="full-width"
+          >
             <mat-label>{{ field.label }}</mat-label>
             <input matInput type="number" [formControlName]="field.key" />
-            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            <mat-error
+              *ngIf="
+                form.get(field.key)?.invalid && form.get(field.key)?.touched
+              "
+            >
               {{ getErrorMessage(field.key) }}
             </mat-error>
           </mat-form-field>
@@ -47,89 +66,158 @@
           </mat-checkbox>
 
           <!-- TEXTAREA -->
-          <mat-form-field *ngSwitchCase="'textarea'" appearance="outline" class="full-width textarea-field">
+          <mat-form-field
+            *ngSwitchCase="'textarea'"
+            appearance="outline"
+            class="full-width textarea-field"
+          >
             <mat-label>{{ field.label }}</mat-label>
-            <textarea matInput cdkTextareaAutosize [cdkAutosizeMinRows]="3" [cdkAutosizeMaxRows]="6"
-              [formControlName]="field.key"></textarea>
-            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              [cdkAutosizeMinRows]="3"
+              [cdkAutosizeMaxRows]="6"
+              [formControlName]="field.key"
+            ></textarea>
+            <mat-error
+              *ngIf="
+                form.get(field.key)?.invalid && form.get(field.key)?.touched
+              "
+            >
               {{ getErrorMessage(field.key) }}
             </mat-error>
           </mat-form-field>
 
           <!-- DATE -->
-          <mat-form-field *ngSwitchCase="'date'" appearance="outline" class="full-width">
+          <mat-form-field
+            *ngSwitchCase="'date'"
+            appearance="outline"
+            class="full-width"
+          >
             <mat-label>{{ field.label }}</mat-label>
-            <input matInput [matDatepicker]="picker" [formControlName]="field.key" readonly />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [formControlName]="field.key"
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            <mat-error
+              *ngIf="
+                form.get(field.key)?.invalid && form.get(field.key)?.touched
+              "
+            >
               {{ getErrorMessage(field.key) }}
             </mat-error>
           </mat-form-field>
 
           <div *ngIf="field.type === 'date'" class="date-value">
-            Selected Date: {{ form.get(field.key)?.value | date: 'mediumDate' }}
+            Selected Date:
+            {{ form.get(field.key)?.value | date : "mediumDate" }}
           </div>
 
           <!-- SELECT -->
-          <mat-form-field *ngSwitchCase="'select'" appearance="outline" class="full-width">
+          <mat-form-field
+            *ngSwitchCase="'select'"
+            appearance="outline"
+            class="full-width"
+          >
             <mat-label>{{ field.label }}</mat-label>
             <mat-select [formControlName]="field.key">
-              <mat-option *ngFor="let option of field.options" [value]="option.value">
+              <mat-option
+                *ngFor="let option of field.options"
+                [value]="option.value"
+              >
                 {{ option.label }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            <mat-error
+              *ngIf="
+                form.get(field.key)?.invalid && form.get(field.key)?.touched
+              "
+            >
               {{ getErrorMessage(field.key) }}
             </mat-error>
           </mat-form-field>
 
           <!-- MULTISELECT -->
-          <mat-form-field *ngSwitchCase="'multiselect'" appearance="outline" class="full-width">
+          <mat-form-field
+            *ngSwitchCase="'multiselect'"
+            appearance="outline"
+            class="full-width"
+          >
             <mat-label>{{ field.label }}</mat-label>
             <mat-select [formControlName]="field.key" multiple>
-              <mat-option *ngFor="let option of field.options" [value]="option.value">
+              <mat-option
+                *ngFor="let option of field.options"
+                [value]="option.value"
+              >
                 {{ option.label }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get(field.key)?.invalid && form.get(field.key)?.touched">
+            <mat-error
+              *ngIf="
+                form.get(field.key)?.invalid && form.get(field.key)?.touched
+              "
+            >
               {{ getErrorMessage(field.key) }}
             </mat-error>
           </mat-form-field>
 
-<!-- Attach right below count field -->
-<ng-container *ngIf="field.key === 'count' && data.suggestedRoomNos?.length">
-  <app-chip-popover #chipPopoverRef
-    [services]="formattedSuggestedRooms" buttonLabel="Suggested Room Numbers">
-  </app-chip-popover>
-</ng-container>
+          <!-- Attach right below count field -->
+          <ng-container
+            *ngIf="field.key === 'count' && data.suggestedRoomNos?.length"
+          >
+            <app-chip-popover
+              #chipPopoverRef
+              [services]="formattedSuggestedRooms"
+              buttonLabel="Suggested Room Numbers"
+            >
+            </app-chip-popover>
+          </ng-container>
 
+          <div class="helper-text" *ngIf="field.helper">
+            {{ field.helper }}
+          </div>
 
-      
-
-
-<!-- BUTTON -->
-<div *ngSwitchCase="'button'" class="check-availability-btn">
-  <button mat-stroked-button color="primary" type="button" (click)="handleButtonClick(field.key)">
-    {{ field.label }}
-  </button>
-</div>
-
+          <!-- BUTTON -->
+          <div *ngSwitchCase="'button'" class="check-availability-btn">
+            <button
+              mat-stroked-button
+              color="primary"
+              type="button"
+              (click)="handleButtonClick(field.key)"
+            >
+              {{ field.label }}
+            </button>
+          </div>
         </ng-container>
 
         <!-- Image Preview -->
-        <div *ngIf="field.key === 'imageUrl' && form.get(field.key)?.valid" class="image-preview">
+        <div
+          *ngIf="field.key === 'imageUrl' && form.get(field.key)?.valid"
+          class="image-preview"
+        >
           <img [src]="form.get(field.key)?.value" alt="Image Preview" />
         </div>
       </div>
-      
     </div>
+    <!-- </div> -->
   </mat-dialog-content>
 
   <mat-dialog-actions align="end" class="action-buttons">
     <button mat-button type="button" (click)="onCancel()">Cancel</button>
-    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
-      {{ data.isEdit ? 'Update' : 'Create' }}
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      {{ data.isEdit ? "Update" : "Create" }}
     </button>
   </mat-dialog-actions>
 </form>
